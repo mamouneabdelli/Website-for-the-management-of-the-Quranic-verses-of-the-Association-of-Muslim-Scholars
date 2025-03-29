@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قضيتنا</title>
+
+
+
+    <style>
+          body {
+            font-family: 'Alexandria', sans-serif;
+            background: #E6F6EC;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            color: #1E1E1E;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* Nav Bar */
+        .nav-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 80px 24px 42px;
+            background: #E6F6EC;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo img {
+            width: 76px;
+            height: 56px;
+            border-radius: 62.8163px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .menu-item {
+            font-size: 18px;
+            font-weight: 500;
+            color:#00A841;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            color: #00A841;
+        }
+
+        .cta-button button {
+            background: #00A841;
+            color: #FFFFFF;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Alexandria', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button button:hover {
+            background: #008634;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 63px 80px 240px;
+            background: #E6F6EC;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+            width: 100%;
+            max-width: 1280px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .quote {
+            text-align: center;
+            font-family:'Lateef';
+            
+        }
+
+        .quote h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .quote p {
+            font-size: 48px;
+            font-weight: 600;
+            color: #000000;
+            line-height: 69px;
+            margin: 0;
+        }
+
+        .quote p:last-child {
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 18px;
+            margin-top: 10px;
+        }
+
+        .sub-heading p {
+            font-size: 16px;
+            font-weight: 400;
+            color: #008634;
+            text-align: center;
+            line-height: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .decorative-image-1 {
+            position: absolute;
+            width: 600px;
+            height: 643px;
+            right: -300px;
+            top: 200px;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .decorative-image-2 {
+            position: absolute;
+            width: 600px;
+            
+            height: 643px;
+            left: -300px;
+            top: 100px;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .decorative-image-1 img, .decorative-image-2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        @media (max-width: 1440px) {
+            .nav-bar {
+                padding: 24px 40px;
+            }
+
+            .hero-section {
+                padding: 63px 40px 170px;
+            }
+
+            .content-section,
+            .stats-section,
+            .faq-section,
+            .map-section,
+            .footer {
+                padding: 60px 40px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-section {
+                flex-direction: column;
+            }
+
+            .content-section.reversed {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 16px;
+                padding: 24px 20px;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .hero-section {
+                padding: 63px 20px 170px;
+            }
+
+            .quote h2 {
+                font-size: 24px;
+            }
+
+            .quote p {
+                font-size: 36px;
+                line-height: 48px;
+            }
+
+            .quote p:last-child {
+                font-size: 14px;
+            }
+
+            .sub-heading p {
+                font-size: 14px;
+            }
+
+            .content-section,
+            .stats-section,
+            .faq-section,
+            .map-section,
+            .footer {
+                padding: 40px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .h3 {
+                font-size: 28px;
+            }
+
+            .secondone {
+                font-size: 18px;
+            }
+        
+        }
+
+    </style>
+</head>
+<body>
+    
+
+
+        <!-- Nav Bar -->
+        <nav class="nav-bar">
+            <div class="logo">
+                <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 1.png" alt="Logo جمعية العلماء المسلمين">
+            </div>
+            <div class="menu">
+                <a href="index.html" class="menu-item"  >الرئيسية</a> <!-- هنا ربط تاع صفحات مع بعض    -->
+                <a href="index2.html" class="menu-item">عن البرنامج</a>
+                <a href="#" class="menu-item">اتصل بنا</a>
+                <a href="#" class="menu-item">قضيتنا</a>
+            </div>
+            <div class="cta-button">
+                <button>سجّل وابدأ رحلتك العلمية</button>
+            </div>
+        </nav>
+    
+    
+    
+    
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="quote">
+                <h2>● قال رسول الله صلى الله عليه و سلم ●</h2>
+                <p>"من لم يغز أو يجهِز غازيا أو يخلف غازيا في أهله بخير، أصابه اللَّه بقارعة قبل يوم القيامة</p>
+                <p>رواه مسلم</p>
+            </div>
+            <div class="sub-heading">
+                <p>
+                    نؤمن بأن القضية الفلسطينية ليست مجرد قضية شعب، بل هي قضية أمة
+                     بأكملها، قضية حق وعدل. نحن نساند فلسطين بكل ما نملك — بالكلمة، بالدعاء
+                     ، وبنشر الوعي — لأن الحرية حق، والظلم إلى زوال
+                     . ستظل القدس عاصمة القلوب، وفلسطين رمز العزة والصمود. 
+                </p>
+            </div>
+            <div class="cta-button">
+                <button>دعم قضيتك </button>
+            </div>
+        </div>
+        <div class="decorative-image-1">
+            <img src="d6540cd37f0613635a757705639e5310.png" alt="زخرفة إسلامية">
+        </div>
+        <div class="decorative-image-2">
+            <img src="d6540cd37f0613635a757705639e53101.png" alt="زخرفة إسلامية">
+            
+        </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
