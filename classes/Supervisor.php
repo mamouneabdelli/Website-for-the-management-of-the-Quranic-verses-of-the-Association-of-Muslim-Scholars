@@ -1,6 +1,6 @@
 <?php
 
-class Supervisor extends User {
+class Supervisor extends User implements Report {
     private $admin_code;
     private $date_of_birth;
     private $employment_date;

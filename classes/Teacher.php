@@ -1,6 +1,6 @@
 <?php
 
-class Teacher extends User {
+class Teacher extends User implements Report {
     private $teacher_code;
     private $date_of_birth;
     private $specialization;
