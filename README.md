@@ -3,6 +3,9 @@
 ## 📝 Description
 A web-based management system for Quranic schools under the **Association of Algerian Muslim Scholars**. This system aims to streamline **student enrollment, class schedules, attendance tracking, teacher management, and financial transactions** in an efficient and user-friendly manner.
 
+## Design Link : 
+https://www.figma.com/design/qeZvezNxa0CDj8UWdWhXWQ/PROJCET?node-id=0-1&t=3SCvGLikmUSGtisl-1
+
 ## 🎯 Features
 - 🔹 **Student Management**: Registration, profiles, and progress tracking.
 - 🔹 **Teacher Management**: Assignments, schedules, and evaluations.
