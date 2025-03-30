@@ -278,77 +278,8 @@
         </div>
     </footer>
     <!-- Popup Window -->
-<div class="overlay" id="registrationPopup">
-    <div class="popup-container">
-        <div class="form-side">
-            <button class="close-btn" onclick="closePopup()">&times;</button>
-            <div class="welcome-text">
-                <h2>سجّل رحلتك العلمية</h2>
-                <p>انضم إلى جمعية العلماء المسلمين واستفد من برامجنا المتنوعة في العلوم الشرعية واللغوية</p>
-            </div>
-            <div class="form">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="الاسم الأول">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="الاسم الأخير">
-                </div>
-                <div class="form-group">
-                    <input type="email" class="form-control" placeholder="البريد الإلكتروني">
-                </div>
-                <div class="form-group">
-                    <input type="tel" class="form-control" placeholder="رقم الهاتف">
-                </div>
-                <div class="form-group full-width">
-                    <div class="dropdown">
-                        <div class="dropdown-select">اختر البرنامج ▼</div>
-                    </div>
-                </div>
-                <div class="form-group full-width">
-                    <input type="password" class="form-control" placeholder="كلمة المرور">
-                    <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
-                </div>
-                <div class="form-group full-width">
-                    <button class="submit-btn">تسجيل</button>
-                </div>
-            </div>
-        </div>
-        <div class="decoration-side">
-            <div class="decoration-pattern"></div>
-            <div class="time" id="currentTime"></div>
-        </div>
-    </div>
-</div>
 
-<!-- JavaScript for Popup -->
-<script>
-    // Get registration button
-    var registerBtn = document.querySelector('.cta-button button');
-    var popup = document.getElementById('registrationPopup');
-    
-   
-    registerBtn.addEventListener('click', function() {
-        popup.classList.add('active');
-    });
-    
-    // Function to close popup
-    function closePopup() {
-        popup.classList.remove('active');
-    }
-    
-    
-    function updateTime() {
-        var timeElement = document.getElementById('currentTime');
-        var now = new Date();
-        var hours = now.getHours().toString().padStart(2, '0');
-        var minutes = now.getMinutes().toString().padStart(2, '0');
-        timeElement.textContent = hours + ':' + minutes;
-    }
-    
-    
-    updateTime();
-    setInterval(updateTime, 60000);
-</script>
+
 <script>
     // Animation for decorative images
 document.addEventListener('DOMContentLoaded', function() {
