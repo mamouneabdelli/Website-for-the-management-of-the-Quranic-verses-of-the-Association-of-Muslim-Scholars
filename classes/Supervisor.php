@@ -21,4 +21,9 @@ class Supervisor extends User implements Report {
     public function login() {
         
     }
+
+    public function signup()
+    {
+        
+    }
 }

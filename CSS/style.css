@@ -55,7 +55,7 @@
             color: #00A841;
         }
 
-        .cta-button button {
+        .cta-button a {
             background: #00A841;
             color: #FFFFFF;
             padding: 16px 28px;
@@ -66,6 +66,7 @@
             cursor: pointer;
             font-family: 'Alexandria', sans-serif;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
         .cta-button button:hover {

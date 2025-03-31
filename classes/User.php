@@ -10,5 +10,6 @@ abstract class User {
     protected $phone;
     protected $user_type;
 
-    public abstract function login();
+    public abstract function login($email,$password);
+    public abstract function signup($first_name,$last_name);
 }

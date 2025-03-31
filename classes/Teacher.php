@@ -14,6 +14,11 @@ class Teacher extends User implements Report {
 
     }
 
+    public function signup()
+    {
+        
+    }
+
     public function setAbsence() {
         
     }

@@ -15,4 +15,9 @@ class Student extends User {
     public function login() {
         
     }
+
+    public function signup()
+    {
+       
+    }
 }
