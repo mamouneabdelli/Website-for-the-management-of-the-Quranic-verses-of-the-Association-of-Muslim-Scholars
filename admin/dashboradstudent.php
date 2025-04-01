@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html> 
 <html lang="ar" dir="rtl"> 
 <head> 
@@ -387,7 +392,7 @@
          <div class="color">
         <div class="sidebar">
             <div class="logo-container">
-                <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 2.png" alt="Association Logo" class="association-logo" />
+                <img src="../img/d21ff0b5c94ca27dab2ad0f90de39de1.png" alt="Association Logo" class="association-logo" />
                 <div class="association-name">جمعية العلماء المسلمين الجزائريين</div>
             </div>
             
@@ -408,7 +413,7 @@
                 <div class="header"> 
                     <div class="icons-section"> 
                         <div class="welcome-text"> 
-                            <span>👋 أهلا بك يا محمد، عودا حميدا!</span> 
+                            <span>👋 أهلا بك يا <?= $_SESSION['name'] ?>، عودا حميدا!</span> 
                         </div> 
                         
                         <div class="icon">✉️</div> 

@@ -1,10 +1,10 @@
 <?php
 
 $config = [
-    'localhost' => '' ,
-    'user' => '',
+    'host' => 'localhost' ,
+    'user' => 'root',
     'password' => '',
-    'database' => ''
+    'database' => 'quranic_management_system'
 ];
 
 ?>
