@@ -91,14 +91,14 @@
   }
   .col1 .parent .text {
     width: 536px;
-    margin-bottom: 77px;
+    margin-bottom: 40px;
   }
   .col1 .parent h1 {
     font-weight: 500;
-    font-size: 28px;
+    font-size: 34px;
   }
   .col1 .parent p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 152%;
     font-weight: 300;
   }
@@ -118,9 +118,13 @@
     border-radius: 7.5px;
     border: 1.5px solid black;
   }
-  .col1 .parent input:first-of-type {
-    margin-bottom: 38px;
+
+  form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
+  
   .col1 .parent a {
     text-align: end;
     font-weight: 300;

@@ -455,7 +455,7 @@ session_start();
                     <!-- Hadith Section (now on the left) --> 
                     <div class="hadith-section"> 
                         <div class="hadith-container"> 
-                            <img src="image 1.png" alt="Study Illustration" class="illustration" /> 
+                            <img src="../img/study.png" alt="Study Illustration" class="illustration" /> 
                             <div class="hadith-title">قال رسول الله ﷺ</div> 
                             <div class="hadith-text">"إذا مات ابن آدم انقطع عمله إلا من ثلاث: صدقة جارية، أو علم ينتفع به، أو ولد صالح يدعو له."</div> 
                             <div class="hadith-source"><span>(رواه مسلم)</span></div> 

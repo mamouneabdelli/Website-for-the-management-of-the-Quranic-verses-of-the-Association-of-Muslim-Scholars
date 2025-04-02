@@ -3,6 +3,9 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
+    $showPopup = true;
+
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -17,6 +20,233 @@ ini_set('display_errors', 1);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-container {
+            position: relative;
+            max-width: 546px;
+            width: 90%;
+            animation: popIn 0.4s ease-out forwards;
+            height: 654px;
+            border-radius: 20px;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup {
+            background-color: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #000000;
+            direction: rtl;
+            position: absolute;
+            right: 3px;
+            top: 2px;
+        }
+
+        .popup-header {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .popup-title {
+            text-align: center;
+            color: #0d6e32;
+            font-size: 28px;
+            font-weight: 700;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e7f5ec;
+        }
+
+        .document-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 35px;
+        }
+
+        .document-list li {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .document-list li:hover {
+            transform: translateX(-5px);
+        }
+
+        .document-list li::before {
+            content: "•";
+            color: #19a94d;
+            font-weight: bold;
+            margin-left: 12px;
+            font-size: 22px;
+        }
+
+        .info-section {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .school-address {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 17px;
+            color: #333;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .phone-number {
+            text-align: center;
+            font-size: 17px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .phone-label {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .phone-value {
+            font-weight: 700;
+            color: #0d6e32;
+            direction: ltr;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .print-button {
+            background-color: #19a94d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .print-button:hover {
+            background-color: #0d8e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 169, 77, 0.3);
+        }
+
+        .print-button:active {
+            transform: translateY(0);
+        }
+
+        .print-button svg {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .print-button:hover svg {
+            transform: translateY(-2px);
+        }
+
+        .close-button {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: #f9f9f9;
+            border: 2px solid #19a94d;
+            color: #19a94d;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: #19a94d;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .popup {
+                padding: 25px;
+            }
+
+            .popup-title {
+                font-size: 24px;
+            }
+
+            .document-list li {
+                font-size: 16px;
+            }
+
+            .info-section {
+                padding: 15px;
+            }
+
+            .school-address,
+            .phone-number {
+                font-size: 15px;
+            }
+
+            .print-button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -33,14 +263,19 @@ ini_set('display_errors', 1);
         </div>
         <div class="cta-button">
             <?php if (isset($_SESSION['logen_in'])) { ?>
-                <span class="fw-bold" style="color: #00A841;"><?= $_SESSION['user_name']?></span>
-                <button class="btn btn-primary">
-                    <i class="bi bi-lock" ></i> تسجيل الدخول
-                </button>
+                <div>
+                    <button class="print-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z" />
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                        </svg>
+                        طباعة
+                    </button>
+                </div>
             <?php } else { ?>
                 <a href="signup.html">سجّل وابدأ رحلتك العلمية</a>
             <?php } ?>
-            </div>
+        </div>
     </nav>
 
     <!-- first section   -->
@@ -296,6 +531,159 @@ ini_set('display_errors', 1);
     </footer>
     <!-- Popup Window -->
 
+    <!-- Registration Popup -->
+    <div id="registrationPopup" class="popup-overlay <?= $showPopup ? 'active' : '' ?>">
+        <div class="popup-container">
+            <div class="popup">
+                <div class="popup-header">
+                    <h2 class="popup-title">ملف التسجيل</h2>
+                    <div class="close-button">×</div>
+                </div>
+
+                <ul class="document-list">
+                    <li>شهادة ميلاد</li>
+                    <li>02 صور شمسية</li>
+                    <li>شهادة إثبات مستوى</li>
+                    <li>رسوم الاشتراك ( 4200 DA)</li>
+                    <li>صور طبق الأصل بطاقة التعريف</li>
+                </ul>
+
+                <div class="info-section">
+                    <div class="school-address">
+                        عنوان مدرسة الفتح التعليم القرآني عين الدفلة 01 رقم 04
+                    </div>
+
+                    <div class="phone-number">
+                        <span class="phone-label">رقم الهاتف</span>
+                        <span class="phone-value">0669557044</span>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="print-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z" />
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                        </svg>
+                        طباعة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add functionality to close button
+        document.querySelector('.close-button').addEventListener('click', function() {
+            document.getElementById('registrationPopup').classList.remove('active');
+        });
+
+        // Add print functionality
+        document.querySelector('.print-button').addEventListener('click', function() {
+            // Create a new window for printing just the popup content
+            const printWindow = window.open('', '_blank');
+
+            // Get the content to print
+            const popupContent = `
+        <!DOCTYPE html>
+        <html dir="rtl" lang="ar">
+        <head>
+          <meta charset="UTF-8">
+          <title>ملف التسجيل</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              direction: rtl;
+            }
+            .print-header {
+              text-align: center;
+              color: #0d6e32;
+              font-size: 24px;
+              font-weight: bold;
+              margin-bottom: 20px;
+              padding-bottom: 10px;
+              border-bottom: 2px solid #e7f5ec;
+            }
+            .document-list {
+              list-style: none;
+              padding: 0;
+              margin-bottom: 30px;
+            }
+            .document-list li {
+              margin-bottom: 12px;
+              font-size: 16px;
+              padding-right: 20px;
+              position: relative;
+            }
+            .document-list li::before {
+              content: "•";
+              color: #19a94d;
+              font-weight: bold;
+              position: absolute;
+              right: 0;
+            }
+            .info-box {
+              background-color: #f8f9fa;
+              border: 1px solid #e0e0e0;
+              border-radius: 5px;
+              padding: 15px;
+              margin-top: 20px;
+            }
+            .school-address {
+              text-align: center;
+              margin-bottom: 15px;
+              padding-bottom: 10px;
+              border-bottom: 1px solid #e0e0e0;
+            }
+            .phone-number {
+              text-align: center;
+            }
+            .phone-value {
+              font-weight: bold;
+              color: #0d6e32;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-header">ملف التسجيل</div>
+          
+          <ul class="document-list">
+            <li>شهادة ميلاد</li>
+            <li>02 صور شمسية</li>
+            <li>شهادة إثبات مستوى</li>
+            <li>رسوم الاشتراك ( 4200 DA)</li>
+            <li>صور طبق الأصل بطاقة التعريف</li>
+          </ul>
+          
+          <div class="info-box">
+            <div class="school-address">
+              عنوان مدرسة الفتح التعليم القرآني عين الدفلة 01 رقم 04
+            </div>
+            
+            <div class="phone-number">
+              رقم الهاتف:<br>
+              <span class="phone-value">0669557044</span>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+            // Write content to the new window
+            printWindow.document.open();
+            printWindow.document.write(popupContent);
+            printWindow.document.close();
+
+            // Print after the content loads
+            printWindow.onload = function() {
+                printWindow.print();
+                // Close the window after printing (optional)
+                // printWindow.close();
+            };
+        });
+    </script>
+
 
     <script>
         // Animation for decorative images
@@ -514,7 +902,6 @@ ini_set('display_errors', 1);
 
         });;
     </script>
-<?php
-session_destroy();
-?>
+    <?php
     
+    ?>

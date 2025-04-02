@@ -30,17 +30,17 @@ $errors = [
     'user' => ''
 ];
 
-$email = $first_name = $last_name = $password = $confirm_password = '';
+$email = $password = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email']; $password = $_POST['password'];
     if (!empty($_POST['email']) && !empty($_POST['password'])) {
-        $email = filterEmail($_POST['email']);
-        $password = $_POST['password'];
+        $email = filterEmail($email);
         if (!$email)
-            $errors['email'] = "Email is invalide";
+            $errors['email'] = "الايميل غير صالح";
     } else {
-        if (empty($_POST['email'])) $errors['email'] = "your email is required";
-        if (empty($_POST['password'])) $errors['first_name'] = "your password is required";
+        if (empty($_POST['email'])) $errors['email'] = "الاميل مطلوب";
+        if (empty($_POST['password'])) $errors['password'] = "كلمة السر مطلوبة";
     }
     
     if (!$errors['email'] && !$errors['password']) {
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: /quranic/admin/dashboradstudent.php");
             exit();
         } else {
-            $errors['user'] = "Invalid email or password";  
+            $errors['user'] = "كلمة السر او الايميل غير صالح";  
         }
     }
 }

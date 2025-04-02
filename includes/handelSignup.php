@@ -32,33 +32,35 @@ $errors = [
 
 $email = $first_name = $last_name = $password = $confirm_password = '';
 
+$showPopup = false;
+
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
+    $first_name = $_POST['first_name']; $last_name = $_POST['last_name']; $email = $_POST['email'];
+        $password = $_POST['password']; $confirm_password = $_POST['confirm_password'];
     if(!empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['confirm_password']) )
     {
-        $first_name = filterString($_POST['first_name']); $last_name = filterString($_POST['last_name']); $email = filterEmail($_POST['email']);
-        $password = $_POST['password']; $confirm_password = $_POST['confirm_password'];
+        $first_name = filterString($first_name); $last_name = filterString($last_name); $email = filterEmail($email);
         if(!$first_name)
-            $errors['first_name']="first name is invalide";
+            $errors['first_name']="الاسم غير صالح";
         if(!$last_name)
-            $errors['last_name']="last name is invalide";
+            $errors['last_name']="اللقب غير صالح";
         if(!$email)
-            $errors['email']="Email is invalide";
+            $errors['email']="الايميل غير صالح";
         if(strlen($password) >= 8)
         {
             if($password != $confirm_password)
-                $errors['confirm_password']="password don't match";
+                $errors['confirm_password']="كلمة السر غير متطابقة";
         }else {
-            $errors['password']="password must at least 8 characters";
+            $errors['password']="كلمة السر يجب ان تكون على الأقل 8 أحرف";
         }
-        $password = password_hash($password,PASSWORD_DEFAULT);
     }else
     {
-        if(empty($_POST['first_name'])) $errors['first_name'] = "your first name is required";
-        if(empty($_POST['last_name'])) $errors['last_name'] = "your last name is required";
-        if(empty($_POST['email'])) $errors['email'] = "your email is required";
-        if(empty($_POST['password'])) $errors['first_name'] = "your password is required";
-        if(empty($_POST['confirm_password'])) $errors['first_name'] = "Confirm password is required";
+        if(empty($_POST['first_name'])) $errors['first_name'] = "الاسم مطلوب";
+        if(empty($_POST['last_name'])) $errors['last_name'] = "اللقب مطلوب";
+        if(empty($_POST['email'])) $errors['email'] = "الاميل مطلوب";
+        if(empty($_POST['password'])) $errors['password'] = "كلمة السر مطلوبة";
+        if(empty($_POST['confirm_password'])) $errors['confirm_password'] = "تأكيد كلمة السر مطلوبة";
     }
 
     if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password']) {
@@ -66,8 +68,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         $query = $db->prepare("SELECT * FROM users WHERE email=?");
         $query->execute([$email]);
         if($query->fetch())
-            $errors['user'] = "user already exist";
+            $errors['user'] = "المستخدم موجود بالفعل";
         else {
+            $password = password_hash($password,PASSWORD_DEFAULT);
             $db = DBConnection::getConnection()->getDb();
             $student = new Student(
                 $email,$password,$db,$first_name,$last_name,$_POST['gender']
