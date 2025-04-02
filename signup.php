@@ -42,6 +42,8 @@ require_once __DIR__ . "/includes/handelSignup.php";
           العقول لبناء مستقبلٍ مشرق. سجّل دخولك وكن جزءًا من رسالتنا
         </p>
         <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
+
+        <span class="text-danger"><?= $errors['user'] ?? '' ?></span>
           <div class="part1">
             <div class="name">
               <div>
@@ -82,7 +84,7 @@ require_once __DIR__ . "/includes/handelSignup.php";
             </div>
 
             <div>
-              <select class="main" id="education_level" name="education_level">
+              <select class="main" id="education_level" name="academic_phase">
                 <option value="" selected>
                   اختر الطور الذي تدرسه
                 </option>

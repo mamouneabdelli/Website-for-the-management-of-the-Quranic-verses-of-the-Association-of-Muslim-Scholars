@@ -20,6 +20,8 @@ if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style.css">
+    <!-- Font Awesome Library -->
+    <link rel="stylesheet" href="CSS/all.min.css" />
     <style>
         /* Popup Styles */
         .popup-overlay {
@@ -263,15 +265,10 @@ if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
         </div>
         <div class="cta-button">
             <?php if (isset($_SESSION['logen_in'])) { ?>
-                <div>
-                    <button class="print-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z" />
-                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                        </svg>
-                        طباعة
-                    </button>
-                </div>
+                <a href="login.php" class="login-button" aria-disabled="true" role="button">
+                    <i class="fas fa-lock"></i>
+                    <span>تسجيل الدخول</span>
+                </a>
             <?php } else { ?>
                 <a href="signup.html">سجّل وابدأ رحلتك العلمية</a>
             <?php } ?>

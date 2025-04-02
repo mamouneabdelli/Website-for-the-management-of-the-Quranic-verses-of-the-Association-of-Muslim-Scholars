@@ -13,11 +13,13 @@ class Student extends User {
     private $enrollment_date;
     private $current_status;
     private $aditional_notes;
+    private $academic_phase;
     private $db; 
 
-    public function __construct($email, $password,$db, $first_name = null, $last_name = null, $gender = null)
+    public function __construct($email, $password,$db, $first_name = null, $last_name = null, $gender = null , $academic_phase = null)
     {
         parent::__construct($email, $password,$first_name, $last_name, $gender);
+        $this->academic_phase = $academic_phase;
         $this->db = $db; 
     }
 
@@ -43,6 +45,10 @@ class Student extends User {
             $query = $this->db->prepare("INSERT INTO users (email, first_name, last_name, password, gender,user_type) VALUES (?, ?, ?, ?, ?,?)");
             $query->execute([$this->email, $this->first_name, $this->last_name, $this->password, $this->gender,'student']);
             
+            $user_id = $this->db->lastInsertId();
+
+            $query = $this->db->prepare("INSERT INTO students (user_id,academic_phase) VALUES (?, ?)");
+            $query->execute([$user_id, $this->academic_phase]);
             return true; 
         } catch (PDOException $e) {
             die("خطأ في التسجيل: " . $e->getMessage()); 

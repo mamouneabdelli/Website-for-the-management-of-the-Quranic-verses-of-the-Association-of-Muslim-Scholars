@@ -73,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $password = password_hash($password,PASSWORD_DEFAULT);
             $db = DBConnection::getConnection()->getDb();
             $student = new Student(
-                $email,$password,$db,$first_name,$last_name,$_POST['gender']
+                $email,$password,$db,$first_name,$last_name,$_POST['gender'],$_POST['academic_phase']
             );
     
             $student->signup();
