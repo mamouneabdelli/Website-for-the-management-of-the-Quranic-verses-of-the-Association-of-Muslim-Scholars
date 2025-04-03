@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جمعية العلماء المسلمين الجزائريين</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e9f0;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-right button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-left .icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .welcome-message span {
+            color: #ffc107;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card h3 {
+            color: #e74c3c;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card h3.green {
+            color: #27ae60;
+        }
+        
+        .stat-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 3fr 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .weekly-schedule {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .activities-title {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-align: right;
+            font-size: 16px;
+            padding-right: 10px;
+            position: relative;
+        }
+        
+        .activities-title::before {
+            content: "•";
+            color: #27ae60;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .schedule-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .schedule-table th, .schedule-table td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .schedule-table th {
+            font-weight: 500;
+        }
+        
+        .hadith-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .hadith-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .hadith-image img {
+            max-width: 150px;
+        }
+        
+        .hadith-content {
+            text-align: center;
+        }
+        
+        .hadith-header {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .hadith-text {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .hadith-source {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .sidebar-card {
+            background-color: #a8dadc;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-card:hover {
+            background-color: #8ecfd1;
+        }
+        
+        .sidebar-card.register {
+            background-color: #000;
+            color: white;
+        }
+        
+        .personal-schedule {
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .personal-schedule-title {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-align: right;
+            font-size: 16px;
+            padding-right: 10px;
+            position: relative;
+        }
+        
+        .personal-schedule-title::before {
+            content: "•";
+            color: #27ae60;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .days-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .day-button {
+            background-color: #c1e7c8;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .day-button.active {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+        
+        .time-slot {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .time-slot.active {
+            background-color: #e8f5e9;
+            border-color: #a5d6a7;
+        }
+        
+        .activity-slot {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+            grid-column: span 2;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-right">
+                <button>
+                    <span>تسجيل الدخول</span>
+                    <span>←</span>
+                </button>
+            </div>
+            <div class="header-left">
+                <div class="icon">✉️</div>
+                <div class="icon">🔔</div>
+            </div>
+        </div>
+        
+        <div class="welcome-message">
+            <h3>أهلا بك يا محمد. عودا حميدا. ✨</h3>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>18</h3>
+                <p>عدد الحصص المتبقية</p>
+            </div>
+            <div class="stat-card">
+                <h3 class="green">13</h3>
+                <p>معدل الحضور المتبقية</p>
+            </div>
+            <div class="stat-card">
+                <h3 style="color: #e74c3c;">3</h3>
+                <p>معدل الغيابات</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="weekly-schedule">
+                <div class="activities-title">الواجبات (مقررة على مدار السنة)</div>
+                <h4 class="schedule-title">الحصة الأسبوعية</h4>
+                <table class="schedule-table">
+                    <tr>
+                        <th>الأحد</th>
+                        <td>بداية - دار كبيرة</td>
+                    </tr>
+                    <tr>
+                        <th>الإثنين</th>
+                        <td>نحو - دار كبيرة</td>
+                    </tr>
+                    <tr>
+                        <th>الثلاثاء</th>
+                        <td>دين - دار كبيرة</td>
+                    </tr>
+                    <tr>
+                        <th>الأربعاء</th>
+                        <td>مكتبة - دار كبيرة</td>
+                    </tr>
+                    <tr>
+                        <th>الخميس</th>
+                        <td>لجنة دار - كبيرة</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="hadith-card">
+                <div class="hadith-image">
+                    <img src="/api/placeholder/150/150" alt="صورة توضيحية للحديث">
+                </div>
+                <div class="hadith-content">
+                    <div class="hadith-header">قال رسول الله ﷺ</div>
+                    <div class="hadith-text">"أتدرون من أفلح؟ قالوا: الله ورسوله أعلم. قال: من أخلص قلبه للإيمان، وجعل قلبه سليماً، ولسانه صادقاً..."</div>
+                    <div class="hadith-source">(رواه مسلم)</div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="logo">
+                    <img src="/api/placeholder/50/50" alt="شعار جمعية العلماء المسلمين الجزائريين">
+                </div>
+                <div class="sidebar-card">لوحة المعلومات</div>
+                <div class="sidebar-card">بيان الوسائل</div>
+                <div class="sidebar-card">كلمات البيانات</div>
+                <div class="sidebar-card">المعلمين</div>
+                <div class="sidebar-card register">
+                    <div>تسجيل الدخول</div>
+                    <div>←</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="personal-schedule">
+            <div class="personal-schedule-title">جدول الحصص (مواعيدك على مدار الشهر: سبتمبر)</div>
+            
+            <div class="days-container">
+                <button class="day-button">التوقيت</button>
+                <button class="day-button active">الأحد</button>
+                <button class="day-button">الإثنين</button>
+                <button class="day-button">الثلاثاء</button>
+                <button class="day-button">الأربعاء</button>
+                <button class="day-button">الخميس</button>
+            </div>
+            
+            <div class="time-slots">
+                <!-- التوقيت -->
+                <div class="time-slot active">8:15_8:00</div>
+                <div class="time-slot active">8:15_9:00</div>
+                <div class="time-slot active">9:30_9:00</div>
+                <div class="time-slot active">9:40_9:30</div>
+                <div class="time-slot active">10:30_9:40</div>
+                <div class="time-slot active">11:00_10:30</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+                
+                <!-- الأحد -->
+                <div class="time-slot active">8:15_8:00</div>
+                <div class="time-slot active">8:15_9:00</div>
+                <div class="time-slot active">9:30_9:00</div>
+                <div class="time-slot active">9:40_9:30</div>
+                <div class="time-slot active">10:30_9:40</div>
+                <div class="time-slot active">11:00_10:30</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+                
+                <!-- الإثنين -->
+                <div class="activity-slot">تدريب الطفل</div>
+                <div class="activity-slot">الإستفادة و الأسئلة</div>
+                <div class="time-slot active">9:40_9:30</div>
+                <div class="time-slot active">10:30_9:40</div>
+                <div class="time-slot active">11:00_10:30</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+                
+                <!-- الثلاثاء -->
+                <div class="time-slot active">8:15_8:00</div>
+                <div class="time-slot active">8:15_9:00</div>
+                <div class="time-slot active">9:30_9:00</div>
+                <div class="time-slot active">9:40_9:30</div>
+                <div class="time-slot active">10:30_9:40</div>
+                <div class="time-slot active">11:00_10:30</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+                
+                <!-- الأربعاء -->
+                <div class="time-slot active">8:15_8:00</div>
+                <div class="time-slot active">8:15_9:00</div>
+                <div class="time-slot active">9:30_9:00</div>
+                <div class="time-slot active">9:40_9:30</div>
+                <div class="time-slot active">10:30_9:40</div>
+                <div class="time-slot active">11:00_10:30</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+                
+                <!-- الخميس -->
+                <div class="activity-slot">استقبال البراعم</div>
+                <div class="activity-slot">تدريب الطفل</div>
+                <div class="activity-slot">الإستفادة و السلامة</div>
+                <div class="time-slot"></div>
+                <div class="time-slot active">12:00_11:00</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

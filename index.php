@@ -258,7 +258,7 @@ if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
             <img src="img/شعار.png" alt="Logo جمعية العلماء المسلمين">
         </div>
         <div class="menu">
-            <a href="index.html" class="menu-item">الرئيسية</a> <!-- هنا ربط تاع صفحات مع بعض    -->
+            <a href="index.php" class="menu-item">الرئيسية</a> <!-- هنا ربط تاع صفحات مع بعض    -->
             <a href="برنامجنا.html" class="menu-item">عن البرنامج</a>
             <a href="contact.html" class="menu-item">اتصل بنا</a>
             <a href="قضيتنا.html" class="menu-item">قضيتنا</a>
@@ -270,7 +270,8 @@ if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
                     <span>تسجيل الدخول</span>
                 </a>
             <?php } else { ?>
-                <a href="signup.html">سجّل وابدأ رحلتك العلمية</a>
+                <a href="signup.php">سجّل وابدأ رحلتك العلمية</a>
+                <a href="login.php">تسجيل الدخول</a>
             <?php } ?>
         </div>
     </nav>
@@ -900,5 +901,5 @@ if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
         });;
     </script>
     <?php
-    
+    session_destroy();
     ?>

@@ -72,7 +72,6 @@ require_once __DIR__ . "/includes/handelSignup.php";
             </div>
           </div>
 
-          <a href="#">هل نسيت كلمة السر ؟</a>
 
           <div class="part2">
             <div>

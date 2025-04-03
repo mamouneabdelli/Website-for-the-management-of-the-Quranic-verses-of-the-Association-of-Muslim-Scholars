@@ -53,9 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         $loginResult = $student->login();
         if ($loginResult) {
-            $_SESSION['logged_in'] = true;  
-            $_SESSION['name'] = $loginResult['first_name'];  
-            header("Location: /quranic/admin/dashboradstudent.php");
+            $_SESSION['login_in'] = true;  
+            $_SESSION['name'] = $loginResult['first_name'] ." ". $loginResult['last_name'];
+            $_SESSION['user_id'] =  $loginResult['id']; 
+            header("Location: /quranic/admin/student");
             exit();
         } else {
             $errors['user'] = "كلمة السر او الايميل غير صالح";  
