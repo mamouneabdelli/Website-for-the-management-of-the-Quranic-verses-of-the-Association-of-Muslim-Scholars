@@ -21,11 +21,9 @@
         
         .container {
             display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            height: 100vh;
+            gap:20px;
+            margin-bottom:20px;
+            background-color: #FFFFFF;
         }
         
         /* Header Styles */
@@ -62,72 +60,87 @@
             height: 24px;
         }
         
-        /* Sidebar Styles */
+        /* Updated Sidebar Styles */
         .sidebar {
-            width: 220px;
-            background-color: white;
-            border-left: 1px solid #e0e0e0;
-            padding: 10px 0;
             display: flex;
-            flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
         }
         
         .logo {
             text-align: center;
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 15px 10px;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .logo img {
-            width: 60px;
-            height: 60px;
+    width: 121.33333587646484px;
+    height:90.73469543457031px;
+    border-radius:100.14px;
+    margin: 0 auto;
+    display: block;
+    background-color: #FFFFFF;
         }
         
         .logo p {
-            font-size: 18px;
-            margin-top: 5px;
-            font-family: 'Alexandra';
-            
+            font-size: 14px;
+            margin-top: 8px;
+            color: #333;
+            font-weight: 600;
         }
         
         .sidebar-menu {
             list-style: none;
             flex-grow: 1;
+            padding: 0;
+            
         }
         
         .sidebar-menu li {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            color: #333;
-            font-size: 14px;
-            text-align: right;
-            margin-right:0%;
+            
+    background-color:#E6F6ECBF; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 12px 15px; 
+    text-align:right; 
+    cursor: pointer; 
+    color:#000000; 
+    font-weight: bold; 
+    transition: background-color 0.3s; 
+    margin-bottom: 10px;
+    font-size: 16px;
+    
+
         }
         
         .sidebar-menu li:hover {
-            background-color: #f5f5f5;
+            background-color: #00A841;
         }
         
         .sidebar-menu li.active {
-            background-color: #E6F6ECBF;
-            color: #4CAF50;
-            font-weight: bold;
+            background-color:#E6F6ECBF;
+            color: #00A841;
+            font-weight: 600;
+            border-right: 4px solid #00A841;
         }
         
         .register-btn {
             background-color: #000;
             color: white;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             margin: 15px;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
             font-size: 14px;
+            font-weight: 600;
         }
         
         /* Main Content Styles */
@@ -165,13 +178,14 @@
         }
         
         .register-student-btn {
-            background-color: #4CAF50;
+            background-color: #00A841;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
         }
         
         /* Stats Cards */
@@ -205,10 +219,10 @@
         }
         
         .red { color: #ff5252; }
-        .green { color: #4CAF50; }
+        .green { color: #00A841; }
         .blue { color: #2196F3; }
         
-        /* Quran Session Cards */
+        /* Updated Quran Session Cards */
         .session-cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -217,7 +231,6 @@
         }
         
         .session-card {
-            background-color: #E6F7E9;
             border-radius: 8px;
             padding: 12px;
             display: flex;
@@ -227,7 +240,7 @@
         
         .session-card i {
             background-color: white;
-            color: #4CAF50;
+            color: #ffffff;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -237,13 +250,14 @@
         }
         
         .session-card .title {
-            color: #333;
+            color: #ffffff;
             font-size: 14px;
             background: none;
             border: none;
             cursor: pointer;
             text-align: right;
             width: 100%;
+            font-weight: 600;
         }
         
         /* Schedule Table */
@@ -304,7 +318,7 @@
             font-size: 14px;
         }
         
-        /* Popup Styles */
+        /* Updated Popup Styles */
         .popup-overlay {
             position: fixed;
             top: 0;
@@ -321,40 +335,65 @@
         .popup {
             background-color: white;
             border-radius: 8px;
-            padding: 20px;
-            width: 80%;
+            padding: 0;
+            width: 90%;
             max-width: 800px;
-            max-height: 80vh;
+            max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        /* Attendance Popup */
+        /* Updated Attendance Popup */
+        .popup h2 {
+            background-color: #00A841;
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            border-radius: 8px 8px 0 0;
+            font-size: 18px;
+        }
+        
+        .popup .search-input {
+            margin: 15px 20px;
+            width: auto;
+        }
+        
         .attendance-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1fr repeat(3, 40px);
             gap: 10px;
-            margin-top: 20px;
+            margin: 20px;
+            background-color: #E6F7E9;
+            padding: 10px;
+            border-radius: 8px;
         }
         
         .student-header {
-            background-color: #E6F7E9;
+            background-color: transparent;
             padding: 10px;
-            border-radius: 4px;
             text-align: center;
             font-weight: bold;
+            color: #333;
+        }
+        
+        .attendance-list {
+            margin: 0 20px 20px;
         }
         
         .attendance-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1fr repeat(3, 40px);
             gap: 10px;
             margin-bottom: 10px;
             align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .student-name {
             text-align: right;
-            font-weight: bold;
+            font-weight: 600;
+            color: #333;
         }
         
         .attendance-checkbox {
@@ -364,11 +403,17 @@
         .checkbox-container {
             display: inline-block;
             position: relative;
-            width: 20px;
-            height: 20px;
-            background-color: #E6F7E9;
+            width: 24px;
+            height: 24px;
+            background-color: #f5f5f5;
             border-radius: 50%;
             cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        
+        .checkbox-container.checked {
+            background-color: #00A841;
+            border-color: #00A841;
         }
         
         .checkbox-container.checked:after {
@@ -377,85 +422,190 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #4CAF50;
+            color: white;
             font-weight: bold;
+            font-size: 12px;
         }
         
-        /* Review Popup */
+        /* Updated Review Popup */
         .review-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 0;
+            margin: 20px 20px 10px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         .review-tab {
             flex: 1;
-            background-color: #E6F7E9;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 12px 10px;
             text-align: center;
             cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
         
         .review-tab.active {
-            background-color: #4CAF50;
+            background-color: #00A841;
             color: white;
+            font-weight: 600;
         }
         
         .review-list {
-            margin-top: 20px;
+            margin: 0 20px 20px;
         }
         
         .review-row {
             border-bottom: 1px solid #e0e0e0;
-            padding: 12px 0;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .review-row:hover {
+            background-color: #f9f9f9;
         }
         
         .student-review {
             display: flex;
             justify-content: space-between;
+            font-weight: 500;
         }
 
-        /* Mobile sidebar toggle */
-        .sidebar-toggle {
-            display: none;
-        }
         /* Student Details Popup Styles */
-.progress-form {
-    margin-top: 20px;
-}
-
-.form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    gap: 10px;
-}
-
-.form-group label {
-    width: 80px;
-    text-align: left;
-}
-
-.form-control {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-}
-
-.save-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 15px;
-    width: 100%;
-}
-
-        /* Responsive styles */
+        .section {
+            background-color: white;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header1 {
+            background-color: #00A841;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .header1 .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .section-header {
+            background-color: #f0f8f0;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .section-header .title {
+            color: #00A841;
+            font-weight: bold;
+        }
+        
+        .section-content {
+            padding: 15px;
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .form-label {
+            min-width: 70px;
+            text-align: right;
+            font-weight: 500;
+        }
+        
+        .form-field {
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn {
+            padding: 8px 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #00A841;
+        }
+        
+        .btn-secondary {
+            background-color: #75c3a9;
+        }
+        
+        .delete-btn {
+            width: 26px;
+            height: 26px;
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .items-container .form-row {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        
+        .highlight-box {
+            background-color: #00A841;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Mobile styles */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -469,6 +619,19 @@
             
             .session-cards {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-cards {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-field {
+                width: 100%;
             }
         }
     </style>
@@ -489,11 +652,11 @@
     <div class="container">
         <div class="sidebar">
             <div class="logo">
-                <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 1.png" alt="جمعية العلماء المسلمين">
+                <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 2.png" alt="جمعية العلماء المسلمين">
                 <p>جمعية العلماء المسلمين الجزائريين</p>
             </div>
             <ul class="sidebar-menu">
-                <li>لوحة التحكم</li>
+                <li style=" background-color:#B0E4C4;">لوحة التحكم</li>
                 <li id="attendance-btn" class="active">الحضور و الغياب</li>
                 <li id="review-btn">الحفظ و المراجعة</li>
                 <li>إرسال تقرير</li>
@@ -530,43 +693,45 @@
             </div>
             
             <div class="session-cards">
-                <div class="session-card"style="background-color:#00A841;">
+                <div class="session-card" style="background-color:#00A841;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 1</button>
                 </div>
-                <div class="session-card"style="background-color:#008634;">
+                <div class="session-card" style="background-color:#008634;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 2</button>
                 </div>
-                <div class="session-card"style="background-color:#008634;">
+                <div class="session-card" style="background-color:#008634;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 3</button>
                 </div>
-                <div class="session-card"style="background-color:#4C9D9B;">
+                <div class="session-card" style="background-color:#4C9D9B;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 4</button>
                 </div>
             </div>
            
             <div class="session-cards">
-                <div class="session-card"style="background-color:#4C9D9B;">
+                <div class="session-card" style="background-color:#4C9D9B;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 1</button>
                 </div>
-                <div class="session-card"style="background-color:#4C9D9B;">
+                <div class="session-card" style="background-color:#4C9D9B;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">  حلقات القرآن اليوم رقم 2</button>
                 </div>
-                <div class="session-card"style="background-color:#479392;">
+                <div class="session-card" style="background-color:#479392;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 3</button>
                 </div>
-                <div class="session-card"style="background-color:#397674;">
+                <div class="session-card" style="background-color:#397674;">
                     <i class="fas fa-book-open"></i>
                     <button class="title">حلقات القرآن اليوم رقم 4</button>
                 </div>
             </div>
-            
+          
+          
+                
             <div class="schedule-section">
                 <div class="schedule-header">
                     <div class="day-header">التوقيت</div>
@@ -609,7 +774,7 @@
     <div class="popup-overlay" id="attendance-popup">
         <div class="popup">
             <h2>الطلاب</h2>
-            <div class="search-input" style="margin: 15px 0;">
+            <div class="search-input" style="margin: 15px 20px;">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="بحث عن طالب">
             </div>
@@ -662,6 +827,61 @@
                     <div class="attendance-checkbox"><div class="checkbox-container"></div></div>
                     <div class="attendance-checkbox"><div class="checkbox-container checked"></div></div>
                     <div class="attendance-checkbox"><div class="checkbox-container"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Review Popup -->
+    <div class="popup-overlay" id="review-popup">
+        <div class="popup">
+            <h2>الطلاب</h2>
+            <div class="search-input" style="margin: 15px 20px;">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="بحث عن طالب">
+            </div>
+            
+            <div class="review-tabs">
+                <div class="review-tab active">الطالب</div>
+                <div class="review-tab">الإنجاز</div>
+                <div class="review-tab">المواظبة</div>
+            </div>
+            
+            <div class="review-list">
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
+                </div>
+                
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
+                </div>
+                
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
+                </div>
+                
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
+                </div>
+                
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
+                </div>
+                
+                <div class="review-row">
+                    <div class="student-review">
+                        <div>أسامة شقلبية</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -995,27 +1215,27 @@
         </div>
 </div>
 <script>
-// Function to handle session card button clicks
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Get all session card buttons
+   
     const sessionCardButtons = document.querySelectorAll('.session-card .title');
     
-    // Add click event listeners to each session card button
+    
     sessionCardButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Get the session name from the button text
+         
             const sessionName = this.textContent.trim();
             
-            // Show the attendance popup with the session name
+            
             const attendancePopup = document.getElementById('attendance-popup');
             if (attendancePopup) {
-                // Update the popup title to include the session name
+                
                 const popupTitle = attendancePopup.querySelector('h2');
                 if (popupTitle) {
                     popupTitle.textContent = `الطلاب - ${sessionName}`;
                 }
                 
-                // Display the popup
+            
                 attendancePopup.style.display = 'flex';
             }
         });
@@ -1025,7 +1245,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Attendance popup functionality
+           
             const attendanceBtn = document.getElementById('attendance-btn');
             const attendancePopup = document.getElementById('attendance-popup');
             
@@ -1033,7 +1253,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 attendancePopup.style.display = 'flex';
             });
             
-            // Review popup functionality
+           
             const reviewBtn = document.getElementById('review-btn');
             const reviewPopup = document.getElementById('review-popup');
             
@@ -1041,7 +1261,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reviewPopup.style.display = 'flex';
             });
             
-            // Close popups when clicking outside
+          
             const popups = document.querySelectorAll('.popup-overlay');
             
             popups.forEach(popup => {
@@ -1052,51 +1272,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
             
-            // Checkbox functionality
+      
             const checkboxes = document.querySelectorAll('.checkbox-container');
             
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('click', function() {
-                    // Clear all checkboxes in the same row
+                   
                     const row = this.closest('.attendance-row');
                     const rowCheckboxes = row.querySelectorAll('.checkbox-container');
                     rowCheckboxes.forEach(cb => {
                         cb.classList.remove('checked');
                     });
                     
-                    // Add checked class to clicked checkbox
+                   
                     this.classList.add('checked');
                 });
             });
         });
     </script>
     <script>
-        // Student review details popup functionality
+        
 const studentDetailsPopup = document.getElementById('student-details-popup');
 
-// When a student is clicked in the review list
+
 const reviewRows = document.querySelectorAll('.review-row');
 reviewRows.forEach(row => {
     row.addEventListener('click', function() {
-        // Show the student details popup
+      
         studentDetailsPopup.style.display = 'flex';
     });
 });
 
-// Add tab functionality in the review popup
+
 const reviewTabs = document.querySelectorAll('.review-tab');
 reviewTabs.forEach(tab => {
     tab.addEventListener('click', function() {
-        // Remove active class from all tabs
+        
         reviewTabs.forEach(t => t.classList.remove('active'));
         
-        // Add active class to clicked tab
+      
         this.classList.add('active');
         
-        // If "الإنجاز" tab is clicked and a student is selected, show the details popup
+        
         if (this.textContent === 'الإنجاز') {
-            // Assuming a student is selected (in a real app, you'd check this)
-            // For demo purposes, we'll just show the popup when this tab is clicked
+           
             studentDetailsPopup.style.display = 'flex';
         }
     });
