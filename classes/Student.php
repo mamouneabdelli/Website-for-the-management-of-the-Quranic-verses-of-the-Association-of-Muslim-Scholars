@@ -89,4 +89,11 @@ class Student extends User
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
+
+    public static function getMessages($groupId,$db) {
+        $query = $db->prepare("SELECT * FROM messages WHERE group_id=? ORDER BY date DESC");
+        $query->execute([$groupId]);
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
 }

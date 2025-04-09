@@ -1,83 +1,59 @@
 <?php
 
 require_once __DIR__.'/../template/header.php';
+require_once __DIR__ . '/../../classes/DBConnection.php';
+require_once __DIR__ . '/../../classes/Student.php';
+
+$studentId = $_SESSION['studen_id']['id'];
+$db = DBConnection::getConnection()->getDb();
+$userId = $_SESSION['user_id'];
+
+$groupId = Student::getGroupId(
+    $studentId,
+    $db
+);
+
+if(isset($_GET['id'])) {
+    $query = $db->prepare("SELECT * FROM messages WHERE user_id=? ORDER BY date DESC");
+        $query->execute([$userId]);
+        $messages = $query->fetchAll(PDO::FETCH_ASSOC);
+
+}else {
+
+$messages = Student::getMessages($groupId[0]['group_id'], $db);
+
+}
 ?>
 
                 <!-- الرسائل والمحادثات -->
                 <div class="messages-tab">
-                    <button class="tab-btn active" id="inbox-tab">صندوق الوارد</button>
-                    <button class="tab-btn" id="sent-tab">الرسائل المرسلة</button>
+                    <a class="tab-btn active" id="inbox-tab" href="messages.php">صندوق الوارد</a>
+                    <a class="tab-btn" id="sent-tab" href="?id=<?= $studentId ?>">الرسائل المرسلة</a>
                     <button class="tab-btn" id="compose-tab">إنشاء رسالة جديدة</button>
                 </div>
 
                 <!-- صندوق الوارد -->
                 <div class="messages-container" id="inbox-content">
-                    <div class="section-title">الرسائل الواردة</div>
+                    <div class="section-title"><?php if(isset($_GET['id'])) { ?>الرسائل المرسلة<?php }else{ ?>الرساءل الواردة<?php }?></div>
 
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">اليوم 10:30</span>
-                            <span class="message-sender">إدارة جمعية العلماء المسلمين</span>
-                        </div>
-                        <div class="message-content">
-                            <p>نعلم الطلبة الأعزاء بتعديل جدول الحصص ليوم الخميس هذا الأسبوع. سيتم تقديم حصة التجويد إلى الساعة التاسعة صباحاً، ونرجو من الجميع الالتزام بالموعد الجديد.</p>
-                        </div>
-                    </div>
+                                <?php
+                        if (!empty($messages)) {
+                            foreach ($messages as $message) { ?>
+                                <div style="background-color: #f8f8f8; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid #27ae60;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="color: #777; font-size: 12px;"><?= $message['date'] ?></span>
+                                        <strong><?= $message['sender'] ?></strong>
+                                    </div>
+                                    <p><?= $message['content'] ?></p>
+                                </div>
+                            <?php }
+                        } else {
+                            ?>
+                            لاتوجد رسائل
+                        <?php } ?>
+                     </div>
 
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">البارحة 14:15</span>
-                            <span class="message-sender">الأستاذ عبد الرحمن مالك</span>
-                        </div>
-                        <div class="message-content">
-                            <p>تم تصحيح اختبار الحفظ الأخير، يمكنك الاطلاع على النتيجة من خلال قسم العلامات. أحسنت على المجهود المبذول، واستمر في المراجعة المنتظمة.</p>
-                        </div>
-                    </div>
-
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">21/03/2025 09:45</span>
-                            <span class="message-sender">إدارة جمعية العلماء المسلمين</span>
-                        </div>
-                        <div class="message-content">
-                            <p>نذكر جميع الطلبة بضرورة التسجيل في المسابقة السنوية لحفظ القرآن الكريم، آخر موعد للتسجيل هو يوم الأحد القادم. يرجى التواصل مع سكرتارية المدرسة للمزيد من المعلومات.</p>
-                        </div>
-                    </div>
-
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">18/03/2025 16:20</span>
-                            <span class="message-sender">الأستاذة نور الهدى</span>
-                        </div>
-                        <div class="message-content">
-                            <p>أرجو منك مراجعة سورة البقرة الآيات من 150 إلى 200 قبل الحصة القادمة. سنقوم بتسميع هذه الآيات في بداية الحصة، كما سنتناول أحكام التجويد المتعلقة بها.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- الرسائل المرسلة -->
-                <div class="messages-container" id="sent-content" style="display: none;">
-                    <div class="section-title">الرسائل المرسلة</div>
-
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">22/03/2025 11:20</span>
-                            <span class="message-sender">إلى: الأستاذ عبد الرحمن مالك</span>
-                        </div>
-                        <div class="message-content">
-                            <p>السلام عليكم أستاذي الكريم، أرجو منكم تحديد موعد لمراجعة حفظي للجزء الأخير. أنا متاح يومي الثلاثاء والخميس بعد الساعة العاشرة صباحاً. جزاكم الله خيراً.</p>
-                        </div>
-                    </div>
-
-                    <div class="message-item">
-                        <div class="message-header">
-                            <span class="message-date">15/03/2025 09:30</span>
-                            <span class="message-sender">إلى: إدارة جمعية العلماء المسلمين</span>
-                        </div>
-                        <div class="message-content">
-                            <p>السلام عليكم، أرجو إفادتي بموعد الاختبار النهائي للفصل الدراسي الحالي، وما هي المواد المطلوبة للاختبار. وشكراً جزيلاً.</p>
-                        </div>
-                    </div>
+                   
                 </div>
 
                 <!-- إنشاء رسالة جديدة -->
@@ -114,11 +90,8 @@ require_once __DIR__.'/../template/header.php';
                         <button type="submit" class="send-btn">إرسال الرسالة</button>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+            
+                <script>
         document.addEventListener('DOMContentLoaded', function() {
             const inboxTab = document.getElementById('inbox-tab');
             const sentTab = document.getElementById('sent-tab');
@@ -160,6 +133,12 @@ require_once __DIR__.'/../template/header.php';
             });
         });
     </script>
+                
+            </div>
+        </div>
+    </div>
+
+    
 </body>
 
 </html>

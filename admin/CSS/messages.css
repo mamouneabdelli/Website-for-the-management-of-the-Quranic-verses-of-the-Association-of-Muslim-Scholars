@@ -90,6 +90,8 @@ textarea.form-control {
     border: none;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
+    color: black;
 }
 
 .tab-btn.active {

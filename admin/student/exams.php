@@ -9,7 +9,7 @@ $studentId = $_SESSION['studen_id']['id'];
 $db = DBConnection::getConnection()->getDb();
 
 $grades = Student::getGrades($studentId, $db);
-print_r($grades);
+
 
 
 $status = $grades[0]['status'];
