@@ -11,14 +11,15 @@ $db = DBConnection::getConnection()->getDb();
 $grades = Student::getGrades($studentId, $db);
 
 
-
-$status = $grades[0]['status'];
-$bgColor = match ($status) {
-    'ناجح' => '#d4edda',
-    'راسب' => '#f8d7da',
-    'غياب' => '#fff3cd',
-    default => '#e2e3e5',
-};
+if(!empty($grades)) {
+    $status = $grades[0]['status'];
+    $bgColor = match ($status) {
+        'ناجح' => '#d4edda',
+        'راسب' => '#f8d7da',
+        'غياب' => '#fff3cd',
+        default => '#e2e3e5',
+    };
+}
 ?>
 
 <!-- Grades Section -->

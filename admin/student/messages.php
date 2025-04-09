@@ -27,8 +27,8 @@ $messages = Student::getMessages($groupId[0]['group_id'], $db);
 
                 <!-- الرسائل والمحادثات -->
                 <div class="messages-tab">
-                    <a class="tab-btn active" id="inbox-tab" href="messages.php">صندوق الوارد</a>
-                    <a class="tab-btn" id="sent-tab" href="?id=<?= $studentId ?>">الرسائل المرسلة</a>
+                    <a class="tab-btn <?= isset($_GET['id']) ? " " : "active" ?> " id="inbox-tab" href="messages.php">صندوق الوارد</a>
+                    <a class="tab-btn <?= isset($_GET['id']) ? "active" : "" ?>" id="sent-tab" href="?id=<?= $studentId ?>">الرسائل المرسلة</a>
                     <button class="tab-btn" id="compose-tab">إنشاء رسالة جديدة</button>
                 </div>
 
