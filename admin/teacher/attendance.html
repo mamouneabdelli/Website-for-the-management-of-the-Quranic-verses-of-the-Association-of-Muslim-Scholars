@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الحلقات القرآنية</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #F2F9FF;
+            color: #333;
+        }
+        
+        /* Header Styles */
+        .header {
+            padding: 10px 20px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: right;
+        }
+        
+        .welcome-msg {
+            font-size: 16px;
+            color: #555;
+        }
+        
+        /* Main Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-left: 1px solid #e0e0e0;
+            padding: 15px 0;
+        }
+        
+        .logo-section {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        
+        .logo-section img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        
+        .logo-section p {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .menu-section {
+            padding: 0 15px;
+        }
+        
+        .menu-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        
+        .menu-item.active {
+            font-weight: bold;
+            color: #006400;
+        }
+        
+        /* Content Styles */
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            color: #006400;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .group-list {
+            list-style: none;
+        }
+        
+        .group-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .group-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-list {
+            list-style: none;
+        }
+        
+        .student-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .student-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="welcome-msg">
+            أهلا بك يا أستاذ محمد
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-section">
+                <img src="logo.png" alt="شعار الجمعية">
+                <p>جمعية العلماء المسلمين الجزائريين</p>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-item active">لوحة التحكم</div>
+                <div class="menu-item">الحضور والغياب</div>
+                <div class="menu-item">الحفظ والمراجعة</div>
+                <div class="menu-item">إرسال التقارير</div>
+                <div class="menu-item">الطلاب المتخلفين</div>
+                <div class="menu-item">إعداد المواعيد وخطط الدراسة</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h3 class="section-title">تسجيل الحضور والغياب</h3>
+                <p>يتم عن طريق الطلاب</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">حلقات القرآن</h3>
+                <ul class="group-list">
+                    <li class="group-item">حلقة القرآن فوج رقم 1</li>
+                    <li class="group-item">حلقة القرآن فوج رقم 2</li>
+                    <li class="group-item">حلقة القرآن فوج رقم 3</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">الطلاب</h3>
+                <ul class="student-list">
+                    <li class="student-item">شايبية أسامة</li>
+                    <li class="student-item">شايبية أسامة</li>
+                    <li class="student-item">شايبية أسامة</li>
+                    <li class="student-item">شايبية أسامة</li>
+                    <li class="student-item">شايبية أسامة</li>
+                    <li class="student-item">شايبية أسامة</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,4 +8,9 @@ class Currilculum {
     private $objectives;
     private $resssources;
     private $group_type_id;
+
+    public function __construct()
+    {
+        
+    }
 }

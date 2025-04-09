@@ -1,7 +1,24 @@
 <?php
 
 require_once __DIR__ . '/../template/header.php';
+require_once __DIR__ . '/../../classes/DBConnection.php';
+require_once __DIR__ . '/../../classes/Student.php';
 
+
+$studentId = $_SESSION['studen_id']['id'];
+$db = DBConnection::getConnection()->getDb();
+
+$grades = Student::getGrades($studentId, $db);
+print_r($grades);
+
+
+$status = $grades[0]['status'];
+$bgColor = match ($status) {
+    'ناجح' => '#d4edda',
+    'راسب' => '#f8d7da',
+    'غياب' => '#fff3cd',
+    default => '#e2e3e5',
+};
 ?>
 
 <!-- Grades Section -->
@@ -19,38 +36,21 @@ require_once __DIR__ . '/../template/header.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">القرآن الكريم - الجزء الأول</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;">85/100</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">15/03/2025</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
-                            <span style="background-color: #d4e9d7; padding: 4px 8px; border-radius: 4px;">ناجح</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">التجويد</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;">78/100</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">10/03/2025</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
-                            <span style="background-color: #d4e9d7; padding: 4px 8px; border-radius: 4px;">ناجح</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">الأحاديث النبوية</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #d35400;">65/100</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">05/03/2025</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
-                            <span style="background-color: #f5dcc5; padding: 4px 8px; border-radius: 4px;">مقبول</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">السيرة النبوية</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;">92/100</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">28/02/2025</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
-                            <span style="background-color: #d4e9d7; padding: 4px 8px; border-radius: 4px;">ممتاز</span>
-                        </td>
-                    </tr>
+
+                    <?php
+                    foreach ($grades as $grade) {
+                    ?>
+                        <tr>
+                            <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;"><?= $grade['subject_name'] ?></td>
+                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;"><?= $grades[0]['grade'] ?>/100</td>
+                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;"><?= $grade['date'] ?></td>
+                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
+                                <span style="background-color: <?= $bgColor ?>; padding: 4px 8px; border-radius: 4px;">
+                                    <?= $status ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

@@ -14,4 +14,6 @@ class Group {
     private $students;
     private $teacher;
     private $currilculum;
+
+    
 }

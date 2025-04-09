@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['login_in'] = true;  
             $_SESSION['name'] = $loginResult['first_name'] ." ". $loginResult['last_name'];
             $_SESSION['user_id'] =  $loginResult['id']; 
+            $_SESSION['studen_id'] = $loginResult['student_id'];
             header("Location: /quranic/admin/student");
             exit();
         } else {
