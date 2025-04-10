@@ -71,7 +71,7 @@ class Student extends User
         if ($result)
             return $result;
         else
-            die("error return group id");
+            return "";
     }
 
     public static function getGrades($studentId, $db)

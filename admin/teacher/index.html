@@ -327,6 +327,10 @@
             .schedule-header, .schedule-grid {
                 grid-template-columns: 1fr;
             }
+         }
+        .sidebar-menu  a {
+            text-decoration: none;
+            color: black;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -349,11 +353,16 @@
                 <p>جمعية العلماء المسلمين الجزائريين</p>
             </div>
             <ul class="sidebar-menu">
-                <li style="background-color:#B0E4C4;">لوحة التحكم</li>
-                <li class="active">الحضور والغياب</li>
-                <li>الحفظ والمراجعة</li>
+                <li style="background-color:#B0E4C4;" class="active">
+                    <a href="index.html">لوحة التحكم</a>
+                </li>
+                <li >
+                    <a href="attendance.html">الحضور والغياب</a>
+                </li>
+                <li>
+                    <a href="save.html">الحفظ والمراجعة</a>
+                </li>
                 <li>إرسال تقرير</li>
-                <li>الصفحات المفتوحة</li>
                 <li>إعداد المواضيع و خطة دراسية</li>
             </ul>
             <div class="register-btn">

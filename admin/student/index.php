@@ -14,7 +14,6 @@ $groupId = Student::getGroupId(
 );
 
 
-
 $query = $db->prepare("SELECT 
     schedule.id,
     days.name AS day_name,
