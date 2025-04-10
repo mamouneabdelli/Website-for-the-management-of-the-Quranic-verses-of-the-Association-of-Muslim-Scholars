@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرسال تقرير - لوحة تحكم الأستاذ</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #F2F9FF;
+            color: #333;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .welcome-msg {
+            color: #555;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .welcome-msg span {
+            color: #000;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-icons i {
+            font-size: 20px;
+            color: #555;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: white;
+            padding: 15px 0;
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+        }
+
+        .logo p {
+            font-size: 14px;
+            margin-top: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .sidebar-menu li {
+            background-color: #E6F6EC;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: #00A841;
+            color: white;
+        }
+
+        .sidebar-menu li.active {
+            background-color: #E6F6EC;
+            color: #00A841;
+            border-right: 4px solid #00A841;
+        }
+
+        .register-btn {
+            background-color: #000;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            margin: 15px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Main Content Styles */
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Report Styles */
+        .report-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00A841;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .report-types {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-type {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .report-type:hover {
+            border-color: #00A841;
+        }
+
+        .report-type.active {
+            border-color: #00A841;
+            background-color: #E6F7E9;
+        }
+
+        .report-type i {
+            font-size: 24px;
+            color: #00A841;
+            margin-bottom: 10px;
+        }
+
+        .report-type h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .report-type p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .submit-btn {
+            background-color: #00A841;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            float: left;
+        }
+
+        .previous-reports {
+            margin-top: 30px;
+        }
+
+        .report-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .report-info {
+            flex: 1;
+        }
+
+        .report-info h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .report-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .report-actions button {
+            background-color: transparent;
+            border: none;
+            color: #00A841;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .report-types {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-left: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="header">
+    <div class="welcome-msg">
+        أهلا بك يا <span>الأستاذ محمد</span>
+    </div>
+    <div class="header-icons">
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-envelope"></i>
+    </div>
+</div>
+
+<div class="container">
+    <div class="sidebar">
+        <div class="logo">
+            <img src="logo.png" alt="جمعية العلماء المسلمين">
+            <p>جمعية العلماء المسلمين الجزائريين</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="index.html">لوحة التحكم</a>
+            </li>
+            <li>
+                <a href="attendance.html">الحضور والغياب</a>
+            </li>
+            <li>
+                <a href="save.html">الحفظ والمراجعة</a>
+            </li>
+            <li style="background-color:#B0E4C4;">
+                <a href="report.html">إرسال تقرير</a>
+            </li>
+        </ul>
+        <div class="register-btn">
+            <i class="fas fa-arrow-left"></i> تسجيل الدخول
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="report-section">
+            <div class="section-title">إرسال تقرير جديد</div>
+
+            <div class="report-types">
+                <div class="report-type active">
+                    <i class="fas fa-user-graduate"></i>
+                    <h3>تقرير أداء الطلاب</h3>
+                    <p>تقرير دوري عن مستوى الطلاب وتقدمهم</p>
+                </div>
+                <div class="report-type">
+                    <i class="fas fa-book-reader"></i>
+                    <h3>تقرير الحلقات</h3>
+                    <p>تقرير عن سير الحلقات والدروس</p>
+                </div>
+                <div class="report-type">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>تقرير إداري</h3>
+                    <p>تقارير إدارية وإحصائية للإدارة</p>
+                </div>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label>عنوان التقرير</label>
+                    <input type="text" class="form-control" placeholder="أدخل عنوان التقرير">
+                </div>
+
+                <div class="form-group">
+                    <label>الفترة الزمنية</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="date" class="form-control" style="width: 50%;">
+                        <input type="date" class="form-control" style="width: 50%;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>اختر الحلقة</label>
+                    <select class="form-control">
+                        <option>جميع الحلقات</option>
+                        <option>حلقة القرآن رقم 1</option>
+                        <option>حلقة القرآن رقم 2</option>
+                        <option>حلقة القرآن رقم 3</option>
+                        <option>حلقة القرآن رقم 4</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>محتوى التقرير</label>
+                    <textarea class="form-control" placeholder="اكتب محتوى التقرير هنا"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>إرفاق ملفات (اختياري)</label>
+                    <input type="file" class="form-control">
+                </div>
+
+                <button type="submit" class="submit-btn">إرسال التقرير</button>
+                <div style="clear: both;"></div>
+            </form>
+        </div>
+
+        <div class="report-section previous-reports">
+            <div class="section-title">التقارير السابقة</div>
+
+            <div class="report-card">
+                <div class="report-info">
+                    <h4>تقرير أداء الطلاب - شهر رمضان</h4>
+                    <p>تم الإرسال: 15 مارس 2025</p>
+                </div>
+                <div class="report-actions">
+                    <button><i class="fas fa-eye"></i> عرض</button>
+                    <button><i class="fas fa-download"></i> تحميل</button>
+                    <button><i class="fas fa-trash"></i> حذف</button>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="report-info">
+                    <h4>تقرير الحلقات - الربع الأول</h4>
+                    <p>تم الإرسال: 1 فبراير 2025</p>
+                </div>
+                <div class="report-actions">
+                    <button><i class="fas fa-eye"></i> عرض</button>
+                    <button><i class="fas fa-download"></i> تحميل</button>
+                    <button><i class="fas fa-trash"></i> حذف</button>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="report-info">
+                    <h4>التقرير الإداري السنوي</h4>
+                    <p>تم الإرسال: 15 يناير 2025</p>
+                </div>
+                <div class="report-actions">
+                    <button><i class="fas fa-eye"></i> عرض</button>
+                    <button><i class="fas fa-download"></i> تحميل</button>
+                    <button><i class="fas fa-trash"></i> حذف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // تفاعلات الصفحة
+    document.querySelectorAll('.report-type').forEach(type => {
+        type.addEventListener('click', function() {
+            document.querySelectorAll('.report-type').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
