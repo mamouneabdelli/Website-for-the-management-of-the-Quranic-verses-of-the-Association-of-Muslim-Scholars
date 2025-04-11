@@ -4,7 +4,8 @@ require_once __DIR__.'/../template/header.php';
 require_once __DIR__ . '/../../classes/DBConnection.php';
 require_once __DIR__ . '/../../classes/Student.php';
 
-$studentId = $_SESSION['studen_id']['id'];
+
+$studentId = $_SESSION['student_id']['id'];
 $db = DBConnection::getConnection()->getDb();
 $userId = $_SESSION['user_id'];
 
@@ -19,8 +20,8 @@ if(isset($_GET['id'])) {
         $messages = $query->fetchAll(PDO::FETCH_ASSOC);
 
 }else {
-
-$messages = Student::getMessages($groupId[0]['group_id'], $db);
+if (!empty($groupId[0]['group_id']))
+    $messages = Student::getMessages($groupId[0]['group_id'], $db);
 
 }
 ?>

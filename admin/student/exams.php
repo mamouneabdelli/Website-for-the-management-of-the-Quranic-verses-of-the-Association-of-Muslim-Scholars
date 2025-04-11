@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../classes/DBConnection.php';
 require_once __DIR__ . '/../../classes/Student.php';
 
 
-$studentId = $_SESSION['studen_id']['id'];
+$studentId = $_SESSION['student_id']['id'];
 $db = DBConnection::getConnection()->getDb();
 
 $grades = Student::getGrades($studentId, $db);
@@ -42,9 +42,9 @@ if(!empty($grades)) {
                     foreach ($grades as $grade) {
                     ?>
                         <tr>
-                            <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;"><?= $grade['subject_name'] ?></td>
-                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;"><?= $grades[0]['grade'] ?>/100</td>
-                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;"><?= $grade['date'] ?></td>
+                            <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;"><?= $grade ? $grade['subject_name'] : "" ?></td>
+                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; color: #27ae60;"><?= $grade ? $grades[0]['grade'] : "" ?>/100</td>
+                            <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;"><?= $grade ? $grade['date'] : "" ?></td>
                             <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;">
                                 <span style="background-color: <?= $bgColor ?>; padding: 4px 8px; border-radius: 4px;">
                                     <?= $status ?>
