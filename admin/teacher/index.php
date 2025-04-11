@@ -1,3 +1,29 @@
+<?php
+
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../../classes/Report.php';
+require_once __DIR__ . '/../../classes/User.php';
+require_once __DIR__ . '/../../classes/Teacher.php';
+require_once __DIR__ . '/../../classes/DBConnection.php';
+
+$groupNames = [];
+
+if (isset($_SESSION['teacher_id'])) {
+
+    $teacherId = $_SESSION['teacher_id'];
+
+    $groupNames = Teacher::getGroups(
+            $teacherId,
+            DBConnection::getConnection()->getDb()
+    );
+
+}
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,18 +38,18 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        
+
         body {
             background-color: #F2F9FF;
             color: #333;
         }
-        
+
         /* Main Layout */
         .container {
             display: flex;
             min-height: 100vh;
         }
-        
+
         /* Header Styles */
         .header {
             display: flex;
@@ -33,27 +59,27 @@
             background-color: white;
             border-bottom: 1px solid #e0e0e0;
         }
-        
+
         .welcome-msg {
             color: #555;
             font-weight: bold;
             font-size: 16px;
         }
-        
+
         .welcome-msg span {
             color: #000;
         }
-        
+
         .header-icons {
             display: flex;
             gap: 15px;
         }
-        
+
         .header-icons i {
             font-size: 20px;
             color: #555;
         }
-        
+
         /* Sidebar Styles */
         .sidebar {
             width: 280px;
@@ -61,33 +87,33 @@
             padding: 15px 0;
             border-left: 1px solid #e0e0e0;
         }
-        
+
         .logo {
             text-align: center;
             padding: 15px;
             border-bottom: 1px solid #f0f0f0;
             margin-bottom: 15px;
         }
-        
+
         .logo img {
             width: 120px;
             height: 90px;
             border-radius: 50%;
             background-color: #FFFFFF;
         }
-        
+
         .logo p {
             font-size: 14px;
             margin-top: 8px;
             color: #333;
             font-weight: 600;
         }
-        
+
         .sidebar-menu {
             list-style: none;
             padding: 0 15px;
         }
-        
+
         .sidebar-menu li {
             background-color: #E6F6EC;
             border-radius: 8px;
@@ -97,18 +123,18 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         .sidebar-menu li:hover {
             background-color: #00A841;
             color: white;
         }
-        
+
         .sidebar-menu li.active {
             background-color: #E6F6EC;
             color: #00A841;
             border-right: 4px solid #00A841;
         }
-        
+
         .register-btn {
             background-color: #000;
             color: white;
@@ -124,19 +150,19 @@
             font-weight: 600;
             cursor: pointer;
         }
-        
+
         /* Main Content Styles */
         .content {
             flex: 1;
             padding: 20px;
         }
-        
+
         .search-bar {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
-        
+
         .search-input {
             display: flex;
             align-items: center;
@@ -145,7 +171,7 @@
             padding: 8px 15px;
             width: 300px;
         }
-        
+
         .search-input input {
             border: none;
             background: transparent;
@@ -153,7 +179,7 @@
             padding-right: 10px;
             outline: none;
         }
-        
+
         .register-student-btn {
             background-color: #00A841;
             color: white;
@@ -164,14 +190,14 @@
             font-size: 14px;
             font-weight: 600;
         }
-        
+
         /* Stats Cards */
         .stats-cards {
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
         }
-        
+
         .stat-card {
             flex: 1;
             background-color: white;
@@ -180,30 +206,33 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
         }
-        
+
         .stat-card .number {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .stat-card .label {
             color: #666;
             font-size: 12px;
         }
-        
+
         .blue { color: #2196F3; }
         .green { color: #00A841; }
         .red { color: #ff5252; }
-        
+
         /* Session Cards */
         .session-cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 15px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
         }
-        
+
         .session-card {
             border-radius: 8px;
             padding: 12px;
@@ -212,7 +241,7 @@
             gap: 10px;
             cursor: pointer;
         }
-        
+
         .session-card i {
             background-color: white;
             color: #ffffff;
@@ -223,7 +252,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .session-card .title {
             color: #ffffff;
             font-size: 14px;
@@ -234,7 +263,7 @@
             width: 100%;
             font-weight: 600;
         }
-        
+
         /* Schedule Section */
         .schedule-section {
             margin-top: 20px;
@@ -243,12 +272,12 @@
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        
+
         .schedule-header {
             display: flex;
             margin-bottom: 10px;
         }
-        
+
         .day-header {
             flex: 1;
             text-align: center;
@@ -258,13 +287,13 @@
             font-size: 14px;
             font-weight: bold;
         }
-        
+
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
-        
+
         .schedule-cell {
             background-color: white;
             border: 1px solid #e0e0e0;
@@ -277,11 +306,11 @@
             justify-content: center;
             font-size: 14px;
         }
-        
+
         .schedule-cell.filled {
             background-color: #E6F7E9;
         }
-        
+
         .time-slot {
             background-color: #E6F7E9;
             padding: 8px;
@@ -292,38 +321,38 @@
             justify-content: center;
             font-size: 14px;
         }
-        
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .session-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .stats-cards {
                 flex-direction: column;
             }
         }
-        
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 border-left: none;
                 border-bottom: 1px solid #e0e0e0;
             }
-            
+
             .search-bar {
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .search-input {
                 width: 100%;
             }
-            
+
             .schedule-header, .schedule-grid {
                 grid-template-columns: 1fr;
             }
@@ -345,7 +374,7 @@
             <i class="fas fa-envelope"></i>
         </div>
     </div>
-    
+
     <div class="container">
         <div class="sidebar">
             <div class="logo">
@@ -382,7 +411,7 @@
             
             <div class="stats-cards">
                 <div class="stat-card">
-                    <div class="number red">3</div>
+                    <div class="number red"><?= count($groupNames) ?></div>
                     <div class="label">إجمالي الحلقات التي تشرف عليها</div>
                 </div>
                 <div class="stat-card">
@@ -396,48 +425,24 @@
             </div>
             
             <div class="session-cards">
+                <?php
+                if (!empty($groupNames)) {
+                    foreach ($groupNames as $groupName) {
+                ?>
                 <div class="session-card" style="background-color:#00A841;">
                     <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 1</button>
+                    <button class="title"><?= $groupName ?></button>
                 </div>
-                <div class="session-card" style="background-color:#008634;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 2</button>
-                </div>
-                <div class="session-card" style="background-color:#008634;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 3</button>
-                </div>
-                <div class="session-card" style="background-color:#4C9D9B;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 4</button>
-                </div>
+                <?php
+                    }
+                }else {
+                 ?>
+                    لا توجد حلقات
+                <?php
+                }
+                ?>
             </div>
-            
-            <div class="session-cards">
-                <div class="session-card" style="background-color:#4C9D9B;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 1</button>
-                </div>
-                <div class="session-card" style="background-color:#4C9D9B;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 2</button>
-                </div>
-                <div class="session-card" style="background-color:#479392;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 3</button>
-                </div>
-                <div class="session-card" style="background-color:#397674;">
-                    <i class="fas fa-book-open"></i>
-                    <button class="title">حلقات القرآن اليوم رقم 4</button>
-                </div>
-            </div>
-            
-            <div class="session-cards">
-                <div class="session-card" style="background-color:#00A841;">
-                    <button class="title">حلقات القرآن اليوم رقم 1</button>
-                </div>
-            </div>
+
             
             <div class="schedule-section">
                 <div class="schedule-header">
