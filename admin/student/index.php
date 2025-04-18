@@ -13,7 +13,6 @@ $groupId = Student::getGroupId(
     $db
 );
 
-echo $groupId;
 
 $schedule = null;
 if (!empty($groupId)) {

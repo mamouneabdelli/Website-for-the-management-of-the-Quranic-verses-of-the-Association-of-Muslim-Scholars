@@ -48,10 +48,10 @@ class Teacher extends User implements Report {
             $placeholders = implode(',', array_fill(0, count($groupIds), '?'));
 
             $query = $db->prepare("
-            SELECT group_name FROM groups WHERE id IN ($placeholders)
+            SELECT group_name , id FROM groups WHERE id IN ($placeholders)
         ");
             $query->execute($groupIds);
-            $groupNames = $query->fetchAll(PDO::FETCH_COLUMN);
+            $groupNames = $query->fetchAll(PDO::FETCH_ASSOC);
 
             return !empty($groupNames) ? $groupNames : false;
         }

@@ -6,17 +6,61 @@ require_once __DIR__ . '/../../classes/User.php';
 require_once __DIR__ . '/../../classes/Teacher.php';
 require_once __DIR__ . '/../../classes/DBConnection.php';
 
+
 $groupNames = [];
 
 if (isset($_SESSION['teacher_id'])) {
 
-    $teacherId = $_SESSION['teacher_id'];
 
-    $groupNames = Teacher::getGroups(
-            $teacherId,
-            DBConnection::getConnection()->getDb()
-    );
+}
 
+$teacherId = 2;
+$db = DBConnection::getConnection()->getDb();
+$schedule = null;
+$groupNames = Teacher::getGroups(
+    $teacherId,
+    $db
+);
+
+if (isset($_GET['id']))
+    $groupId = $_GET['id'];
+
+if (!empty($groupId)) {
+
+    $query = $db->prepare("SELECT 
+        schedule.id,
+        days.name AS day_name,
+        TIME_FORMAT(periods.start_time, '%H:%i') AS start_time,
+        TIME_FORMAT(periods.end_time, '%H:%i') AS end_time,
+        subjects.name AS subject_name
+    FROM schedule
+    JOIN days ON schedule.day_id = days.id
+    JOIN periods ON schedule.period_id = periods.id
+    JOIN subjects ON schedule.subject_id = subjects.id
+        WHERE schedule.group_id = {$groupId[0]['group_id']}
+        ORDER BY schedule.id ASC
+    
+    ");
+
+    $query->execute();
+    $schedule = $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$studentGroup = [];
+if (isset($groupId)) {
+    $query = $db->prepare("SELECT * FROM student_group WHERE group_id=? ");
+    $query->execute([$groupId]);
+    $studentGroup = $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$totalStudent = [];
+
+if (isset($groupNames)) {
+    foreach ($groupNames as $groupName) {
+        $query = $db->prepare("SELECT * FROM student_groups WHERE group_id=? ");
+        $query->execute([$groupName['id']]);
+        $totalStudent = $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>
@@ -386,7 +430,7 @@ if (isset($_SESSION['teacher_id'])) {
                     <a href="index.html" >لوحة التحكم</a>
                 </li>
                 <li>
-                    <a href="attendance.html">الحضور والغياب</a>
+                    <a href="attendance.php">الحضور والغياب</a>
                 </li>
                 <li>
                     <a href="save.html">الحفظ والمراجعة</a>
@@ -415,11 +459,11 @@ if (isset($_SESSION['teacher_id'])) {
                     <div class="label">إجمالي الحلقات التي تشرف عليها</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number green">13</div>
+                    <div class="number green"><?= count($studentGroup) ?></div>
                     <div class="label">عدد الحضور الجلسة</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number blue">50</div>
+                    <div class="number blue"><?= count($totalStudent) ?></div>
                     <div class="label">إجمالي عدد الطلاب</div>
                 </div>
             </div>
@@ -431,7 +475,7 @@ if (isset($_SESSION['teacher_id'])) {
                 ?>
                 <div class="session-card" style="background-color:#00A841;">
                     <i class="fas fa-book-open"></i>
-                    <button class="title"><?= $groupName ?></button>
+                    <a class="title" href="?id=<?= $groupName['id'] ?>"><?= $groupName['group_name'] ?></a>
                 </div>
                 <?php
                     }
@@ -443,7 +487,7 @@ if (isset($_SESSION['teacher_id'])) {
                 ?>
             </div>
 
-            
+
             <div class="schedule-section">
                 <div class="schedule-header">
                     <div class="day-header">التوقيت</div>
@@ -451,28 +495,28 @@ if (isset($_SESSION['teacher_id'])) {
                     <div class="day-header">الثلاثاء</div>
                     <div class="day-header">الخميس</div>
                 </div>
-                
+
                 <div class="schedule-grid">
                     <div class="time-slot">8:00 - 8:15</div>
                     <div class="schedule-cell filled">حفظ القرآن</div>
                     <div class="schedule-cell"></div>
                     <div class="schedule-cell filled">حفظ القرآن</div>
-                    
+
                     <div class="time-slot">8:15 - 9:00</div>
                     <div class="schedule-cell"></div>
                     <div class="schedule-cell filled">حفظ القرآن</div>
                     <div class="schedule-cell"></div>
-                    
+
                     <div class="time-slot">9:00 - 9:30</div>
                     <div class="schedule-cell"></div>
                     <div class="schedule-cell filled">الأحكام</div>
                     <div class="schedule-cell filled">حفظ القرآن</div>
-                    
+
                     <div class="time-slot">9:30 - 9:40</div>
                     <div class="schedule-cell filled">مراجعة</div>
                     <div class="schedule-cell"></div>
                     <div class="schedule-cell"></div>
-                    
+
                     <div class="time-slot">9:40 - 10:30</div>
                     <div class="schedule-cell filled">مراجعة</div>
                     <div class="schedule-cell"></div>

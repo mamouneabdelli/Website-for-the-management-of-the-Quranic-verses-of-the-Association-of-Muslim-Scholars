@@ -1,3 +1,10 @@
+<?php
+
+require_once __DIR__ . '/includes/header.php';
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -359,7 +366,7 @@
                 <a href="index.php">لوحة التحكم</a>
             </li>
             <li style="background-color:#B0E4C4;">
-                <a href="attendance.html">الحضور والغياب</a>
+                <a href="attendance.php">الحضور والغياب</a>
             </li>
             <li>
                 <a href="save.html">الحفظ والمراجعة</a>
