@@ -55,7 +55,7 @@ foreach($groupNames as $groupName) {
 <div class="container">
     <div class="sidebar">
         <div class="logo">
-            <img src="logo.png" alt="جمعية العلماء المسلمين">
+            <img src="../../img/شعار.png" alt="جمعية العلماء المسلمين">
             <p>جمعية العلماء المسلمين الجزائريين</p>
         </div>
         <ul class="sidebar-menu">
@@ -66,7 +66,7 @@ foreach($groupNames as $groupName) {
                 <a href="attendance.php">الحضور والغياب</a>
             </li>
             <li>
-                <a href="save.html">الحفظ والمراجعة</a>
+                <a href="save.php">الحفظ والمراجعة</a>
             </li>
             <li>
                 <a href="report.html">إرسال تقرير</a>

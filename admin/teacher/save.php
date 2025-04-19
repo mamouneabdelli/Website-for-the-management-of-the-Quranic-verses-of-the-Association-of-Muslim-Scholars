@@ -16,7 +16,7 @@ $groupNames = Teacher::getGroups(
 
 
 
-$attendances = [];
+$progresses = [];
 
 foreach($groupNames as $groupName) {
     $a = new Progress(
@@ -24,11 +24,12 @@ foreach($groupNames as $groupName) {
         $db
     );
 
-    array_push($attendances,$a->getProggresses());
+    array_push($progresses,$a->getProggresses());
 }
 
-
-
+/* echo "<pre>";
+print_r($progresses);
+echo "</pre>"; */
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +55,7 @@ foreach($groupNames as $groupName) {
 <div class="container">
     <div class="sidebar">
         <div class="logo">
-            <img src="logo.png" alt="جمعية العلماء المسلمين">
+            <img src="../../img/شعار.png" alt="جمعية العلماء المسلمين">
             <p>جمعية العلماء المسلمين الجزائريين</p>
         </div>
         <ul class="sidebar-menu">
@@ -65,7 +66,7 @@ foreach($groupNames as $groupName) {
                 <a href="attendance.php">الحضور والغياب</a>
             </li>
             <li style="background-color:#B0E4C4;">
-                <a href="save.html">الحفظ والمراجعة</a>
+                <a href="save.php">الحفظ والمراجعة</a>
             </li>
             <li>
                 <a href="report.html">إرسال تقرير</a>
@@ -86,12 +87,26 @@ foreach($groupNames as $groupName) {
         </div>
 
         <div class="student-progress-cards">
+
+            <?php
+
+            foreach($progresses as $progresseGroup) {
+                foreach($progresseGroup as $progresse) {    
+
+                    $bgColor = match ($progresse['evaluation']) {
+                        'ممتاز' => 'status-excellent',
+                        'جيد' => 'status-good',
+                        'متوسط' => 'status-average',
+                        'يحتاج مراجعة' => 'status-needs-review',
+                        default => '#e2e3e5',
+                    };
+            ?>
             <div class="student-card">
                 <div class="student-header">
                     <div class="student-avatar">أ</div>
                     <div class="student-info">
-                        <div class="student-name">أحمد محمد</div>
-                        <div class="student-level">متقدم</div>
+                        <div class="student-name"><?= $progresse['first_name'] . " " . $progresse['last_name'] ?></div>
+                        <div class="student-level"><?= $progresse['evaluation'] ?></div>
                     </div>
                 </div>
 
@@ -105,19 +120,19 @@ foreach($groupNames as $groupName) {
                 <div class="memorization-details">
                     <div class="memorization-row">
                         <div class="memorization-label">السورة الحالية:</div>
-                        <div class="memorization-value">سورة المائدة</div>
+                        <div class="memorization-value">سورة <?= $progresse['sourah'] ?></div>
                     </div>
                     <div class="memorization-row">
                         <div class="memorization-label">الآيات المحفوظة:</div>
-                        <div class="memorization-value">1-30</div>
+                        <div class="memorization-value"><?= $progresse['ayah'] ?></div>
                     </div>
                     <div class="memorization-row">
                         <div class="memorization-label">جودة الحفظ:</div>
-                        <div class="memorization-value" style="color: #00A841;">ممتاز</div>
+                        <div ><span class="memorization-status <?= $bgColor ?>"><?= $progresse['evaluation'] ?></span></div>
                     </div>
                     <div class="memorization-row">
                         <div class="memorization-label">آخر مراجعة:</div>
-                        <div class="memorization-value">5 أبريل 2025</div>
+                        <div class="memorization-value"><?= $progresse['date'] ?></div>
                     </div>
                 </div>
 
@@ -126,85 +141,11 @@ foreach($groupNames as $groupName) {
                 </div>
             </div>
 
-            <div class="student-card">
-                <div class="student-header">
-                    <div class="student-avatar">س</div>
-                    <div class="student-info">
-                        <div class="student-name">سارة عبدالله</div>
-                        <div class="student-level">متوسط</div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="progress-title">نسبة الحفظ الكلية</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 45%;"></div>
-                    </div>
-                </div>
-
-                <div class="memorization-details">
-                    <div class="memorization-row">
-                        <div class="memorization-label">السورة الحالية:</div>
-                        <div class="memorization-value">سورة النساء</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">الآيات المحفوظة:</div>
-                        <div class="memorization-value">1-50</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">جودة الحفظ:</div>
-                        <div class="memorization-value" style="color: #2196F3;">جيد</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">آخر مراجعة:</div>
-                        <div class="memorization-value">3 أبريل 2025</div>
-                    </div>
-                </div>
-
-                <div class="record-button">
-                    <button class="action-button">تسجيل المتابعة</button>
-                </div>
-            </div>
-
-            <div class="student-card">
-                <div class="student-header">
-                    <div class="student-avatar">م</div>
-                    <div class="student-info">
-                        <div class="student-name">محمد علي</div>
-                        <div class="student-level">مبتدئ</div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="progress-title">نسبة الحفظ الكلية</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 20%;"></div>
-                    </div>
-                </div>
-
-                <div class="memorization-details">
-                    <div class="memorization-row">
-                        <div class="memorization-label">السورة الحالية:</div>
-                        <div class="memorization-value">سورة البقرة</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">الآيات المحفوظة:</div>
-                        <div class="memorization-value">1-25</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">جودة الحفظ:</div>
-                        <div class="memorization-value" style="color: #FB8C00;">متوسط</div>
-                    </div>
-                    <div class="memorization-row">
-                        <div class="memorization-label">آخر مراجعة:</div>
-                        <div class="memorization-value">9 أبريل 2025</div>
-                    </div>
-                </div>
-
-                <div class="record-button">
-                    <button class="action-button">تسجيل المتابعة</button>
-                </div>
-            </div>
+            <?php
+                }
+            }    
+            ?>
+            
         </div>
 
         <div class="surah-progress-section">
@@ -288,8 +229,11 @@ foreach($groupNames as $groupName) {
         </div>
 
         <div class="memorization-table-section">
+            <?php
+            foreach($progresses as $progresseGroup) {
+             ?>
             <div class="section-header">
-                <div class="section-title">سجل متابعة الحفظ والمراجعة</div>
+                <div class="section-title"><?= $progresseGroup[0]['group_name'] ?></div>
                 <div>
                     <select class="filter-dropdown">
                         <option>آخر أسبوع</option>
@@ -313,62 +257,32 @@ foreach($groupNames as $groupName) {
                 </tr>
                 </thead>
                 <tbody>
+                <?php
+            foreach($progresseGroup as $progresse) { 
+                $bgColor = match ($progresse['evaluation']) {
+                    'ممتاز' => 'status-excellent',
+                    'جيد' => 'status-good',
+                    'متوسط' => 'status-average',
+                    'يحتاج مراجعة' => 'status-needs-review',
+                    default => '#e2e3e5',
+                };
+             ?>
                 <tr>
-                    <td>أحمد محمد</td>
-                    <td>سورة المائدة</td>
-                    <td>20-30</td>
+                    <td><?= $progresse['first_name'] . " " . $progresse['last_name'] ?></td>
+                    <td>سورة <?= $progresse['sourah'] ?></td>
+                    <td><?= $progresse['ayah'] ?></td>
                     <td>حفظ جديد</td>
-                    <td><span class="memorization-status status-excellent">ممتاز</span></td>
-                    <td>9 أبريل 2025</td>
-                    <td>متقن للحفظ مع تجويد ممتاز</td>
+                    <td><span class="memorization-status <?= $bgColor ?>"><?= $progresse['evaluation'] ?></span></td>
+                    <td><?= $progresse['date'] ?></td>
+                    <td><?= $progresse['note'] ?></td>
                 </tr>
-                <tr>
-                    <td>سارة عبدالله</td>
-                    <td>سورة النساء</td>
-                    <td>40-50</td>
-                    <td>حفظ جديد</td>
-                    <td><span class="memorization-status status-good">جيد</span></td>
-                    <td>8 أبريل 2025</td>
-                    <td>بحاجة لمراجعة قواعد التجويد</td>
-                </tr>
-                <tr>
-                    <td>محمد علي</td>
-                    <td>سورة البقرة</td>
-                    <td>15-25</td>
-                    <td>حفظ جديد</td>
-                    <td><span class="memorization-status status-average">متوسط</span></td>
-                    <td>8 أبريل 2025</td>
-                    <td>بحاجة إلى مزيد من المراجعة</td>
-                </tr>
-                <tr>
-                    <td>أحمد محمد</td>
-                    <td>سورة المائدة</td>
-                    <td>1-20</td>
-                    <td>مراجعة</td>
-                    <td><span class="memorization-status status-excellent">ممتاز</span></td>
-                    <td>5 أبريل 2025</td>
-                    <td>حفظ متقن جدًا</td>
-                </tr>
-                <tr>
-                    <td>نورة أحمد</td>
-                    <td>سورة الفاتحة</td>
-                    <td>كاملة</td>
-                    <td>مراجعة</td>
-                    <td><span class="memorization-status status-good">جيد</span></td>
-                    <td>3 أبريل 2025</td>
-                    <td>تحسن ملحوظ في الأداء</td>
-                </tr>
-                <tr>
-                    <td>رامي خالد</td>
-                    <td>سورة البقرة</td>
-                    <td>1-10</td>
-                    <td>حفظ جديد</td>
-                    <td><span class="memorization-status status-needs-review">يحتاج مراجعة</span></td>
-                    <td>1 أبريل 2025</td>
-                    <td>يواجه صعوبة في الحفظ، يحتاج تدريب إضافي</td>
-                </tr>
+                <?php } ?>
+               
                 </tbody>
             </table>
+            <?php
+            } 
+             ?>
         </div>
     </div>
 </div>

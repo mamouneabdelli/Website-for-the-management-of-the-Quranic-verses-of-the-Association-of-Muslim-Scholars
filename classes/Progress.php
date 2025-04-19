@@ -16,9 +16,9 @@ class Progress {
     public function getProggresses()  {
         $query = $this->db->prepare("
            SELECT 
-           students.first_name,
-           students.last_name,
-           groups.name,
+           users.first_name,
+           users.last_name,
+           groups.group_name,
            academic_progress.sourah,
            academic_progress.ayah,
            academic_progress.evaluation,
@@ -27,6 +27,7 @@ class Progress {
            academic_progress.note
            FROM academic_progress
            JOIN students ON  students.id = academic_progress.student_id
+           JOIN users ON  users.id = students.user_id
            JOIN groups ON  groups.id = academic_progress.group_id
             WHERE academic_progress.group_id = ? 
         ");
