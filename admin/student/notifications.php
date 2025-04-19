@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../classes/DBConnection.php';
 require_once __DIR__ . '/../../classes/Student.php';
 
 
-$studentId = $_SESSION['studen_id']['id'];
+$studentId = $_SESSION['student_id']['id'];
 $db = DBConnection::getConnection()->getDb();
 
 
