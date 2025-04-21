@@ -38,4 +38,26 @@ class Progress {
         else
             return false;
     }
+
+    public function getStudents() {
+        $query = $this->db->prepare("
+            SELECT 
+              users.first_name ,
+              users.last_name ,
+              students.id
+            FROM student_groups
+            JOIN students ON students.id = student_groups.student_id
+            JOIN users ON users.id = students.user_id
+            WHERE student_groups.group_id = ?   
+        ");
+
+        $query->execute([$this->group_id]);
+
+        $groupNames = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if(empty($groupNames))
+            return "";
+        else
+            return $groupNames;
+    }
 }
