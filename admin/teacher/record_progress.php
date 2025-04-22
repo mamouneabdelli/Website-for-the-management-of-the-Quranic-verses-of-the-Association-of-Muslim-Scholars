@@ -28,22 +28,34 @@ $surahs = [
     ['id' => 8, 'name' => 'الأنفال']
 ];
 
+$types = [
+        'مراجعة',
+        'حفظ جديد'
+];
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_progress'])) {
     $groupId = $_POST['group_id'];
     $studentId = $_POST['student_id'];
-    $surahId = $_POST['surah_id'];
+    $surah = $_POST['surah_name'];
     $ayah = $_POST['ayah'];
     $evaluation = $_POST['evaluation'];
     $note = $_POST['note'];
     $date = $_POST['date'];
+    $progress = $_POST['progress'];
 
-    // Process progress data (example; adjust based on your Progress class)
-    // Example: Save progress to database using Progress class
-    // $progress = new Progress($groupId, $db);
-    // $progress->saveProgress($studentId, $surahId, $ayah, $evaluation, $note, $date);
 
-    // Redirect back to save.php with success message (adjust as needed)
+
+    try {
+        $query = $db->prepare("
+    INSERT INTO academic_progress (student_id,group_id,sourah,ayah,evaluation,progress_type,date,note)
+    VALUES (?,?,?,?,?,?,?,?)
+    ");
+        $query->execute([$studentId,$groupId,$surah,$ayah,$evaluation,$progress,$date,$note]);
+    }catch (PDOException $e) {
+        die("Error : ". $e->getMessage());
+    }
     header('Location: save.php?message=Progress recorded successfully');
     exit;
 }
@@ -158,10 +170,20 @@ if ($selectedGroupId) {
 
             <div class="form-group">
                 <label for="surahSelect">السورة:</label>
-                <select id="surahSelect" name="surah_id" required>
+                <select id="surahSelect" name="surah_name" required>
                     <option value="">اختر السورة</option>
                     <?php foreach ($surahs as $surah) { ?>
-                        <option value="<?= $surah['id'] ?>"><?= $surah['name'] ?></option>
+                        <option value="<?= $surah['name'] ?>"><?= $surah['name'] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="surahSelect">نوع المتابعة:</label>
+                <select id="surahSelect" name="progress" required>
+                    <option value="">اختر النوع</option>
+                    <?php foreach ($types as $type) { ?>
+                        <option value="<?= $type ?>"><?= $type ?></option>
                     <?php } ?>
                 </select>
             </div>

@@ -27,9 +27,9 @@ foreach($groupNames as $groupName) {
     array_push($progresses,$a->getProggresses());
 }
 
-/* echo "<pre>";
-print_r($progresses);
-echo "</pre>"; */
+// echo "<pre>";
+//print_r($progresses);
+//echo "</pre>";
 ?>
 
 <link rel="stylesheet" href="css/save.css">
@@ -47,7 +47,7 @@ echo "</pre>"; */
         <div class="student-progress-cards">
 
             <?php
-
+            if (!empty($progresses)) {
             foreach($progresses as $progresseGroup) {
                 foreach($progresseGroup as $progresse) {    
 
@@ -101,7 +101,8 @@ echo "</pre>"; */
 
             <?php
                 }
-            }    
+            }
+            }
             ?>
             
         </div>
@@ -191,7 +192,7 @@ echo "</pre>"; */
             foreach($progresses as $progresseGroup) {
              ?>
             <div class="section-header">
-                <div class="section-title"><?= $progresseGroup[0]['group_name'] ?></div>
+                <div class="section-title"><?= $progresseGroup[0]['group_name'] ?? "" ?></div>
                 <div>
                     <select class="filter-dropdown">
                         <option>آخر أسبوع</option>
@@ -216,6 +217,7 @@ echo "</pre>"; */
                 </thead>
                 <tbody>
                 <?php
+                if (!empty($progresseGroup)) {
             foreach($progresseGroup as $progresse) { 
                 $bgColor = match ($progresse['evaluation']) {
                     'ممتاز' => 'status-excellent',
@@ -234,7 +236,7 @@ echo "</pre>"; */
                     <td><?= $progresse['date'] ?></td>
                     <td><?= $progresse['note'] ?></td>
                 </tr>
-                <?php } ?>
+                <?php } }?>
                
                 </tbody>
             </table>
