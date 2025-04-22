@@ -1,5 +1,5 @@
 <?php 
 
 interface Report {
-    function sendReport();
+    function sendReport($title,$content,$groupId,$senderId);
 }

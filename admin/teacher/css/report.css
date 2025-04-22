@@ -283,3 +283,118 @@ textarea.form-control {
     text-decoration: none;
     color: black;
 }
+
+/* Tabs Container */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+    padding-bottom: 2px;
+}
+
+/* Tab Styles */
+.tab {
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    border-radius: 8px 8px 0 0;
+    transition: background-color 0.3s, color 0.3s, border-bottom 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab:hover {
+    background-color: #E6F7E9;
+    color: #00A841;
+}
+
+.tab.active {
+    background-color: #E6F7E9;
+    color: #00A841;
+    border-bottom: 3px solid #00A841;
+    font-weight: bold;
+}
+
+.tab i {
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .tab {
+        margin-left: 0;
+        margin-bottom: 5px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+/* Button Container */
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* Submit Button Styles */
+.submit-btn {
+    background-color: #00A841;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.submit-btn:hover {
+    background-color: #008633;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* Message Button Styles */
+.message-btn {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.message-btn:hover {
+    background-color: #1e87db;
+}
+
+.message-btn:active {
+    transform: scale(0.98);
+}
+
+/* Clearfix */
+.clearfix {
+    clear: both;
+}

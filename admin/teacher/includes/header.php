@@ -45,7 +45,7 @@ ini_set("display_errors",1);
                     <a href="save.php">الحفظ والمراجعة</a>
                 </li>
                 <li >
-                    <a href="report.html">إرسال تقرير</a>
+                    <a href="report.php">إرسال تقرير</a>
                 </li>
             </ul>
             <div class="register-btn">
