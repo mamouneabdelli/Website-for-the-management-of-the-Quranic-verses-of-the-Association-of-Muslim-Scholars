@@ -3,9 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إرسال تقرير - لوحة تحكم الأستاذ</title>
+    <title>إرسال تقرير أو رسالة - لوحة تحكم الأستاذ</title>
     <link rel="stylesheet" href="css/report.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Tabs Container */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+            padding-bottom: 2px;
+        }
+
+        /* Tab Styles */
+        .tab {
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            border-radius: 8px 8px 0 0;
+            transition: background-color 0.3s, color 0.3s, border-bottom 0.3s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            background-color: #E6F7E9;
+            color: #00A841;
+        }
+
+        .tab.active {
+            background-color: #E6F7E9;
+            color: #00A841;
+            border-bottom: 3px solid #00A841;
+            font-weight: bold;
+        }
+
+        .tab i {
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .tab {
+                margin-left: 0;
+                margin-bottom: 5px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* Submit Button Styles */
+        .submit-btn {
+            background-color: #00A841;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background-color: #008633;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Message Button Styles */
+        .message-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .message-btn:hover {
+            background-color: #1e87db;
+        }
+
+        .message-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Clearfix */
+        .clearfix {
+            clear: both;
+        }
+    </style>
 </head>
 <body>
 <div class="header">
@@ -35,7 +151,7 @@
                 <a href="save.php">الحفظ والمراجعة</a>
             </li>
             <li style="background-color:#B0E4C4;">
-                <a href="report.html">إرسال تقرير</a>
+                <a href="report.html">إرسال تقرير/رسالة</a>
             </li>
         </ul>
         <div class="register-btn">
@@ -44,7 +160,13 @@
     </div>
 
     <div class="content">
-        <div class="report-section">
+        <div class="tabs">
+            <div class="tab active" data-target="report-section">إرسال تقرير</div>
+            <div class="tab" data-target="message-section">إرسال رسالة</div>
+        </div>
+
+        <!-- Report Section -->
+        <div class="report-section" id="report-section">
             <div class="section-title">إرسال تقرير جديد</div>
 
             <div class="report-types">
@@ -100,13 +222,61 @@
                     <input type="file" class="form-control">
                 </div>
 
-                <button type="submit" class="submit-btn">إرسال التقرير</button>
-                <div style="clear: both;"></div>
+                <div class="button-container">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> إرسال التقرير
+                    </button>
+                </div>
+                <div class="clearfix"></div>
             </form>
         </div>
 
+        <!-- Message Section -->
+        <div class="report-section" id="message-section" style="display: none;">
+            <div class="section-title">إرسال رسالة جديدة</div>
+
+            <form>
+                <div class="form-group">
+                    <label>المستلمون</label>
+                    <select class="form-control" multiple>
+                        <option value="all">جميع الطلاب</option>
+                        <option value="group1">حلقة القرآن رقم 1</option>
+                        <option value="group2">حلقة القرآن رقم 2</option>
+                        <option value="group3">حلقة القرآن رقم 3</option>
+                        <option value="group4">حلقة القرآن رقم 4</option>
+                        <option value="student1">طالب: أحمد علي</option>
+                        <option value="student2">طالب: خالد محمود</option>
+                        <option value="student3">طالب: عبد الله سعيد</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>عنوان الرسالة</label>
+                    <input type="text" class="form-control" placeholder="أدخل عنوان الرسالة">
+                </div>
+
+                <div class="form-group">
+                    <label>محتوى الرسالة</label>
+                    <textarea class="form-control" placeholder="اكتب محتوى الرسالة هنا" rows="6"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>إرفاق ملفات (اختياري)</label>
+                    <input type="file" class="form-control">
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" class="message-btn">
+                        <i class="fas fa-envelope"></i> إرسال الرسالة
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+
+        <!-- Previous Reports and Messages -->
         <div class="report-section previous-reports">
-            <div class="section-title">التقارير السابقة</div>
+            <div class="section-title">التقارير والرسائل السابقة</div>
 
             <div class="report-card">
                 <div class="report-info">
@@ -122,8 +292,8 @@
 
             <div class="report-card">
                 <div class="report-info">
-                    <h4>تقرير الحلقات - الربع الأول</h4>
-                    <p>تم الإرسال: 1 فبراير 2025</p>
+                    <h4>رسالة إلى طلاب حلقة القرآن 1</h4>
+                    <p>تم الإرسال: 10 فبراير 2025</p>
                 </div>
                 <div class="report-actions">
                     <button><i class="fas fa-eye"></i> عرض</button>
@@ -148,7 +318,23 @@
 </div>
 
 <script>
-    // تفاعلات الصفحة
+    // Tab functionality
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            document.querySelectorAll('.report-section').forEach(section => {
+                if (section.id === 'previous-reports') return; // Keep previous reports visible
+                section.style.display = 'none';
+            });
+
+            const targetSection = document.getElementById(this.getAttribute('data-target'));
+            targetSection.style.display = 'block';
+        });
+    });
+
+    // Report type selection
     document.querySelectorAll('.report-type').forEach(type => {
         type.addEventListener('click', function() {
             document.querySelectorAll('.report-type').forEach(t => t.classList.remove('active'));
