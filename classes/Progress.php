@@ -36,7 +36,7 @@ class Progress {
         if(!empty($progresses))
             return $progresses;
         else
-            return false;
+            return [];
     }
 
     public function getStudents() {

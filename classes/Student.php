@@ -96,4 +96,30 @@ class Student extends User
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
+
+    public static function getProggresses($studentId,$db)  {
+        $query = $db->prepare("
+           SELECT 
+           users.first_name,
+           users.last_name,
+           groups.group_name,
+           academic_progress.sourah,
+           academic_progress.ayah,
+           academic_progress.evaluation,
+           academic_progress.progress_type,
+           academic_progress.date,
+           academic_progress.note
+           FROM academic_progress
+           JOIN students ON  students.id = academic_progress.student_id
+           JOIN users ON  users.id = students.user_id
+           JOIN groups ON  groups.id = academic_progress.group_id
+            WHERE academic_progress.student_id = ? 
+        ");
+        $query->execute([$studentId]);
+        $progresses = $query->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($progresses))
+            return $progresses;
+        else
+            return [];
+    }
 }

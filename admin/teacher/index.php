@@ -30,7 +30,7 @@ if (!empty($groupId)) {
 }
 
 if (!empty($groupId)) {
-    // Modified query to include teacher name and location (assuming tables exist)
+    
     $query = $db->prepare("
         SELECT 
     subjects.name,
