@@ -153,10 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <?php foreach ($emails as $groupId => $emailGroup): ?>
             <?php
-            // Find group name for this group ID
             $groupName = array_filter($groupNames, fn($g) => $g['id'] == $groupId);
             $groupName = reset($groupName)['group_name'] ?? 'غير معروف';
-            ?>
+            ?> ء
             <?php foreach ($emailGroup as $email): ?>
                 <div class="report-card" data-content="<?= htmlspecialchars($email['content'] ?? '') ?>" data-group="<?= htmlspecialchars($groupName) ?>">
                     <div class="report-info">
