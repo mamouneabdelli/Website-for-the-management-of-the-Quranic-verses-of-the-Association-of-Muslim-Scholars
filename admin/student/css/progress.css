@@ -1,0 +1,284 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #F2F9FF 0%, #E6F7E9 100%);
+    color: #333;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.welcome-msg {
+    color: #555;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.welcome-msg span {
+    color: #00A841;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.header-icons i {
+    font-size: 22px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.header-icons i:hover {
+    color: #00A841;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: white;
+    padding: 20px 0;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.logo {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 130px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo p {
+    font-size: 15px;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 600;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0 15px;
+}
+
+.sidebar-menu li {
+    background-color: #E6F6EC;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu li:hover {
+    background-color: #00A841;
+    color: white;
+    transform: translateX(-5px);
+}
+
+.sidebar-menu li.active {
+    background-color: #B0E4C4;
+    color: #00A841;
+    border-right: 4px solid #00A841;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.register-btn {
+    background-color: #000;
+    color: white;
+    padding: 14px;
+    text-align: center;
+    margin: 20px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+    background-color: #333;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    width: 350px;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-bar:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding-right: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.progress-section, .progress-trend {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.progress-section:hover, .progress-trend:hover {
+    transform: translateY(-5px);
+}
+
+.progress-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.progress-table th, .progress-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+}
+
+.progress-table th {
+    background-color: #E6F7E9;
+    font-weight: bold;
+    color: #00A841;
+    font-size: 16px;
+}
+
+.progress-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.progress-table tr:hover {
+    background-color: #E6F7E9;
+}
+
+.evaluation {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.evaluation-good {
+    background-color: #E6F7E9;
+    color: #00A841;
+}
+
+.evaluation-average {
+    background-color: #FFF3E0;
+    color: #FF9800;
+}
+
+.trend-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 120px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.trend-bar {
+    flex: 1;
+    background-color: #00A841;
+    border-radius: 6px 6px 0 0;
+    transition: height 0.3s ease;
+}
+
+.trend-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        box-shadow: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .progress-table {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 20px;
+    }
+}
