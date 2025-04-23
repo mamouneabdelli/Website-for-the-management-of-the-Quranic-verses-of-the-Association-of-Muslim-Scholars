@@ -64,7 +64,12 @@ class Student extends User
 
     public static function getGroupId($studentId, $db)
     {
-        $query = $db->prepare("SELECT group_id FROM student_groups WHERE student_id=?");
+        $query = $db->prepare("
+    SELECT student_groups.group_id, groups.group_name 
+    FROM student_groups
+    JOIN groups ON groups.id = student_groups.group_id
+    WHERE student_groups.student_id = ?
+");
         $query->execute([$studentId]);
         $result =  $query->fetchAll(PDO::FETCH_ASSOC);
 

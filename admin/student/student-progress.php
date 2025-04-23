@@ -1,11 +1,51 @@
 <?php
 
-require_once __DIR__ .'/template/header.php';
+require_once __DIR__ . '/template/header.php';
+require_once __DIR__ . '/../../classes/Report.php';
+require_once __DIR__ . '/../../classes/DBConnection.php';
+require_once __DIR__ . '/../../classes/Progress.php';
+require_once __DIR__ . '/../../classes/Student.php';
+require_once __DIR__ . '/../../classes/Teacher.php';
+
+
+
+
+$studentId = $_SESSION['student_id']['id'];
+
+$db = DBConnection::getConnection()->getDb();
+
+
+$groupId = Student::getGroupId($studentId, $db);
+
+$progresses = Student::getProggresses($studentId, $db);
+
 
 ?>
 
 
 <link rel="stylesheet" href="css/progress.css">
+
+<style>
+    .status-excellent {
+    background-color: #E6F7E9;
+    color: #00A841;
+}
+
+.status-good {
+    background-color: #E3F2FD;
+    color: #2196F3;
+}
+
+.status-average {
+    background-color: #FFF3E0;
+    color: #FB8C00;
+}
+
+.status-needs-review {
+    background-color: #FFE6E6;
+    color: #FF5252;
+}
+</style>
 
         <div class="content">
             <div class="progress-trend">
@@ -45,27 +85,23 @@ require_once __DIR__ .'/template/header.php';
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach($progresses as $progresse) { 
+                            $bgColor = match ($progresse['evaluation']) {
+                                'ممتاز' => 'status-excellent',
+                                'جيد' => 'status-good',
+                                'متوسط' => 'status-average',
+                                'يحتاج مراجعة' => 'status-needs-review',
+                                default => '#e2e3e5',
+                            };
+                            ?>
                         <tr>
-                            <td>20 أبريل 2025</td>
-                            <td>سورة البقرة</td>
+                            <td><?= $progresse['date'] ?></td>
+                            <td>سورة <?= $progresse['sourah'] ?></td>
                             <td>1-10</td>
-                            <td><span class="evaluation evaluation-good">ممتاز</span></td>
-                            <td>حفظ ممتاز، يحتاج إلى تحسين التجويد</td>
+                            <td><span class="evaluation <?= $bgColor ?>"><?= $progresse['evaluation'] ?></span></td>
+                            <td><?= $progresse['note'] ?></td>
                         </tr>
-                        <tr>
-                            <td>15 أبريل 2025</td>
-                            <td>سورة آل عمران</td>
-                            <td>1-5</td>
-                            <td><span class="evaluation evaluation-average">متوسط</span></td>
-                            <td>يحتاج إلى مراجعة يومية</td>
-                        </tr>
-                        <tr>
-                            <td>10 أبريل 2025</td>
-                            <td>سورة النساء</td>
-                            <td>1-7</td>
-                            <td><span class="evaluation evaluation-good">جيد جدا</span></td>
-                            <td>تقدم ملحوظ في الحفظ</td>
-                        </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

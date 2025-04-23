@@ -1,6 +1,51 @@
 <?php
 
-require_once __DIR__ .'/template/header.php';
+require_once __DIR__ . '/template/header.php';
+require_once __DIR__ . '/../../classes/Report.php';
+require_once __DIR__ . '/../../classes/DBConnection.php';
+require_once __DIR__ . '/../../classes/Progress.php';
+require_once __DIR__ . '/../../classes/Student.php';
+require_once __DIR__ . '/../../classes/Teacher.php';
+
+
+
+
+$studentId = $_SESSION['student_id']['id'];
+
+$db = DBConnection::getConnection()->getDb();
+
+
+$groupId = Student::getGroupId($studentId, $db);
+
+$progresses = Student::getProggresses($studentId, $db);
+
+$messages = Teacher::getMessages($groupId[0]['group_id'], $db);
+
+try {
+    $query = $db->prepare("
+SELECT 
+subjects.name,
+groups.group_name,
+users.first_name,
+users.last_name,
+curriculum.day,
+curriculum.start_time,
+curriculum.end_time,
+curriculum.class
+FROM curriculum
+JOIN subjects ON curriculum.subject_id = subjects.id
+JOIN teachers ON curriculum.teacher_id = teachers.id
+JOIN users ON teachers.user_id = users.id
+JOIN groups ON curriculum.group_id = groups.id
+WHERE curriculum.group_id = ?
+ORDER BY curriculum.id ASC;
+
+");
+    $query->execute([$groupId[0]['group_id']]);
+    $schedules = $query->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error : " . $e->getMessage();
+}
 
 ?>
 
@@ -27,41 +72,15 @@ require_once __DIR__ .'/template/header.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>الأحد</td>
-                            <td>10:00 - 11:30 ص</td>
-                            <td>تلاوة القرآن</td>
-                            <td>أ. محمد عبد الرحمن</td>
-                            <td>قاعة 1</td>
-                        </tr>
-                        <tr>
-                            <td>الإثنين</td>
-                            <td>09:00 - 10:30 ص</td>
-                            <td>تجويد القرآن</td>
-                            <td>أ. علي حسن</td>
-                            <td>قاعة 2</td>
-                        </tr>
-                        <tr>
-                            <td>الثلاثاء</td>
-                            <td>14:00 - 15:30 م</td>
-                            <td>حفظ القرآن</td>
-                            <td>أ. محمد عبد الرحمن</td>
-                            <td>قاعة 1</td>
-                        </tr>
-                        <tr>
-                            <td>الأربعاء</td>
-                            <td>11:00 - 12:30 م</td>
-                            <td>فقه القرآن</td>
-                            <td>أ. أحمد علي</td>
-                            <td>قاعة 3</td>
-                        </tr>
-                        <tr>
-                            <td>الخميس</td>
-                            <td>10:00 - 11:30 ص</td>
-                            <td>تفسير القرآن</td>
-                            <td>أ. أحمد علي</td>
-                            <td>قاعة 2</td>
-                        </tr>
+                    <?php foreach($schedules as $schedule) { ?>
+                <tr>
+                    <td><?= $schedule['day'] ?></td>
+                    <td><?= date("H:i",strtotime($schedule['start_time'])). " - " . date("H:i",strtotime($schedule['end_time'])) ?></td>
+                    <td><?= $schedule['name'] ?></td>
+                    <td><?= $schedule['first_name']. " " . $schedule['last_name'] ?></td>
+                    <td><?= $schedule['class'] ?></td>
+                </tr>
+                <?php } ?>
                     </tbody>
                 </table>
             </div>

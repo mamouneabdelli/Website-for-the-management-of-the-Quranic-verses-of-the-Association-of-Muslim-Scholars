@@ -202,8 +202,8 @@ if (!empty($groupNames)) {
                             <td>
                                 <?php
                                 // Convert to 12-hour format with AM/PM for consistency
-                                $startTime = date('h:i A', strtotime($entry['start_time']));
-                                $endTime = date('h:i A', strtotime($entry['end_time']));
+                                $startTime = date('h:i ', strtotime($entry['start_time']));
+                                $endTime = date('h:i ', strtotime($entry['end_time']));
                                 echo $startTime . ' - ' . $endTime;
                                 ?>
                             </td>

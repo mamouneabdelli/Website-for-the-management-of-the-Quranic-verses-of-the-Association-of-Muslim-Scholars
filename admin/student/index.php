@@ -110,7 +110,7 @@ ORDER BY curriculum.id ASC;
                 <?php foreach($schedules as $schedule) { ?>
                 <tr>
                     <td><?= $schedule['day'] ?></td>
-                    <td><?= $schedule['start_time']. " " . $schedule['end_time'] ?></td>
+                    <td><?= date("H:i",strtotime($schedule['start_time'])). " - " . date("H:i",strtotime($schedule['end_time'])) ?></td>
                     <td><?= $schedule['name'] ?></td>
                     <td><?= $schedule['first_name']. " " . $schedule['last_name'] ?></td>
                     <td><?= $schedule['class'] ?></td>

@@ -93,6 +93,6 @@ ini_set("display_errors", 1);
                 </li>
             </ul>
             <div class="register-btn">
-                <i class="fas fa-arrow-left"></i> تسجيل الخروج
+                <i class="fas fa-arrow-left"></i> <a href="../student/logout.php" style="color: white;">تسجيل الخروج</a>
             </div>
         </div>

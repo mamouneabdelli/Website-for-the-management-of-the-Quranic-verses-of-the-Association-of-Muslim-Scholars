@@ -78,7 +78,17 @@ class Teacher extends User implements Report {
     }
     
     public static function getMessages($groupId,$db) {
-        $query = $db->prepare("SELECT * FROM messages WHERE group_id=? ORDER BY date DESC");
+        $query = $db->prepare("
+        SELECT 
+        messages.title,
+        messages.content,
+        messages.date,
+        users.first_name,
+        users.last_name 
+        FROM messages
+        JOIN users ON users.id = messages.sender_id 
+        WHERE group_id=? ORDER BY date DESC
+        ");
         $query->execute([$groupId]);
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
         return $results;
