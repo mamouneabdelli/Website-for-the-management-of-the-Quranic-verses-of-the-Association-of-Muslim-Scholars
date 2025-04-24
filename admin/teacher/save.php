@@ -15,10 +15,10 @@ $groupNames = Teacher::getGroups(
 );
 
 
-
 $progresses = [];
 
 foreach($groupNames as $groupName) {
+    
     $a = new Progress(
         $groupName['id'],
         $db

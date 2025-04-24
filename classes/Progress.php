@@ -29,7 +29,7 @@ class Progress {
            JOIN students ON  students.id = academic_progress.student_id
            JOIN users ON  users.id = students.user_id
            JOIN groups ON  groups.id = academic_progress.group_id
-           WHERE academic_progress.group_id = ? ORDER BY id DESC
+           WHERE academic_progress.group_id = ? ORDER BY academic_progress.id DESC
         ");
         $query->execute([$this->group_id]);
         $progresses = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -146,6 +146,39 @@ $messages = Teacher::getMessages($groupId[0]['group_id'], $db);
         return gk_fileData[filename] || "";
     }
 </script>
+<script>
+    let lastMessageCount = <?= count($messages) ?>;
+    
+    // استخدام ملف صوتي محلي
+    const notificationSound = new Audio('sounds/notification.wav');
+    
+    function checkNewMessages() {
+        fetch("check_new_messages.php")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.message_count > lastMessageCount) {
+                    console.log('New messages found:', data.message_count);
+                    // تشغيل صوت الإشعار
+                    notificationSound.play();
+                    document.querySelector('.section-title span').textContent = `إجمالي: ${data.message_count} رسائل`;
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error checking messages:', error);
+            });
+    }
+
+    // التحقق فوراً ثم كل 5 ثواني
+    checkNewMessages();
+    setInterval(checkNewMessages, 5000);
+</script>
+
 </body>
 
 </html>
