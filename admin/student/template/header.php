@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if(empty($_SESSION['login_in'])) {
+    header("Location: /quranic");
+}
+
+
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 

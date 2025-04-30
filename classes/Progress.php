@@ -56,7 +56,7 @@ class Progress {
         $groupNames = $query->fetchAll(PDO::FETCH_ASSOC);
 
         if(empty($groupNames))
-            return "";
+            return ""; 
         else
             return $groupNames;
     }
