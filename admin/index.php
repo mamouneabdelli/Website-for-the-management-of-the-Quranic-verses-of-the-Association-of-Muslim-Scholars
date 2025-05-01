@@ -2,36 +2,82 @@
 
 require_once __DIR__ . '/template/header.php';
 
- ?>
+
+$query = $db->prepare("
+    SELECT
+        teachers.id as teacher_id ,
+        teachers.specialization ,
+        users.first_name,
+        users.last_name,
+        users.created_at
+        FROM teachers
+    JOIN users ON teachers.user_id = users.id
+");
+$query->execute();
+$teachers = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$query = $db->prepare("
+    SELECT * FROM students
+");
+$query->execute();
+$students = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$query = $db->prepare("
+    SELECT * FROM groups
+");
+$query->execute();
+$groups = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$query = $db->prepare("
+    SELECT status FROM attendance
+");
+$query->execute();
+$attendances = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+$presents = count(array_filter($attendances, fn($a) => $a['status'] == "حاضر"));
+
+$num = count($attendances);
+
+$percentage = ($presents * 100) / $num;
+
+$query = $db->prepare("
+    SELECT * FROM messages
+");
+$query->execute();
+$messages = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+//echo "<pre>";
+//print_r($teachers);
+//echo "</pre>";
+
+?>
 
  <link rel="stylesheet" href="CSS/style.css">
 
     <div class="content">
         <div class="search-bar">
-            <div class="search-input">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="بحث...">
-            </div>
-            <button class="add-btn">
-                <i class="fas fa-sync-alt"></i> تحديث النظام
-            </button>
+            <a class="add-btn" href="index.php">
+                <i class="fas fa-sync-alt"></i>تحديث النظام
+            </a>
         </div>
 
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="number blue">40</div>
+                <div class="number blue"><?= count($teachers) ?></div>
                 <div class="label">إجمالي الأساتذة</div>
             </div>
             <div class="stat-card">
-                <div class="number green">523</div>
+                <div class="number green"><?= count($students) ?></div>
                 <div class="label">إجمالي الطلاب</div>
             </div>
             <div class="stat-card">
-                <div class="number red">86</div>
-                <div class="label">الحلقات النشطة</div>
+                <div class="number red"><?= count($groups) ?></div>
+                <div class="label">اجمالي الحلقات</div>
             </div>
             <div class="stat-card">
-                <div class="number orange">95%</div>
+                <div class="number orange"><?= number_format($percentage, 2) ?>%</div>
                 <div class="label">نسبة الحضور</div>
             </div>
         </div>
@@ -41,7 +87,7 @@ require_once __DIR__ . '/template/header.php';
                 <div class="dashboard-card-icon bg-blue">
                     <i class="fas fa-user-tie"></i>
                 </div>
-                <div class="dashboard-card-number">12</div>
+                <div class="dashboard-card-number"><?= count($teachers) ?></div>
                 <div class="dashboard-card-title">أساتذة جدد هذا الشهر</div>
                 <div class="dashboard-card-footer">
                     <i class="fas fa-arrow-up"></i> 18% مقارنة بالشهر الماضي
@@ -51,7 +97,7 @@ require_once __DIR__ . '/template/header.php';
                 <div class="dashboard-card-icon bg-green">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <div class="dashboard-card-number">87</div>
+                <div class="dashboard-card-number"><?= count($students) ?></div>
                 <div class="dashboard-card-title">طلاب جدد هذا الشهر</div>
                 <div class="dashboard-card-footer">
                     <i class="fas fa-arrow-up"></i> 23% مقارنة بالشهر الماضي
@@ -61,7 +107,7 @@ require_once __DIR__ . '/template/header.php';
                 <div class="dashboard-card-icon bg-red">
                     <i class="fas fa-book-open"></i>
                 </div>
-                <div class="dashboard-card-number">56</div>
+                <div class="dashboard-card-number"><?= count($groups) ?></div>
                 <div class="dashboard-card-title">حلقات مكتملة هذا الشهر</div>
                 <div class="dashboard-card-footer">
                     <i class="fas fa-arrow-up"></i> 12% مقارنة بالشهر الماضي
@@ -71,8 +117,8 @@ require_once __DIR__ . '/template/header.php';
                 <div class="dashboard-card-icon bg-orange">
                     <i class="fas fa-file-alt"></i>
                 </div>
-                <div class="dashboard-card-number">34</div>
-                <div class="dashboard-card-title">تقارير جديدة هذا الشهر</div>
+                <div class="dashboard-card-number"><?= count($messages) ?></div>
+                <div class="dashboard-card-title">رسائل جديدة هذا الشهر</div>
                 <div class="dashboard-card-footer">
                     <i class="fas fa-arrow-down"></i> 5% مقارنة بالشهر الماضي
                 </div>
@@ -82,7 +128,7 @@ require_once __DIR__ . '/template/header.php';
         <div class="admin-section">
             <div class="section-title">
                 أحدث الأساتذة المنضمين
-                <span class="view-all">عرض الكل</span>
+                <span class="view-all"><a href="admin-teachers.php" class="view-all">عرض الكل</a></span>
             </div>
             <table class="admin-table">
                 <thead>
@@ -90,16 +136,23 @@ require_once __DIR__ . '/template/header.php';
                     <th>اسم الأستاذ</th>
                     <th>تاريخ الانضمام</th>
                     <th>الحلقات</th>
-                    <th>الحالة</th>
+                    <th>الطور</th>
                     <th>الإجراءات</th>
                 </tr>
                 </thead>
                 <tbody>
+                <?php foreach ($teachers as $teacher) :
+                    $query = $db->prepare("
+    SELECT * FROM group_teachers WHERE teacher_id=?
+");
+                    $query->execute([$teacher['teacher_id']]);
+                    $groups = $query->fetchAll(PDO::FETCH_ASSOC);
+                ?>
                 <tr>
-                    <td>محمد علي</td>
-                    <td>10 أبريل 2025</td>
-                    <td>3</td>
-                    <td><span class="status status-active">نشط</span></td>
+                    <td><?= $teacher['first_name'] ." " . $teacher['last_name']  ?></td>
+                    <td><?=date("Y-m-d",strtotime($teacher['created_at'])) ?></td>
+                    <td><?= count($groups) ?></td>
+                    <td><span class="status status-active">تعليم القرأن الكريم</span></td>
                     <td>
                         <div class="action-buttons">
                             <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
@@ -107,30 +160,7 @@ require_once __DIR__ . '/template/header.php';
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>خالد محمود</td>
-                    <td>5 أبريل 2025</td>
-                    <td>2</td>
-                    <td><span class="status status-pending">قيد المراجعة</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>أحمد رامي</td>
-                    <td>1 أبريل 2025</td>
-                    <td>4</td>
-                    <td><span class="status status-active">نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -138,8 +168,6 @@ require_once __DIR__ . '/template/header.php';
         <div class="admin-section">
             <div class="tabs">
                 <div class="tab active">النشاط الأخير</div>
-                <div class="tab">الإشعارات</div>
-                <div class="tab">طلبات جديدة</div>
             </div>
 
             <div class="notification-list">
@@ -224,43 +252,6 @@ require_once __DIR__ . '/template/header.php';
             </div>
         </div>
 
-        <div class="admin-section">
-            <div class="section-title">التقارير السريعة</div>
-            <div class="reports-grid">
-                <div class="report-card">
-                    <div class="report-card-icon bg-blue">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="report-card-title">تقرير الحضور</div>
-                    <div class="report-card-desc">تقرير مفصل عن حضور الطلاب في جميع الحلقات</div>
-                    <div class="report-card-link">
-                        <i class="fas fa-arrow-circle-left"></i> عرض التقرير
-                    </div>
-                </div>
-
-                <div class="report-card">
-                    <div class="report-card-icon bg-green">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="report-card-title">تقرير الأداء</div>
-                    <div class="report-card-desc">تقرير عن أداء الطلاب والحفظ والمراجعة</div>
-                    <div class="report-card-link">
-                        <i class="fas fa-arrow-circle-left"></i> عرض التقرير
-                    </div>
-                </div>
-
-                <div class="report-card">
-                    <div class="report-card-icon bg-orange">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="report-card-title">تقرير الإنجازات</div>
-                    <div class="report-card-desc">تقرير عن إنجازات الطلاب وحفظ السور</div>
-                    <div class="report-card-link">
-                        <i class="fas fa-arrow-circle-left"></i> عرض التقرير
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

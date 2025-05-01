@@ -20,6 +20,6 @@ abstract class User {
         if ($gender !== null) $this->gender = $gender;
     }
 
-    public abstract function login();
+    public abstract function login($user);
     public abstract function signup();
 }

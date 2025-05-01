@@ -24,12 +24,9 @@ class Student extends User
         $this->db = $db;
     }
 
-    public function login()
+    public function login($user)
     {
         try {
-            $query = $this->db->prepare("SELECT * FROM users WHERE email=?");
-            $query->execute([$this->email]);
-            $user = $query->fetch(PDO::FETCH_ASSOC);
             if ($user && password_verify($this->password, $user['password'])) {
                 $query = $this->db->prepare("SELECT id FROM students WHERE user_id=?");
                 $query->execute([$user['id']]);

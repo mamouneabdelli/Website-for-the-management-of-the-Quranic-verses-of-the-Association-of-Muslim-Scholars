@@ -50,6 +50,9 @@ ORDER BY curriculum.id ASC;
 
 ?>
 
+
+<link rel="stylesheet" href="css/style.css">
+
 <div class="content">
     <div class="stats-section">
         <div class="stat-card">

@@ -3,6 +3,11 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+require_once __DIR__ . '/../../classes/DBConnection.php';
+
+$db = DBConnection::getConnection()->getDb();
+
+
 
 require_once __DIR__ .'/../../config/app.php';
 ?>
@@ -32,7 +37,7 @@ require_once __DIR__ .'/../../config/app.php';
 <div class="container">
     <div class="sidebar">
         <div class="logo">
-            <img src="<?= $config['app_url'] ?>/img/شعار.png" alt="جمعية العلماء المسلمين">
+            <img src="<?= $config['app_url'] ?>/img/logo.png" alt="جمعية العلماء المسلمين">
             <p>جمعية العلماء المسلمين الجزائريين</p>
         </div>
         <ul class="sidebar-menu">
@@ -52,7 +57,10 @@ require_once __DIR__ .'/../../config/app.php';
                 <a href="admin-sessions.php">إدارة الحلقات</a>
             </li>
             <li>
-                <a href="admin-reports.php">التقارير والإحصائيات</a>
+                <a href="admin-reports.php">الرسائل والإحصائيات</a>
+            </li>
+            <li>
+                <a href="admin-reports.php">ادارة البرامج</a>
             </li>
             <li>
                 <a href="admin-settings.php">إعدادات النظام</a>

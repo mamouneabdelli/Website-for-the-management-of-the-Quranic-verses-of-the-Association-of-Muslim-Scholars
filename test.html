@@ -1,29 +1,60 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require_once __DIR__ . '/../../classes/DBConnection.php';
+require_once __DIR__ . '/../../config/app.php';
+
+$db = DBConnection::getConnection()->getDb();
+
+// Check if admin is logged in
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+header('Location: ' . $config['app_url'] . '/login.php');
+exit;
+}
+
+// Fetch stats
+$totalUsers = $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$totalTeachers = $db->query("SELECT COUNT(*) FROM teachers")->fetchColumn();
+$totalStudents = $db->query("SELECT COUNT(*) FROM students")->fetchColumn();
+$activeSessions = $db->query("SELECT COUNT(*) FROM sessions WHERE date >= CURDATE()")->fetchColumn();
+$unreadMessages = $db->query("SELECT COUNT(*) FROM messages WHERE recipient_id = ? AND status = 'unread'", [$_SESSION['user']['id']])->fetchColumn();
+
+// Fetch recent messages
+$recentMessages = $db->query("SELECT m.id, m.title, m.content, m.status, m.created_at, u.name AS sender, r.name AS recipient
+FROM messages m
+LEFT JOIN users u ON m.sender_id = u.id
+LEFT JOIN users r ON m.recipient_id = r.id
+ORDER BY m.created_at DESC
+LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch recent activity
+$recentActivity = $db->query("SELECT a.action, a.created_at, u.name
+FROM activity_logs a
+LEFT JOIN users u ON a.user_id = u.id
+ORDER BY a.created_at DESC
+LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>لوحة تحكم الطالب - جمعية العلماء المسلمين</title>
-    <link rel="stylesheet" href="css/report.css">
+    <title>لوحة تحكم المسؤول - جمعية العلماء المسلمين</title>
+    <link rel="stylesheet" href="<?= $config['app_url'] ?>/css/report.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-=======
-    <title>لوحة معلومات الطالب</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Global Styles */
->>>>>>> 239cc0ffdef6cbda1231606afcbb67a44d4cdbd2
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-<<<<<<< HEAD
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         body {
-            background-color: #F2F9FF;
+            background: linear-gradient(135deg, #F2F9FF 0%, #E6F7E9 100%);
             color: #333;
         }
 
@@ -36,31 +67,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 15px 25px;
             background-color: white;
-            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .welcome-msg {
             color: #555;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .welcome-msg span {
-            color: #000;
+            color: #00A841;
         }
 
         .header-icons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
         .header-icons i {
-            font-size: 20px;
+            font-size: 22px;
             color: #555;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: color 0.3s ease;
         }
 
         .header-icons i:hover {
@@ -70,27 +101,28 @@
         .sidebar {
             width: 280px;
             background-color: white;
-            padding: 15px 0;
-            border-left: 1px solid #e0e0e0;
+            padding: 20px 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
         }
 
         .logo {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             border-bottom: 1px solid #f0f0f0;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .logo img {
-            width: 120px;
-            height: 90px;
+            width: 130px;
+            height: 100px;
             border-radius: 50%;
             background-color: #FFFFFF;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .logo p {
-            font-size: 14px;
-            margin-top: 8px;
+            font-size: 15px;
+            margin-top: 10px;
             color: #333;
             font-weight: 600;
         }
@@ -102,12 +134,12 @@
 
         .sidebar-menu li {
             background-color: #E6F6EC;
-            border-radius: 8px;
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 12px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: all 0.3s ease;
         }
 
         .sidebar-menu li:hover {
@@ -131,18 +163,18 @@
         .register-btn {
             background-color: #000;
             color: white;
-            padding: 12px;
+            padding: 14px;
             text-align: center;
-            margin: 15px;
-            border-radius: 6px;
+            margin: 20px 15px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
         .register-btn:hover {
@@ -151,133 +183,214 @@
 
         .content {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #333;
         }
 
-        .search-bar {
+        .stats-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
             display: flex;
             align-items: center;
-            background-color: #f5f5f5;
-            border-radius: 20px;
-            padding: 8px 15px;
-            margin-bottom: 15px;
-            width: 300px;
+            gap: 15px;
         }
 
-        .search-bar input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding-right: 10px;
-            outline: none;
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
-        .schedule-section, .messages-section, .progress-section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+        .stat-icon {
+            font-size: 28px;
+            color: #00A841;
         }
 
-        .schedule-section:hover, .messages-section:hover, .progress-section:hover {
-            transform: translateY(-2px);
+        .stat-info h4 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
         }
 
-        .schedule-table, .progress-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .schedule-table th, .schedule-table td, .progress-table th, .progress-table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            text-align: right;
-        }
-
-        .schedule-table th, .progress-table th {
-            background-color: #E6F7E9;
+        .stat-info p {
+            font-size: 22px;
             font-weight: bold;
             color: #00A841;
         }
 
-        .schedule-table tr:nth-child(even), .progress-table tr:nth-child(even) {
+        .quick-links {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            transition: transform 0.3s ease;
+        }
+
+        .quick-links:hover {
+            transform: translateY(-5px);
+        }
+
+        .quick-link-btn {
+            background-color: #00A841;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link-btn:hover {
+            background-color: #008633;
+            transform: translateY(-2px);
+        }
+
+        .quick-link-btn:active {
+            transform: scale(0.95);
+        }
+
+        .messages-section, .activity-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .messages-section:hover, .activity-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .messages-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .messages-table th, .messages-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+
+        .messages-table th {
+            background-color: #E6F7E9;
+            font-weight: bold;
+            color: #00A841;
+            font-size: 16px;
+        }
+
+        .messages-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        .message-card {
+        .messages-table tr:hover {
+            background-color: #E6F7E9;
+        }
+
+        .message-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.3s;
-        }
-
-        .message-card:hover {
-            background-color: #f5f5f5;
-        }
-
-        .message-card:last-child {
-            border-bottom: none;
-        }
-
-        .message-info h4 {
-            font-size: 16px;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .message-info p {
-            color: #666;
-            font-size: 12px;
+            gap: 10px;
         }
 
         .message-actions button {
             background-color: transparent;
             border: none;
-            color: #2196F3;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            transition: color 0.3s;
+            gap: 8px;
+            transition: color 0.3s ease;
         }
 
-        .message-actions button:hover {
+        .message-actions .view-btn {
+            color: #2196F3;
+        }
+
+        .message-actions .view-btn:hover {
             color: #1e87db;
         }
 
-        .evaluation {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
+        .message-actions .delete-btn {
+            color: #F44336;
+        }
+
+        .message-actions .delete-btn:hover {
+            color: #d32f2f;
+        }
+
+        .message-status {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
             display: inline-block;
         }
 
-        .evaluation-good {
+        .status-sent {
             background-color: #E6F7E9;
             color: #00A841;
         }
 
-        .evaluation-average {
+        .status-received {
             background-color: #FFF3E0;
             color: #FF9800;
         }
 
-        /* Modal Styles */
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .activity-table th, .activity-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+
+        .activity-table th {
+            background-color: #E6F7E9;
+            font-weight: bold;
+            color: #00A841;
+            font-size: 16px;
+        }
+
+        .activity-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .activity-table tr:hover {
+            background-color: #E6F7E9;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -293,10 +406,11 @@
 
         .modal-content {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             width: 500px;
             max-width: 90%;
-            padding: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .modal-header {
@@ -307,16 +421,22 @@
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
+            color: #333;
         }
 
         .close-btn {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #00A841;
         }
 
         .modal-body {
@@ -326,9 +446,9 @@
 
         .modal-body p {
             margin-bottom: 10px;
+            font-size: 15px;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -336,1026 +456,287 @@
 
             .sidebar {
                 width: 100%;
-                border-left: none;
+                box-shadow: none;
                 border-bottom: 1px solid #e0e0e0;
             }
 
-            .search-bar {
-                width: 100%;
+            .content {
+                padding: 20px;
             }
 
-            .schedule-table, .progress-table {
+            .stats-section {
+                flex-direction: column;
+            }
+
+            .quick-links {
+                flex-direction: column;
+            }
+
+            .messages-table, .activity-table {
                 font-size: 14px;
             }
+        }
 
-            .message-card {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 10px;
+        @media (max-width: 480px) {
+            .stat-card {
+                min-width: 100%;
             }
-=======
-            font-family: 'Cairo', sans-serif;
-        }
 
-        body {
-            background-color: #f8f9fa;
-            direction: rtl;
-        }
-
-        /* Layout */
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #343a40;
-            color: white;
-            padding: 20px 0;
-        }
-
-        .logo {
-            padding: 10px 20px;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 5px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            color: #ffffff;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background-color: #00A841;
-            border-right: 4px solid #ffffff;
-        }
-
-        .nav-link i {
-            margin-left: 10px;
-            font-size: 18px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        /* Search Bar */
-        .search-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-
-        .search-input {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 5px;
-            padding: 8px 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 300px;
-        }
-
-        .search-input i {
-            color: #6c757d;
-            margin-left: 10px;
-        }
-
-        .search-input input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-        }
-
-        .action-button {
-            background-color: #00A841;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        /* Stats Cards */
-        .stats-cards {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            flex: 1;
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .number {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .red {
-            color: #dc3545;
-        }
-
-        .green {
-            color: #00A841;
-        }
-
-        .blue {
-            color: #0d6efd;
-        }
-
-        .yellow {
-            color: #ffc107;
-        }
-
-        .label {
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        /* Student Profile Card */
-        .student-profile-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .student-avatar {
-            width: 100px;
-            height: 100px;
-            background-color: #00A841;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .student-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .student-details {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
-
-        .detail-item i {
-            margin-left: 8px;
-            color: #00A841;
-        }
-
-        /* Progress Section */
-        .progress-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #343a40;
-        }
-
-        .overall-progress {
-            margin-bottom: 15px;
-        }
-
-        .progress-bar-container {
-            height: 10px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #00A841;
-            border-radius: 5px;
-        }
-
-        .progress-percentage {
-            text-align: left;
-            font-size: 14px;
-            color: #6c757d;
-        }
-
-        .surah-progress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        .surah-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .surah-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        }
-
-        .surah-name {
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .surah-progress {
-            font-size: 12px;
-            color: #6c757d;
-            margin-bottom: 8px;
-        }
-
-        .progress-indicator {
-            height: 6px;
-            background-color: #e9ecef;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-indicator-fill {
-            height: 100%;
-            background-color: #00A841;
-            border-radius: 3px;
-        }
-
-        /* Attendance Section */
-        .attendance-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .attendance-chart {
-            display: flex;
-            height: 150px;
-            align-items: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 10px;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background-color: #00A841;
-            border-radius: 5px 5px 0 0;
-            position: relative;
-        }
-
-        .chart-bar-label {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            color: #6c757d;
-        }
-
-        .attendance-legend {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .legend-color {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-            margin-left: 5px;
-        }
-
-        .present {
-            background-color: #00A841;
-        }
-
-        .absent {
-            background-color: #dc3545;
-        }
-
-        .late {
-            background-color: #ffc107;
-        }
-
-        /* Schedule Section */
-        .schedule-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .schedule-header {
-            display: flex;
-            background-color: #f8f9fa;
-            border-radius: 5px 5px 0 0;
-            overflow: hidden;
-        }
-
-        .day-header {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            background-color: #343a40;
-            color: white;
-        }
-
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: 120px 1fr 1fr 1fr;
-            border: 1px solid #dee2e6;
-            border-radius: 0 0 5px 5px;
-        }
-
-        .time-slot {
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .schedule-cell {
-            padding: 10px;
-            border-bottom: 1px solid #dee2e6;
-            border-right: 1px solid #dee2e6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 60px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .filled {
-            background-color: #e8f5e9;
-            color: #00A841;
-            font-weight: bold;
-        }
-
-        /* Recent Activities */
-        .activities-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .activity-list {
-            list-style: none;
-        }
-
-        .activity-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            align-items: center;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e8f5e9;
-            color: #00A841;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 15px;
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .activity-timestamp {
-            font-size: 12px;
-            color: #6c757d;
-        }
-
-        /* Status indicators */
-        .status-excellent {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .status-good {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .status-average {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .status-needs-review {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
->>>>>>> 239cc0ffdef6cbda1231606afcbb67a44d4cdbd2
+            .section-title {
+                font-size: 20px;
+            }
+
+            .quick-link-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <div class="header">
-        <div class="welcome-msg">
-            أهلا بك يا <span>الطالب أحمد علي</span>
-        </div>
-        <div class="header-icons">
-            <i class="fas fa-bell"></i>
-            <i class="fas fa-envelope"></i>
-            <i class="fas fa-cog"></i>
-        </div>
+<div class="header">
+    <div class="welcome-msg">
+        أهلا بك يا <span>المدير أحمد</span>
     </div>
-
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <img src="../../img/شعار.png" alt="جمعية العلماء المسلمين">
-                <p>جمعية العلماء المسلمين الجزائريين</p>
-            </div>
-            <ul class="sidebar-menu">
-                <li class="active" style="background-color:#B0E4C4;">
-                    <a href="student-dashboard.html">لوحة التحكم</a>
-                </li>
-                <li>
-                    <a href="student-schedule.html">البرنامج</a>
-                </li>
-                <li>
-                    <a href="student-messages.html">الرسائل</a>
-                </li>
-                <li>
-                    <a href="student-progress.html">المتابعة</a>
-                </li>
-            </ul>
-            <div class="register-btn">
-                <i class="fas fa-arrow-left"></i> تسجيل الخروج
-            </div>
-        </div>
-
-        <div class="content">
-            <!-- Schedule Section -->
-            <div class="schedule-section">
-                <div class="section-title">
-                    البرنامج الأسبوعي
-                    <span>حلقة القرآن رقم 1</span>
-                </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="بحث في البرنامج...">
-                </div>
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>اليوم</th>
-                            <th>الوقت</th>
-                            <th>المادة</th>
-                            <th>الأستاذ</th>
-                            <th>الموقع</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>الأحد</td>
-                            <td>10:00 - 11:30 ص</td>
-                            <td>تلاوة القرآن</td>
-                            <td>أ. محمد عبد الرحمن</td>
-                            <td>قاعة 1</td>
-                        </tr>
-                        <tr>
-                            <td>الثلاثاء</td>
-                            <td>14:00 - 15:30 م</td>
-                            <td>حفظ القرآن</td>
-                            <td>أ. محمد عبد الرحمن</td>
-                            <td>قاعة 1</td>
-                        </tr>
-                        <tr>
-                            <td>الخميس</td>
-                            <td>10:00 - 11:30 ص</td>
-                            <td>تفسير القرآن</td>
-                            <td>أ. أحمد علي</td>
-                            <td>قاعة 2</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Messages Section -->
-            <div class="messages-section">
-                <div class="section-title">
-                    الرسائل المستلمة
-                    <span>إجمالي: 3 رسائل</span>
-                </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="بحث في الرسائل...">
-                </div>
-                <div class="message-card">
-                    <div class="message-info">
-                        <h4>إعلان عن موعد اختبار</h4>
-                        <p>من: أ. محمد عبد الرحمن | تاريخ: 20 أبريل 2025</p>
-                    </div>
-                    <div class="message-actions">
-                        <button data-message="إعلان عن موعد اختبار: الاختبار سيعقد يوم الأحد القادم في قاعة 1."><i class="fas fa-eye"></i> عرض</button>
-                    </div>
-                </div>
-                <div class="message-card">
-                    <div class="message-info">
-                        <h4>تذكير بحلقة القرآن</h4>
-                        <p>من: أ. أحمد علي | تاريخ: 18 أبريل 2025</p>
-                    </div>
-                    <div class="message-actions">
-                        <button data-message="تذكير: حلقة القرآن يوم الثلاثاء الساعة 14:00."><i class="fas fa-eye"></i> عرض</button>
-                    </div>
-                </div>
-                <div class="message-card">
-                    <div class="message-info">
-                        <h4>ملاحظات على الحفظ</h4>
-                        <p>من: أ. محمد عبد الرحمن | تاريخ: 15 أبريل 2025</p>
-                    </div>
-                    <div class="message-actions">
-                        <button data-message="ملاحظات: تحسن ملحوظ في الحفظ، استمر في المراجعة اليومية."><i class="fas fa-eye"></i> عرض</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progress Section -->
-            <div class="progress-section">
-                <div class="section-title">
-                    متابعة التقدم
-                    <span>إجمالي: 3 تقييمات</span>
-                </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="بحث في التقييمات...">
-                </div>
-                <table class="progress-table">
-                    <thead>
-                        <tr>
-                            <th>التاريخ</th>
-                            <th>السورة</th>
-                            <th>الآيات</th>
-                            <th>التقييم</th>
-                            <th>ملاحظات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>20 أبريل 2025</td>
-                            <td>سورة البقرة</td>
-                            <td>1-10</td>
-                            <td><span class="evaluation evaluation-good">ممتاز</span></td>
-                            <td>حفظ ممتاز، يحتاج إلى تحسين التجويد</td>
-                        </tr>
-                        <tr>
-                            <td>15 أبريل 2025</td>
-                            <td>سورة آل عمران</td>
-                            <td>1-5</td>
-                            <td><span class="evaluation evaluation-average">متوسط</span></td>
-                            <td>يحتاج إلى مراجعة يومية</td>
-                        </tr>
-                        <tr>
-                            <td>10 أبريل 2025</td>
-                            <td>سورة النساء</td>
-                            <td>1-7</td>
-                            <td><span class="evaluation evaluation-good">جيد جدا</span></td>
-                            <td>تقدم ملحوظ في الحفظ</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="header-icons">
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-envelope"></i>
+        <i class="fas fa-cog"></i>
     </div>
+</div>
 
-    <!-- Message Modal -->
-    <div class="modal" id="messageModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">تفاصيل الرسالة</div>
-                <button class="close-btn" id="closeMessageModal">×</button>
-            </div>
-            <div class="modal-body">
-                <p id="messageContent"></p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Message Modal Functionality
-        const messageModal = document.getElementById('messageModal');
-        const closeMessageModal = document.getElementById('closeMessageModal');
-        const messageContent = document.getElementById('messageContent');
-
-        document.querySelectorAll('.message-actions button').forEach(button => {
-            button.addEventListener('click', () => {
-                messageContent.textContent = button.getAttribute('data-message');
-                messageModal.style.display = 'flex';
-            });
-        });
-
-        closeMessageModal.addEventListener('click', () => {
-            messageModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === messageModal) {
-                messageModal.style.display = 'none';
-            }
-        });
-
-        // Search Functionality (Placeholder)
-        document.querySelectorAll('.search-bar input').forEach(input => {
-            input.addEventListener('input', () => {
-                alert('البحث قيد التطوير! يرجى إضافة منطق البحث لاحقًا.');
-            });
-        });
-    </script>
-=======
 <div class="container">
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="img/شعار.png" alt="جمعية العلماء المسلمين">
+            <img src="<?= $config['app_url'] ?>/img/logo.png" alt="جمعية العلماء المسلمين">
             <p>جمعية العلماء المسلمين الجزائريين</p>
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="#" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    <span>الرئيسية</span>
-                </a>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="index.php">لوحة التحكم</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-book-open"></i>
-                    <span>متابعة الحفظ</span>
-                </a>
+            <li>
+                <a href="admin-users.php">إدارة المستخدمين</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>الحضور والغياب</span>
-                </a>
+            <li>
+                <a href="admin-teachers.php">إدارة الأساتذة</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-chart-line"></i>
-                    <span>تقارير الأداء</span>
-                </a>
+            <li>
+                <a href="admin-students.php">إدارة الطلاب</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-clock"></i>
-                    <span>جدول الحصص</span>
-                </a>
+            <li>
+                <a href="admin-sessions.php">إدارة الحلقات</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>الإعدادات</span>
-                </a>
+            <li>
+                <a href="messages-management.php">إدارة الرسائل</a>
+            </li>
+            <li>
+                <a href="admin-programs.php">إدارة البرامج</a>
+            </li>
+            <li>
+                <a href="admin-settings.php">إعدادات النظام</a>
             </li>
         </ul>
+        <div class="register-btn">
+            <i class="fas fa-arrow-left"></i> تسجيل الخروج
+        </div>
     </div>
 
-    <!-- Content Area -->
     <div class="content">
-        <div class="search-bar">
-            <div class="search-input">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="بحث">
-            </div>
-            <button class="action-button">
-                <i class="fas fa-sync-alt"></i>
-                تحديث البيانات
-            </button>
-        </div>
-
-        <!-- Student Profile Card -->
-        <div class="student-profile-card">
-            <div class="student-avatar">أ</div>
-            <div class="student-name">أحمد محمد علي</div>
-            <span class="status-excellent">طالب متميز</span>
-            <div class="student-details">
-                <div class="detail-item">
-                    <i class="fas fa-id-card"></i>
-                    <span>رقم الطالب: 12345</span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-users"></i>
-                    <span>المجموعة: حلقة الفرقان</span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-phone"></i>
-                    <span>رقم ولي الأمر: 0561234567</span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>تاريخ الالتحاق: 01/09/2023</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="stats-cards">
+        <div class="stats-section">
             <div class="stat-card">
-                <div class="number green">89%</div>
-                <div class="label">نسبة الحضور</div>
+                <i class="fas fa-users stat-icon"></i>
+                <div class="stat-info">
+                    <h4>إجمالي المستخدمين</h4>
+                    <p><?= $totalUsers ?></p>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="number blue">75%</div>
-                <div class="label">نسبة الحفظ الكلية</div>
+                <i class="fas fa-chalkboard-teacher stat-icon"></i>
+                <div class="stat-info">
+                    <h4>إجمالي الأساتذة</h4>
+                    <p><?= $totalTeachers ?></p>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="number red">90%</div>
-                <div class="label">متوسط التقييم</div>
+                <i class="fas fa-user-graduate stat-icon"></i>
+                <div class="stat-info">
+                    <h4>إجمالي الطلاب</h4>
+                    <p><?= $totalStudents ?></p>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="number yellow">7</div>
-                <div class="label">السور المحفوظة</div>
+                <i class="fas fa-calendar-check stat-icon"></i>
+                <div class="stat-info">
+                    <h4>الحلقات النشطة</h4>
+                    <p><?= $activeSessions ?></p>
+                </div>
             </div>
-        </div>
-
-        <!-- Progress Section -->
-        <div class="progress-section">
-            <div class="section-title">متابعة الحفظ</div>
-            <div class="overall-progress">
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: 75%;"></div>
-                </div>
-                <div class="progress-percentage">75% من القرآن الكريم</div>
-            </div>
-
-            <div class="surah-progress-grid">
-                <div class="surah-card">
-                    <div class="surah-name">سورة الفاتحة</div>
-                    <div class="surah-progress">محفوظة 100%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-
-                <div class="surah-card">
-                    <div class="surah-name">سورة البقرة</div>
-                    <div class="surah-progress">محفوظة 45%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 45%;"></div>
-                    </div>
-                </div>
-
-                <div class="surah-card">
-                    <div class="surah-name">سورة آل عمران</div>
-                    <div class="surah-progress">محفوظة 30%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 30%;"></div>
-                    </div>
-                </div>
-
-                <div class="surah-card">
-                    <div class="surah-name">سورة النساء</div>
-                    <div class="surah-progress">محفوظة 60%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 60%;"></div>
-                    </div>
-                </div>
-
-                <div class="surah-card">
-                    <div class="surah-name">سورة المائدة</div>
-                    <div class="surah-progress">محفوظة 25%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 25%;"></div>
-                    </div>
-                </div>
-
-                <div class="surah-card">
-                    <div class="surah-name">سورة الأنعام</div>
-                    <div class="surah-progress">محفوظة 10%</div>
-                    <div class="progress-indicator">
-                        <div class="progress-indicator-fill" style="width: 10%;"></div>
-                    </div>
+            <div class="stat-card">
+                <i class="fas fa-envelope-open stat-icon"></i>
+                <div class="stat-info">
+                    <h4>الرسائل غير المقروءة</h4>
+                    <p><?= $unreadMessages ?></p>
                 </div>
             </div>
         </div>
 
-        <!-- Attendance Section -->
-        <div class="attendance-section">
-            <div class="section-title">سجل الحضور</div>
-            <div class="attendance-chart">
-                <div class="chart-bar" style="height: 90%;">
-                    <div class="chart-bar-label">الأحد</div>
-                </div>
-                <div class="chart-bar" style="height: 50%; background-color: #ffc107;">
-                    <div class="chart-bar-label">الإثنين</div>
-                </div>
-                <div class="chart-bar" style="height: 80%;">
-                    <div class="chart-bar-label">الثلاثاء</div>
-                </div>
-                <div class="chart-bar" style="height: 70%;">
-                    <div class="chart-bar-label">الأربعاء</div>
-                </div>
-                <div class="chart-bar" style="height: 0%; background-color: #dc3545;">
-                    <div class="chart-bar-label">الخميس</div>
-                </div>
-                <div class="chart-bar" style="height: 85%;">
-                    <div class="chart-bar-label">السبت</div>
-                </div>
-            </div>
-            <div class="attendance-legend">
-                <div class="legend-item">
-                    <div class="legend-color present"></div>
-                    <span>حاضر</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color absent"></div>
-                    <span>غائب</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color late"></div>
-                    <span>متأخر</span>
-                </div>
-            </div>
+        <div class="quick-links">
+            <a href="admin-users.php" class="quick-link-btn">
+                <i class="fas fa-user-plus"></i> إضافة مستخدم
+            </a>
+            <a href="messages-management.php" class="quick-link-btn">
+                <i class="fas fa-envelope"></i> إرسال رسالة
+            </a>
+            <a href="admin-sessions.php" class="quick-link-btn">
+                <i class="fas fa-calendar"></i> إدارة الحلقات
+            </a>
+            <a href="admin-programs.php" class="quick-link-btn">
+                <i class="fas fa-book"></i> إدارة البرامج
+            </a>
         </div>
 
-        <!-- Recent Activities -->
-        <div class="activities-section">
-            <div class="section-title">آخر الأنشطة</div>
-            <ul class="activity-list">
-                <li class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">تم حفظ الآيات 10-15 من سورة البقرة</div>
-                        <div class="activity-timestamp">اليوم، 10:30 صباحًا <span class="status-excellent">ممتاز</span></div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">مراجعة سورة الفاتحة كاملة</div>
-                        <div class="activity-timestamp">أمس، 9:45 صباحًا <span class="status-good">جيد</span></div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">تم تسجيل الحضور</div>
-                        <div class="activity-timestamp">أمس، 8:00 صباحًا</div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">تم حفظ الآيات 5-9 من سورة البقرة</div>
-                        <div class="activity-timestamp">16/04/2025، 10:15 صباحًا <span class="status-average">متوسط</span></div>
-                    </div>
-                </li>
-            </ul>
+        <div class="messages-section">
+            <div class="section-title">
+                الرسائل الأخيرة
+                <a href="messages-management.php">عرض الكل</a>
+            </div>
+            <table class="messages-table">
+                <thead>
+                <tr>
+                    <th>العنوان</th>
+                    <th>المرسل</th>
+                    <th>المستلم</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($recentMessages as $message): ?>
+                <tr>
+                    <td><?= htmlspecialchars($message['title']) ?></td>
+                    <td><?= htmlspecialchars($message['sender']) ?></td>
+                    <td><?= htmlspecialchars($message['recipient']) ?></td>
+                    <td><?= date('d/m/Y', strtotime($message['created_at'])) ?></td>
+                    <td>
+                                    <span class="message-status <?= $message['status'] === 'sent' ? 'status-sent' : 'status-received' ?>">
+                                        <?= $message['status'] === 'sent' ? 'مرسلة' : 'مستلمة' ?>
+                                    </span>
+                    </td>
+                    <td>
+                        <div class="message-actions">
+                            <button class="view-btn" data-message="<?= htmlspecialchars($message['content']) ?>"><i class="fas fa-eye"></i> عرض</button>
+                            <button class="delete-btn" data-message-id="<?= $message['id'] ?>"><i class="fas fa-trash"></i> حذف</button>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Schedule Section -->
-        <div class="schedule-section">
-            <div class="section-title">جدول الدروس</div>
-            <div class="schedule-header">
-                <div class="day-header">التوقيت</div>
-                <div class="day-header">الأحد</div>
-                <div class="day-header">الثلاثاء</div>
-                <div class="day-header">الخميس</div>
+        <div class="activity-section">
+            <div class="section-title">
+                الأنشطة الأخيرة
             </div>
-            <div class="schedule-grid">
-                <div class="time-slot">8:00 - 8:15</div>
-                <div class="schedule-cell filled">حفظ القرآن</div>
-                <div class="schedule-cell"></div>
-                <div class="schedule-cell filled">حفظ القرآن</div>
+            <table class="activity-table">
+                <thead>
+                <tr>
+                    <th>النشاط</th>
+                    <th>المستخدم</th>
+                    <th>التاريخ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($recentActivity as $activity): ?>
+                <tr>
+                    <td><?= htmlspecialchars($activity['action']) ?></td>
+                    <td><?= htmlspecialchars($activity['name']) ?></td>
+                    <td><?= date('d/m/Y H:i', strtotime($activity['created_at'])) ?></td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-                <div class="time-slot">8:15 - 9:00</div>
-                <div class="schedule-cell"></div>
-                <div class="schedule-cell filled">حفظ القرآن</div>
-                <div class="schedule-cell"></div>
+<div class="modal" id="viewMessageModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">تفاصيل الرسالة</div>
+            <button class="close-btn" id="closeViewMessageModal">×</button>
+        </div>
+        <div class="modal-body">
+            <p id="messageContent"></p>
+        </div>
+    </div>
+</div>
 
-                <div class="time-slot">9:00 - 9:30</div>
-                <div class="schedule-cell"></div>
-                <div class="schedule-cell filled">الأحكام</div>
-                <div class="schedule-cell filled">حفظ القرآن</div>
-
-                <div class="time-slot">9:30 - 9:40</div>
-                <div class="schedule-cell filled">مراجعة</div>
-                <div class="schedule-cell"></div>
-                <div class="schedule-cell"></div>
-
-                <div class="time-slot">9:40 - 10:30</div>
-                <div class="schedule-cell filled">مراجعة</div>
-                <div class="schedule-cell"></div>
-                <div class="schedule-cell filled">مراجعة</div>
-            </div>
+<div class="modal" id="deleteMessageModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">تأكيد الحذف</div>
+            <button class="close-btn" id="closeDeleteMessageModal">×</button>
+        </div>
+        <div class="modal-body">
+            <p>هل أنت متأكد من حذف هذه الرسالة؟</p>
+            <button id="confirmDeleteBtn">حذف</button>
+            <button class="cancel-btn" id="cancelDeleteBtn">إلغاء</button>
         </div>
     </div>
 </div>
 
 <script>
-    // تفعيل بطاقات السور
-    document.querySelectorAll('.surah-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const surahName = this.querySelector('.surah-name').textContent;
-            alert('تم اختيار: ' + surahName);
+    const viewMessageModal = document.getElementById('viewMessageModal');
+    const deleteMessageModal = document.getElementById('deleteMessageModal');
+    const closeViewMessageModal = document.getElementById('closeViewMessageModal');
+    const closeDeleteMessageModal = document.getElementById('closeDeleteMessageModal');
+    const messageContent = document.getElementById('messageContent');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+    closeViewMessageModal.addEventListener('click', () => {
+        viewMessageModal.style.display = 'none';
+    });
+
+    closeDeleteMessageModal.addEventListener('click', () => {
+        deleteMessageModal.style.display = 'none';
+    });
+
+    cancelDeleteBtn.addEventListener('click', () => {
+        deleteMessageModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === viewMessageModal) {
+            viewMessageModal.style.display = 'none';
+        }
+        if (event.target === deleteMessageModal) {
+            deleteMessageModal.style.display = 'none';
+        }
+    });
+
+    document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            messageContent.textContent = button.getAttribute('data-message');
+            viewMessageModal.style.display = 'flex';
         });
     });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            deleteMessageModal.style.display = 'flex';
+            confirmDeleteBtn.setAttribute('data-message-id', button.getAttribute('data-message-id'));
+        });
+    });
+
+    confirmDeleteBtn.addEventListener('click', () => {
+        const messageId = confirmDeleteBtn.getAttribute('data-message-id');
+        alert(`حذف الرسالة رقم ${messageId} قيد التطوير! يرجى إضافة منطق الحذف لاحقًا.`);
+        deleteMessageModal.style.display = 'none';
+    });
 </script>
->>>>>>> 239cc0ffdef6cbda1231606afcbb67a44d4cdbd2
 </body>
 </html>

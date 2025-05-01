@@ -17,7 +17,7 @@ class Teacher extends User implements Report {
         $this->db = $db;
     }
 
-    public function login() {
+    public function login($user) {
 
     }
 

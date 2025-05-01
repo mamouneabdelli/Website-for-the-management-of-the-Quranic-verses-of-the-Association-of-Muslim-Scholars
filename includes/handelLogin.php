@@ -50,8 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password,
             $db
         );
-        
-        $loginResult = $student->login();
+        $query = $db->prepare("SELECT * FROM users WHERE email=?");
+        $query->execute([$email]);
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+        $loginResult = $student->login($user);
         if ($loginResult) {
             $_SESSION['login_in'] = true;  
             $_SESSION['name'] = $loginResult['first_name'] ." ". $loginResult['last_name'];
