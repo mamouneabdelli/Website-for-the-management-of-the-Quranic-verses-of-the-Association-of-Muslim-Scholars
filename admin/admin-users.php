@@ -1,5 +1,5 @@
 <?php
-
+$active = "active";
 require_once __DIR__ .'/template/header.php';
 
 ?>
@@ -23,10 +23,9 @@ require_once __DIR__ .'/template/header.php';
             </div>
 
             <div class="filter-bar">
-                <div class="filter-item active">الكل (45)</div>
-                <div class="filter-item">مدراء (8)</div>
-                <div class="filter-item">مشرفين (15)</div>
-                <div class="filter-item">موظفين (22)</div>
+                <div class="filter-item active">الكل </div>
+                <div class="filter-item">مشرفين </div>
+                <div class="filter-item">أساتذة</div>
             </div>
 
             <table class="admin-table">
