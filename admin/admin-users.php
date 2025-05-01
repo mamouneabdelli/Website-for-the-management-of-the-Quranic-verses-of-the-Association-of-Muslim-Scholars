@@ -88,12 +88,12 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <form class="user-form">
             <div class="form-group">
-                <label class="form-label">الاسم الكامل</label>
-                <input type="text" class="form-control" placeholder="أدخل الاسم الكامل">
+                <label class="form-label">الاسم </label>
+                <input type="text" class="form-control" placeholder="أدخل الاسم ">
             </div>
             <div class="form-group">
-                <label class="form-label">اسم المستخدم</label>
-                <input type="text" class="form-control" placeholder="أدخل اسم المستخدم">
+                <label class="form-label">اسم اللقب</label>
+                <input type="text" class="form-control" placeholder="أدخل اللقب">
             </div>
             <div class="form-group">
                 <label class="form-label">البريد الإلكتروني</label>
@@ -108,44 +108,18 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" class="form-control" placeholder="أدخل رقم الهاتف">
             </div>
             <div class="form-group">
-                <label class="form-label">الدور</label>
+                <label class="form-label">الجنس</label>
                 <select class="form-control">
-                    <option>مدير</option>
-                    <option>مشرف</option>
-                    <option>موظف</option>
+                    <option>دكر</option>
+                    <option>أنثى</option>
                 </select>
             </div>
             <div class="form-group full-width">
-                <label class="form-label">الصلاحيات</label>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="perm1">
-                        <label for="perm1">إدارة المستخدمين</label>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="perm2">
-                        <label for="perm2">إدارة الأساتذة</label>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="perm3">
-                        <label for="perm3">إدارة الطلاب</label>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="perm4">
-                        <label for="perm4">إدارة الحلقات</label>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="perm5">
-                        <label for="perm5">الإحصائيات والتقارير</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group full-width">
-                <label class="form-label">الحالة</label>
+                <label class="form-label">نوع المستخدم</label>
                 <select class="form-control">
-                    <option>نشط</option>
-                    <option>غير نشط</option>
-                    <option>قيد المراجعة</option>
+                    <option>طالب</option>
+                    <option>مشرف</option>
+                    <option>أستاد</option>
                 </select>
             </div>
             <div class="form-actions">
