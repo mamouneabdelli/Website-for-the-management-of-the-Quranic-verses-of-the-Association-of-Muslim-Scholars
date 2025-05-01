@@ -1,7 +1,15 @@
 <?php
 $active = "active";
 require_once __DIR__ .'/template/header.php';
-
+if (!empty($_GET)) {
+    $userType = $_GET['user_type'];
+    $query = $db->prepare("SELECT * FROM users WHERE user_type=?");
+    $query->execute([$userType]);
+}else {
+$query = $db->query("SELECT * FROM users");
+    $query->execute();
+}
+$users = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <link rel="stylesheet" href="CSS/admin-users.css">
@@ -23,10 +31,12 @@ require_once __DIR__ .'/template/header.php';
             </div>
 
             <div class="filter-bar">
-                <div class="filter-item active">الكل </div>
-                <div class="filter-item">مشرفين </div>
-                <div class="filter-item">أساتذة</div>
+                <a class="filter-item <?= empty($_GET['user_type']) ? "active" : "" ?>" href="admin-users.php">الكل</a>
+                <a class="filter-item <?= (isset($_GET['user_type']) && $_GET['user_type'] === 'admin') ? "active" : "" ?>" href="?user_type=admin">مشرفين</a>
+                <a class="filter-item <?= (isset($_GET['user_type']) && $_GET['user_type'] === 'teacher') ? "active" : "" ?>" href="?user_type=teacher">أساتذة</a>
+                <a class="filter-item <?= (isset($_GET['user_type']) && $_GET['user_type'] === 'student') ? "active" : "" ?>" href="?user_type=student">طلاب</a>
             </div>
+
 
             <table class="admin-table">
                 <thead>
@@ -35,17 +45,18 @@ require_once __DIR__ .'/template/header.php';
                     <th>البريد الإلكتروني</th>
                     <th>الدور</th>
                     <th>تاريخ التسجيل</th>
-                    <th>الحالة</th>
+                    <th>رقم الهاتف</th>
                     <th>الإجراءات</th>
                 </tr>
                 </thead>
                 <tbody>
+                <?php foreach ($users as $user) : ?>
                 <tr>
-                    <td>أحمد علي</td>
-                    <td>ahmed@example.com</td>
-                    <td>مدير</td>
-                    <td>1 يناير 2025</td>
-                    <td><span class="status status-active">نشط</span></td>
+                    <td><?= $user['first_name'] . " " . $user['last_name'] ?></td>
+                    <td><?= $user['email'] ?></td>
+                    <td><?= $user['user_type'] ?></td>
+                    <td><?= date("Y-m-d",strtotime($user['created_at'])) ?></td>
+                    <td><span class="status status-active"><?= $user['phone'] ?></span></td>
                     <td>
                         <div class="action-buttons">
                             <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
@@ -53,94 +64,17 @@ require_once __DIR__ .'/template/header.php';
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>خالد محمود</td>
-                    <td>khaled@example.com</td>
-                    <td>مشرف</td>
-                    <td>5 فبراير 2025</td>
-                    <td><span class="status status-active">نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>سارة أحمد</td>
-                    <td>sara@example.com</td>
-                    <td>مشرف</td>
-                    <td>10 مارس 2025</td>
-                    <td><span class="status status-inactive">غير نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>محمد عمر</td>
-                    <td>mohamed@example.com</td>
-                    <td>موظف</td>
-                    <td>15 مارس 2025</td>
-                    <td><span class="status status-active">نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>ليلى مصطفى</td>
-                    <td>layla@example.com</td>
-                    <td>موظف</td>
-                    <td>20 مارس 2025</td>
-                    <td><span class="status status-pending">قيد المراجعة</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>عمر فاروق</td>
-                    <td>omar@example.com</td>
-                    <td>مدير</td>
-                    <td>25 مارس 2025</td>
-                    <td><span class="status status-active">نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>نور الهدى</td>
-                    <td>nour@example.com</td>
-                    <td>موظف</td>
-                    <td>30 مارس 2025</td>
-                    <td><span class="status status-active">نشط</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                        </div>
-                    </td>
-                </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
 
-            <div class="pagination">
-                <div class="page-item"><i class="fas fa-chevron-right"></i></div>
-                <div class="page-item active">1</div>
-                <div class="page-item">2</div>
-                <div class="page-item">3</div>
-                <div class="page-item"><i class="fas fa-chevron-left"></i></div>
-            </div>
+<!--            <div class="pagination">-->
+<!--                <div class="page-item"><i class="fas fa-chevron-right"></i></div>-->
+<!--                <div class="page-item active">1</div>-->
+<!--                <div class="page-item">2</div>-->
+<!--                <div class="page-item">3</div>-->
+<!--                <div class="page-item"><i class="fas fa-chevron-left"></i></div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
