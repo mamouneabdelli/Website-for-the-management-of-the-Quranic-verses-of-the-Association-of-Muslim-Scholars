@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قضيتنا</title>
-    <link rel="stylesheet" href="قضيتنا.css">
+<?php
+
+require_once __DIR__ . "/config/app.php";
+require_once __DIR__ . "/template/header.php";
+?>
     <style>
     
         .popup-overlay {
@@ -80,23 +78,7 @@
     }
 
     </style>
-</head>
-<body>
-    <!-- Nav Bar -->
-    <nav class="nav-bar">
-        <div class="logo">
-            <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 1.png" alt="Logo جمعية العلماء المسلمين">
-        </div>
-        <div class="menu">
-            <a href="index.html" style="font-size:19px;color: #00A841;" class="menu-item">الرئيسية</a>
-            <a href="index2.html" style="font-size:19px;color: #00A841;" class="menu-item">عن البرنامج</a>
-            <a href="#" style="font-size:19px;color: #00A841;" class="menu-item">اتصل بنا</a>
-            <a href="#" style="font-size:19px; color:#1E1E1E;" class="menu-item">قضيتنا</a>
-        </div>
-        <div class="cta-button">
-            <button>سجّل وابدأ رحلتك العلمية</button>
-        </div>
-    </nav>
+
     
     <section class="hero-section">
         <div class="hero-content">

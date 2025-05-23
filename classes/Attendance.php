@@ -34,7 +34,7 @@ class Attendance
             JOIN students ON students.id = attendance.student_id
             JOIN users ON users.id = students.user_id
             JOIN groups ON groups.id = attendance.group_id
-            WHERE attendance.group_id = ? ORDER BY attendance.id ASC
+            WHERE attendance.group_id = ? ORDER BY attendance.id DESC
         ");
             $query->execute([$this->group_id]);
             $user = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -53,7 +53,7 @@ class Attendance
             FROM student_groups
             JOIN students ON students.id = student_groups.student_id
             JOIN users ON users.id = students.user_id
-            WHERE student_groups.group_id = ?   
+            WHERE student_groups.group_id = ? 
         ");
 
         $query->execute([$this->group_id]);

@@ -1,12 +1,12 @@
 
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الأقسام التمهيدية - جمعية العلماء المسلمين</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="برمحنا.css">
+<?php
+
+require_once __DIR__ . "/config/app.php";
+require_once __DIR__ . "/template/header.php";
+?>
+
+
+
     <style>
         
 /* Global Styles */
@@ -557,27 +557,7 @@ footer {
 
     </style>
 
-</head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-           
-            <nav class="nav-bar">
-                <div class="logo">
-                    <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 1.png" alt="Logo جمعية العلماء المسلمين">
-                </div>
-                <div class="menu">
-                    <a href="index.html" class="menu-item"  >الرئيسية</a> <!-- هنا ربط تاع صفحات مع بعض    -->
-                    <a href="index3.html" class="menu-item">عن البرنامج</a>
-                    <a href="#" class="menu-item">اتصل بنا</a>
-                    <a href="index4.html" class="menu-item">قضيتنا</a>
-                </div>
-                <div class="cta-button">
-                    <button>نسجيل الدخول</button>
-                </div>
-            </nav>
-    </header>
+
 
     <!-- Main Content -->
     <section class="main-content">

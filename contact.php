@@ -1,34 +1,16 @@
 
-<!DOCTYPE html>
-<html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Font Awesome Library -->
-    <link rel="stylesheet" href="CSS/all.min.css" />
-    <!-- Main Template CSS File -->
+<?php
+
+require_once __DIR__ . "/config/app.php";
+require_once __DIR__ . "/template/header.php";
+?>
+    
+    
+    
     <link rel="stylesheet" href="CSS/contact.css" />
-    <!-- Render All Elements Normally -->
-    <link rel="stylesheet" href="CSS/normalize.css" />
-    <title>contact</title>
-  </head>
-  <body>
-    <!-- Start Header -->
-    <div class="header">
-      <div class="container">
-        <div class="links">
-          <a href="#">سجّل وابدأ رحلتك العلمية</a>
-          <a href="قضيتنا.html">قضيتنا</a>
-          <a href="contact.html">اتصل بنا</a>
-          <a href="برنامجنا.html">عن البرنامج</a>
-          <a href="index.php">الرئسية</a> </a>
-        </div>
-        <div class="image">
-          <img src="img/شعار.png" alt="" />
-        </div>
-      </div>
-    </div>
-    <!-- End Header -->
+  
+
+
      <!-- Start First Content -->
      <div class="content1">
       <div class="container">

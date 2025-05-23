@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دراسة وحفظ القرآن وتدبر فيه</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<?php
+
+require_once __DIR__ . "/config/app.php";
+require_once __DIR__ . "/template/header.php";
+?>
+
+
+
+
+
     <style>
         /* General Styles */
         * {
@@ -463,24 +466,7 @@
 
         }
     </style>
-</head>
-<body>
-    <header>
-        <nav class="nav-bar">
-            <div class="logo">
-                <img src="db8e4a6d-7d8f-4d15-924e-152c403427bc (1) 1.png" alt="Logo جمعية العلماء المسلمين">
-            </div>
-            <div class="menu">
-                <a href="index.html" class="menu-item"  >الرئيسية</a> <!-- هنا ربط تاع صفحات مع بعض    -->
-                <a href="index2.html" class="menu-item">عن البرنامج</a>
-                <a href="contact.html" class="menu-item">اتصل بنا</a>
-                <a href="index4.html" class="menu-item">قضيتنا</a>
-            </div>
-            <div class="cta-button">
-                <button>سجّل وابدأ رحلتك العلمية</button>
-            </div>
-        </nav>
-    </header>
+
 
     <h1 style="color:#00A841; font-family:'Alexendra'; font-size:28px; margin-right:5%;"> الكبار و الصغار </h1>
     <h2 style="color:#000000 ; font-family:'Alexendra'; font-size:28px; margin-right:5%;">دراسة و حفظ القران و تتدبر فيه</h2>
