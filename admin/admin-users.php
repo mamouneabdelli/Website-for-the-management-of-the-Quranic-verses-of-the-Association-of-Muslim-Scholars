@@ -111,10 +111,6 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
                 <input name="email" type="email" class="form-control" placeholder="أدخل البريد الإلكتروني">
             </div>
             <div class="form-group">
-                <label class="form-label">البريد الإلكتروني</label>
-                <input name="phone" type="text" class="form-control" placeholder="أدخل البريد الإلكتروني">
-            </div>
-            <div class="form-group">
                 <label class="form-label">كلمة المرور</label>
                 <input name="password" type="password" class="form-control" placeholder="أدخل كلمة المرور">
             </div>
@@ -124,7 +120,67 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="form-group">
                 <label class="form-label">رقم الهاتف</label>
-                <input type="text" class="form-control" placeholder="أدخل رقم الهاتف">
+                <input name="phone" type="tel" class="form-control" placeholder="أدخل رقم الهاتف" pattern="[0-9]{10}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">تاريخ الميلاد </label>
+                <input name="date" type="date" class="form-control" placeholder="أدخل تاريخ الميلاد">
+            </div>
+            <div class="form-group">
+                <label for="wilaya" class="form-label">مكان الميلاد</label>
+<select name="wilaya" id="wilaya" class="form-control" required>
+  <option value="">اختر الولاية</option>
+  <option value="ad-djazaïr">الجزائر</option>
+  <option value="adrar">أدرار</option>
+  <option value="ain-defla">عين الدفلى</option>
+  <option value="ain-temouchent">عين تموشنت</option>
+  <option value="alger">الجزائر</option>
+  <option value="annaba">عنابة</option>
+  <option value="bechar">بشار</option>
+  <option value="biskra">بسكرة</option>
+  <option value="bejaia">بجاية</option>
+  <option value="bordj-bouarreridj">برج بوعريريج</option>
+  <option value="bouira">البويرة</option>
+  <option value="boumerdes">بومرداس</option>
+  <option value="chlef">الشلف</option>
+  <option value="constantine">قسنطينة</option>
+  <option value="djelfa">الجلفة</option>
+  <option value="el-bayadh">البيض</option>
+  <option value="el-oued">الوادي</option>
+  <option value="el-tarf">الطارف</option>
+  <option value="ghardaia">غرداية</option>
+  <option value="guelma">قالمة</option>
+  <option value="illizi">إليزي</option>
+  <option value="khenchela">خنشلة</option>
+  <option value="laghouat">الأغواط</option>
+  <option value="m’sila">مسيلة</option>
+  <option value="mediouna">المديونة</option>
+  <option value="mila">ميلة</option>
+  <option value="mostaganem">مستغانم</option>
+  <option value="msila">مسيلة</option>
+  <option value="naama">النعامة</option>
+  <option value="oran">وهران</option>
+  <option value="ouargla">ورقلة</option>
+  <option value="oumm-el-bouaghi">أم البواقي</option>
+  <option value="relizane">غليزان</option>
+  <option value="sétif">سطيف</option>
+  <option value="saida">سعيدة</option>
+  <option value="skikda">سكيكدة</option>
+  <option value="sougueur">سوق أهراس</option>
+  <option value="sidi-bel-abbes">سيدي بلعباس</option>
+  <option value="tamanrasset">تمنراست</option>
+  <option value="tébessa">تبسة</option>
+  <option value="tlemcen">تلمسان</option>
+  <option value="tila">تيبازة</option>
+  <option value="tizi-ouzou">تيزي وزو</option>
+  <option value="tipaza">تيبازة</option>
+  <option value="tissemsilt">تيسمسيلت</option>
+</select>
+
+            </div>
+            <div class="form-group">
+                <label class="form-label">العنوان </label>
+                <input name="address" type="text" class="form-control" placeholder="أدخل عنوان السكن">
             </div>
             <div class="form-group">
                 <label class="form-label">الجنس</label>
@@ -132,6 +188,10 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
                     <option>دكر</option>
                     <option>أنثى</option>
                 </select>
+            </div>
+            <div class="form-group full-width">
+                <label class="form-label">ملاحظات اضافية </label>
+                <input name="notes" type="text" class="form-control" placeholder="ملاحظات عن الطالب ...">
             </div>
             <div class="form-actions">
                 <button type="button" class="btn btn-secondary" id="cancelUserBtn">إلغاء</button>

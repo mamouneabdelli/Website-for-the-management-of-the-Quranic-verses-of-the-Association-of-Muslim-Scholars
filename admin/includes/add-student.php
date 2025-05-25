@@ -29,7 +29,7 @@ $errors = [
     'user' => ''
 ];
 
-$email = $first_name = $last_name = $password = $confirm_password = $date_of_birth = $place_of_birth = $academic_level = $phone = $address = $health_note = $notes = '';
+$email = $first_name = $last_name = $password = $confirm_password = $date_of_birth = $place_of_birth = $phone = $address = $health_note = $notes = '';
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
