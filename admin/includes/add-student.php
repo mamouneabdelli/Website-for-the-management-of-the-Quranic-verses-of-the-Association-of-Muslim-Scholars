@@ -29,14 +29,16 @@ $errors = [
     'user' => ''
 ];
 
-$email = $first_name = $last_name = $password = $confirm_password = $date_of_birth = $place_of_birth = $phone = $address = $health_note = $notes = '';
+$email = $first_name = $last_name = $password = $confirm_password = $date_of_birth = $place_of_birth = $phone = $address = $notes = '';
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
     $first_name = $_POST['first_name']; $last_name = $_POST['last_name']; $email = $_POST['email'];
         $password = $_POST['password']; $confirm_password = $_POST['confirm_password'];
-    if(!empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['confirm_password']) )
+        $date_of_birth = $_POST['date'];
+        $place_of_birth = $_POST['wilaya'];
+    if(!empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['confirm_password']) && !empty($_POST['phone']) && !empty($_POST['date']) && !empty($_POST['wilaya']) && !empty($_POST['address']) && !empty($_POST['gender']) && !empty($_POST['notes']) )
     {
         $first_name = filterString($first_name); $last_name = filterString($last_name); $email = filterEmail($email);
         if(!$first_name)

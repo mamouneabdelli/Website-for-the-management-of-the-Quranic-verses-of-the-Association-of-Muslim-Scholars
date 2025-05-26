@@ -184,9 +184,9 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="form-group">
                 <label class="form-label">الجنس</label>
-                <select class="form-control">
-                    <option>دكر</option>
-                    <option>أنثى</option>
+                <select name="gender" class="form-control">
+                    <option value="male">دكر</option>
+                    <option value="female">أنثى</option>
                 </select>
             </div>
             <div class="form-group full-width">
