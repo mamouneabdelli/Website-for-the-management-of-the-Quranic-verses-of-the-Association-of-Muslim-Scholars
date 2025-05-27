@@ -39,7 +39,8 @@ $presents = count(array_filter($attendances, fn($a) => $a['status'] == "حاضر
 
 $num = count($attendances);
 
-$percentage = ($presents * 100) / $num;
+if($num != 0)
+    $percentage = ($presents * 100) / $num;
 
 $query = $db->prepare("
     SELECT * FROM messages
@@ -77,7 +78,7 @@ $messages = $query->fetchAll(PDO::FETCH_ASSOC);
                 <div class="label">اجمالي الحلقات</div>
             </div>
             <div class="stat-card">
-                <div class="number orange"><?= number_format($percentage, 2) ?>%</div>
+                <div class="number orange"><?= isset($percentage) ? number_format($percentage, 2) : " " ?>%</div>
                 <div class="label">نسبة الحضور</div>
             </div>
         </div>

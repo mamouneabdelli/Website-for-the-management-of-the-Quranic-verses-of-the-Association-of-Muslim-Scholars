@@ -342,11 +342,7 @@ body {
     font-size: 20px;
 }
 
-.user-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+
 
 .form-group {
     margin-bottom: 15px;
@@ -369,6 +365,7 @@ body {
 
 .form-group.full-width {
     grid-column: 1 / -1;
+    
 }
 
 .form-actions {
