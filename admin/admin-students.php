@@ -86,9 +86,8 @@ require_once __DIR__ .'/template/header.php';
 
                 <div class="tabs">
                     <div class="tab active">جميع الطلاب</div>
-                    <div class="tab">الطلاب الجدد</div>
-                    <div class="tab">المتفوقون</div>
-                    <div class="tab">يحتاج للمتابعة</div>
+                    <div class="tab">طلاب تم تسجيلهم</div>
+                    <div class="tab">طلاب غير مسجلين</div>
                 </div>
 
                 <table class="admin-table">

@@ -2,12 +2,12 @@
 $active = "active";
 require_once __DIR__ . '/template/header.php';
 
-if(isset($_POST['user_type']) && $_POST['user_type'] == "student")
-    require_once __DIR__ .'/includes/add-student.php';
+if (isset($_POST['user_type']) && $_POST['user_type'] == "student")
+    require_once __DIR__ . '/includes/add-student.php';
 
 //print_r($_POST);
 
-if (!empty($_GET)) {
+if (!empty($_GET['user_type'])) {
     $userType = $_GET['user_type'];
     $query = $db->prepare("SELECT * FROM users WHERE user_type=?");
     $query->execute([$userType]);
@@ -68,11 +68,15 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
                         <td><span class="status status-active"><?= $user['phone'] ?></span></td>
                         <td>
                             <div class="action-buttons">
-                                <button class="action-button edit-user"><i class="fas fa-edit"></i> تعديل</button>
-                                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                                <a href="edit-user.php?id=<?= $user['id'] ?>" class="action-button edit-user">
+                                    <i class="fas fa-edit"></i> تعديل
+                                </a>
+                                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" style="display: inline;">
                                     <input type="text" hidden value="<?= $user['id'] ?>" name="user_id">
                                     <input type="text" hidden value="<?= $user['user_type'] ?>" name="delete_type">
-                                    <button class="action-button delete" type="submit"><i class="fas fa-trash"></i> حذف</button>
+                                    <button class="action-button delete" type="submit" onclick="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+                                        <i class="fas fa-trash"></i> حذف
+                                    </button>
                                 </form>
                             </div>
                         </td>
@@ -220,7 +224,7 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="form-group teacher-field supervisor-field">
                     <label class="form-label">تاريخ بداية العمل </label>
-                    <input name="employment_date" type="date" class="form-control" >
+                    <input name="employment_date" type="date" class="form-control">
                     <span class="error"><?php echo isset($errors['employment_date']) ? $errors['employment_date'] : ''; ?></span>
                 </div>
                 <div class="form-group supervisor-field">
@@ -255,28 +259,26 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 <script>
- userTypeSelect.addEventListener('change', () => {
-    const userType = userTypeSelect.value;
+    userTypeSelect.addEventListener('change', () => {
+        const userType = userTypeSelect.value;
 
-    // إظهار الحقول العامة
-    extraFields.style.display = userType !== "" ? 'grid' : 'none';
+        // إظهار الحقول العامة
+        extraFields.style.display = userType !== "" ? 'grid' : 'none';
 
-    // إخفاء الحقول الخاصة أولًا
-    document.querySelectorAll('.student-field').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.teacher-field').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.supervisor-field').forEach(el => el.style.display = 'none');
+        // إخفاء الحقول الخاصة أولًا
+        document.querySelectorAll('.student-field').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.teacher-field').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.supervisor-field').forEach(el => el.style.display = 'none');
 
-    // إظهار الحقول الخاصة بالنوع المختار
-    if (userType === 'student') {
-        document.querySelectorAll('.student-field').forEach(el => el.style.display = 'block');
-    } else if (userType === 'teacher') {
-        document.querySelectorAll('.teacher-field').forEach(el => el.style.display = 'block');
-    } else if (userType === 'supervisor') {
-        document.querySelectorAll('.supervisor-field').forEach(el => el.style.display = 'block');
-    }
-});
-
-
+        // إظهار الحقول الخاصة بالنوع المختار
+        if (userType === 'student') {
+            document.querySelectorAll('.student-field').forEach(el => el.style.display = 'block');
+        } else if (userType === 'teacher') {
+            document.querySelectorAll('.teacher-field').forEach(el => el.style.display = 'block');
+        } else if (userType === 'supervisor') {
+            document.querySelectorAll('.supervisor-field').forEach(el => el.style.display = 'block');
+        }
+    });
 </script>
 <script>
     // Show/Hide Modal
@@ -323,26 +325,26 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
 </script>
 
 <style>
-.error {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: block;
-}
+    .error {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
 
-.form-group {
-    margin-bottom: 1rem;
-    position: relative;
-}
+    .form-group {
+        margin-bottom: 1rem;
+        position: relative;
+    }
 
-.form-control.error {
-    border-color: #dc3545;
-}
+    .form-control.error {
+        border-color: #dc3545;
+    }
 
-.form-control.error:focus {
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-}
+    .form-control.error:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
 </style>
 </body>
 
@@ -350,12 +352,12 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <?php
 
-if(isset($_POST['user_id']) && $_POST['delete_type'] == "student") {
+if (isset($_POST['user_id']) && $_POST['delete_type'] == "student") {
     ob_start(); // Start output buffering
-    
+
     $user_id = $_POST['user_id'];
     $db = DBConnection::getConnection()->getDb();
-    
+
     try {
         $query = $db->prepare("DELETE FROM students WHERE user_id=?");
         $query->execute([$user_id]);
@@ -374,4 +376,4 @@ if(isset($_POST['user_id']) && $_POST['delete_type'] == "student") {
         exit();
     }
 }
- ?>
+?>
