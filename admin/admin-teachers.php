@@ -2,6 +2,17 @@
 $ac_teacher = "active";
 require_once __DIR__ .'/template/header.php';
 
+$user_type = "teacher";
+$query = $db->prepare("SELECT * FROM users WHERE user_type = ?");
+$query->execute([$user_type]);
+$teachers = $query->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($teachers as $teacher) {
+    $query = $db->prepare("SELECT * FROM teachers WHERE user_id = ?");
+    $query->execute([$teacher['id']]);
+}
+
+
 ?>
 
 <link rel="stylesheet" href="CSS/admin-teachers.css">
@@ -20,25 +31,6 @@ require_once __DIR__ .'/template/header.php';
             <div class="filter-section">
                 <div class="filter-title">تصفية النتائج</div>
                 <div class="filter-options">
-                    <div class="filter-option">
-                        <label>الحالة:</label>
-                        <select class="filter-select">
-                            <option value="all">الكل</option>
-                            <option value="active">نشط</option>
-                            <option value="pending">قيد المراجعة</option>
-                            <option value="inactive">غير نشط</option>
-                        </select>
-                    </div>
-                    <div class="filter-option">
-                        <label>التخصص:</label>
-                        <select class="filter-select">
-                            <option value="all">الكل</option>
-                            <option value="quran">القرآن الكريم</option>
-                            <option value="hadith">الحديث الشريف</option>
-                            <option value="fiqh">الفقه</option>
-                            <option value="aqidah">العقيدة</option>
-                        </select>
-                    </div>
                     <div class="filter-option">
                         <label>الترتيب:</label>
                         <select class="filter-select">
@@ -64,7 +56,6 @@ require_once __DIR__ .'/template/header.php';
                             <th>تاريخ الانضمام</th>
                             <th>عدد الحلقات</th>
                             <th>عدد الطلاب</th>
-                            <th>الحالة</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
@@ -75,7 +66,6 @@ require_once __DIR__ .'/template/header.php';
                             <td>10 أبريل 2025</td>
                             <td>3</td>
                             <td>45</td>
-                            <td><span class="status status-active">نشط</span></td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
@@ -84,107 +74,9 @@ require_once __DIR__ .'/template/header.php';
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>خالد محمود عبد الرحمن</td>
-                            <td>الفقه</td>
-                            <td>5 أبريل 2025</td>
-                            <td>2</td>
-                            <td>32</td>
-                            <td><span class="status status-pending">قيد المراجعة</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>أحمد رامي محمد</td>
-                            <td>الحديث الشريف</td>
-                            <td>1 أبريل 2025</td>
-                            <td>4</td>
-                            <td>58</td>
-                            <td><span class="status status-active">نشط</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>سعيد محمد علي</td>
-                            <td>العقيدة</td>
-                            <td>28 مارس 2025</td>
-                            <td>1</td>
-                            <td>15</td>
-                            <td><span class="status status-active">نشط</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>محمود عبد الله</td>
-                            <td>القرآن الكريم</td>
-                            <td>25 مارس 2025</td>
-                            <td>3</td>
-                            <td>38</td>
-                            <td><span class="status status-inactive">غير نشط</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>عبد الرحمن محمد</td>
-                            <td>الفقه</td>
-                            <td>20 مارس 2025</td>
-                            <td>2</td>
-                            <td>27</td>
-                            <td><span class="status status-active">نشط</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>يوسف أحمد</td>
-                            <td>الحديث الشريف</td>
-                            <td>15 مارس 2025</td>
-                            <td>1</td>
-                            <td>18</td>
-                            <td><span class="status status-pending">قيد المراجعة</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
-                                    <button class="action-button"><i class="fas fa-edit"></i> تعديل</button>
-                                    <button class="action-button delete"><i class="fas fa-trash"></i> حذف</button>
-                                </div>
-                            </td>
-                        </tr>
+                        
                     </tbody>
                 </table>
-
-                <div class="pagination">
-                    <div class="page-item"><i class="fas fa-angle-double-right"></i></div>
-                    <div class="page-item active">1</div>
-                    <div class="page-item">2</div>
-                    <div class="page-item">3</div>
-                    <div class="page-item">4</div>
-                    <div class="page-item"><i class="fas fa-angle-double-left"></i></div>
-                </div>
             </div>
         </div>
     </div>

@@ -41,7 +41,7 @@ require_once __DIR__ .'/../../config/app.php';
             <p>جمعية العلماء المسلمين الجزائريين</p>
         </div>
         <ul class="sidebar-menu">
-            <li style="background-color:#B0E4C4;" class="<?= $index ?? "" ?>">
+            <li class="<?= $index ?? "" ?>">
                 <a href="index.php">لوحة التحكم</a>
             </li>
             <li class="<?= $ac_user ?? "" ?>">
