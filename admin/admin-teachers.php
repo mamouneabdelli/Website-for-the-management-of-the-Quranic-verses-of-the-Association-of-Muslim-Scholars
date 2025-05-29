@@ -55,13 +55,29 @@ $teachers = $query->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($teachers as $teacher) { ?>
+                        <?php foreach($teachers as $teacher) { 
+                            $query = $db->prepare("SELECT id,specialization,employment_date FROM teachers WHERE user_id = ?");
+                            $query->execute([$teacher['id']]);
+                            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                            
+                            $query = $db->prepare("SELECT * FROM groups WHERE teacher_id = ?");
+                            $query->execute([$teacher['id']]);
+                            $groups = $query->fetchAll(PDO::FETCH_ASSOC);
+                            
+                            $num = 0;
+                            foreach($groups as $group) {
+                                $query = $db->prepare("SELECT * FROM groups WHERE teacher_id = ?");
+                            $query->execute([$group['id']]);
+                            $students = $query->fetchAll(PDO::FETCH_ASSOC);
+                            $num+= count($students);
+                            }
+                            ?>
                         <tr>
                             <td> <?= $teacher['first_name'] . " " . $teacher['last_name'] ?></td>
-                            <td>القرآن الكريم</td>
-                            <td>10 أبريل 2025</td>
-                            <td>3</td>
-                            <td>45</td>
+                            <td><?= $data[0]['specialization'] ?></td>
+                            <td><?= $data[0]['employment_date'] ?></td>
+                            <td><?= count($groups) ?></td>
+                            <td><?= $num ?></td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="action-button view"><i class="fas fa-eye"></i> عرض</button>
