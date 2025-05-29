@@ -1,5 +1,5 @@
 <?php
-$active = "active";
+$ac_user = "active";
 require_once __DIR__ . '/template/header.php';
 
 // التحقق من وجود معرف المستخدم
@@ -314,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group full-width">
                 <label class="form-label">ملاحظات اضافية</label>
-                <textarea name="notes" class="form-control" placeholder="ملاحظات عن المستخدم ..." rows="3"><?= htmlspecialchars($additional_data['notes']) ?></textarea>
+                <textarea name="notes" class="form-control" placeholder="ملاحظات عن المستخدم ..." rows="3"><?= isset($additional_data['notes']) ? htmlspecialchars($additional_data['notes']) : "" ?></textarea>
                 <span class="error"><?php echo isset($errors['notes']) ? $errors['notes'] : ''; ?></span>
             </div>
 

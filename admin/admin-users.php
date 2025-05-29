@@ -1,11 +1,15 @@
 <?php
-$active = "active";
+$ac_user = "active";
 require_once __DIR__ . '/template/header.php';
+
 
 if (isset($_POST['user_type']) && $_POST['user_type'] == "student")
     require_once __DIR__ . '/includes/add-student.php';
+if (isset($_POST['user_type']) && $_POST['user_type'] == "teacher")
+    require_once __DIR__ . '/includes/add-teacher.php';
+if (isset($_POST['user_type']) && $_POST['user_type'] == "supervisor")
+    require_once __DIR__ . '/includes/add-supervisor.php';
 
-//print_r($_POST);
 
 if (!empty($_GET['user_type'])) {
     $userType = $_GET['user_type'];
@@ -373,6 +377,54 @@ if (isset($_POST['user_id']) && $_POST['delete_type'] == "student") {
         ob_end_clean();
         header("Location: /quranic/admin/admin-users.php?user_type=student&error=1");
         echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=student&error=1';</script>";
+        exit();
+    }
+}
+if (isset($_POST['user_id']) && $_POST['delete_type'] == "teacher") {
+    ob_start(); // Start output buffering
+
+    $user_id = $_POST['user_id'];
+    $db = DBConnection::getConnection()->getDb();
+
+    try {
+        $query = $db->prepare("DELETE FROM teachers WHERE user_id=?");
+        $query->execute([$user_id]);
+
+        $query = $db->prepare("DELETE FROM users WHERE id=?");
+        $query->execute([$user_id]);
+
+        ob_end_clean(); // Clear any output
+        header("Location: /quranic/admin/admin-users.php?user_type=teacher");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=teacher';</script>";
+        exit();
+    } catch (PDOException $e) {
+        ob_end_clean();
+        header("Location: /quranic/admin/admin-users.php?user_type=teacher&error=1");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=teacher&error=1';</script>";
+        exit();
+    }
+}
+if (isset($_POST['user_id']) && $_POST['delete_type'] == "admin") {
+    ob_start(); // Start output buffering
+
+    $user_id = $_POST['user_id'];
+    $db = DBConnection::getConnection()->getDb();
+
+    try {
+        $query = $db->prepare("DELETE FROM supervisors WHERE user_id=?");
+        $query->execute([$user_id]);
+
+        $query = $db->prepare("DELETE FROM users WHERE id=?");
+        $query->execute([$user_id]);
+
+        ob_end_clean(); // Clear any output
+        header("Location: /quranic/admin/admin-users.php?user_type=admin");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=admin';</script>";
+        exit();
+    } catch (PDOException $e) {
+        ob_end_clean();
+        header("Location: /quranic/admin/admin-users.php?user_type=admin&error=1");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=admin&error=1';</script>";
         exit();
     }
 }

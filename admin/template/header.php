@@ -44,20 +44,20 @@ require_once __DIR__ .'/../../config/app.php';
             <li style="background-color:#B0E4C4;" class="<?= $index ?? "" ?>">
                 <a href="index.php">لوحة التحكم</a>
             </li>
-            <li>
-                <a href="admin-users.php" class="<?= $active ?? "" ?>">إدارة المستخدمين</a>
+            <li class="<?= $ac_user ?? "" ?>">
+                <a href="admin-users.php" >إدارة المستخدمين</a>
             </li>
-            <li>
-                <a href="admin-teachers.php" class="<?= $active ?? "" ?>">إدارة الأساتذة</a>
+            <li class="<?= $ac_teacher ?? "" ?>">
+                <a href="admin-teachers.php" >إدارة الأساتذة</a>
             </li>
-            <li>
-                <a href="admin-students.php" class="<?= $active ?? "" ?>">إدارة الطلاب</a>
+            <li class="<?= $ac_student ?? "" ?>">
+                <a href="admin-students.php" >إدارة الطلاب</a>
             </li>
-            <li>
-                <a href="admin-sessions.php" class="<?= $active ?? "" ?>">إدارة الحلقات</a>
+            <li class="<?= $ac_session ?? "" ?>">
+                <a href="admin-sessions.php" >إدارة الحلقات</a>
             </li>
-            <li>
-                <a href="admin-reports.php" class="<?= $active ?? "" ?>">الرسائل والإحصائيات</a>
+            <li class="<?= $ac_message ?? "" ?>">
+                <a href="admin-reports.php" >الرسائل والإحصائيات</a>
             </li>
             <li>
                 <a href="admin-reports.php">ادارة البرامج</a>

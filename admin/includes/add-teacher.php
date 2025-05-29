@@ -26,10 +26,16 @@ $errors = [
     'email' => '',
     'password' => '',
     'confirm_password' => '',
-    'user' => ''
+    'user' => '',
+    'date' => '',
+    'wilaya' => '',
+    'address' => '',
+    'gender' => '',
+    'academic_level' => '',
+    'employment_date' => ''
 ];
 
-$first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $regestred = $parent_name = $notes = ''; 
+$first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $employment_date = $notes = ''; 
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
@@ -37,9 +43,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $first_name = $_POST['first_name']; $last_name = $_POST['last_name']; $email = $_POST['email'];
         $password = $_POST['password']; $confirm_password = $_POST['confirm_password'];
         $date_of_birth = $_POST['date'];
-        $place_of_birth = $_POST['wilaya']; $regestred = $_POST['regestred'];
-        $phone= $_POST['phone']; $address = $_POST['address']; $gender = $_POST['gender']; $academic_level = $_POST['academic_level']; $parent_name = $_POST['parent_name']; $notes = $_POST['notes'];
-    if(!empty($first_name) && !empty($last_name) && !empty($email) && !empty($password) && !empty($confirm_password) && !empty($phone) && !empty($date_of_birth) && !empty($place_of_birth) && !empty($address) && !empty($gender) && !empty($academic_level) )
+        $place_of_birth = $_POST['wilaya']; 
+        $phone= $_POST['phone']; $address = $_POST['address']; $gender = $_POST['gender']; $academic_level = $_POST['academic_level']; $employment_date = $_POST['employment_date']; $notes = $_POST['notes'];
+    if(!empty($first_name) && !empty($last_name) && !empty($email) && !empty($password) && !empty($confirm_password) && !empty($phone) && !empty($date_of_birth) && !empty($place_of_birth) && !empty($address) && !empty($gender) && !empty($academic_level) && !empty($employment_date) )
     {
         $first_name = filterString($first_name); 
         $last_name = filterString($last_name); 
@@ -50,7 +56,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         $address = filterString($address);
         $gender = filterString($gender);
         $academic_level = filterString($academic_level);
-        $parent_name = filterString($parent_name);
         $notes = filterString($notes);
 
         if(!$first_name)
@@ -71,10 +76,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $errors['gender']="الجنس غير صالح";
         if(!$academic_level)
             $errors['academic_level']="المستوى الدراسي غير صالح";
-        if(!$parent_name)
-            $errors['parent_name']="اسم الوالد غير صالح";
-        if(!$notes)
-            $errors['notes']="الملاحظات غير صالحة";
         if(strlen($password) >= 8)
         {
             if($password != $confirm_password)
@@ -96,11 +97,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         if(empty($_POST['address'])) $errors['address'] = "العنوان مطلوب";
         if(empty($_POST['gender'])) $errors['gender'] = "الجنس مطلوب";
         if(empty($_POST['academic_level'])) $errors['academic_level'] = "المستوى الدراسي مطلوب";
-        if(empty($_POST['parent_name'])) $errors['parent_name'] = "اسم الوالد مطلوب";
-        if(empty($_POST['regestred'])) $errors['regestred'] = "يجب تحديد حالة التسجيل";
+        if(empty($_POST['employment_date'])) $errors['employment_date'] = "تاريخ التوظيف مطلوب";
     }
-
-    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password']) {
+    echo "brahmia";
+    print_r($errors);
+    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password']  && !$errors['date'] && !$errors['wilaya'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['employment_date']) {
+        echo "lokman";
         $db = DBConnection::getConnection()->getDb();
         $query = $db->prepare("SELECT * FROM users WHERE email=?");
         $query->execute([$email]);
@@ -112,19 +114,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             
             // Insert into users table
             $query = $db->prepare("INSERT INTO users (email, first_name, last_name, password, gender, phone,date_of_birth,place_of_birth,address,academic_level, user_type) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?)");
-            $query->execute([$email, $first_name, $last_name, $password, $gender, $phone,$date_of_birth,$place_of_birth,$address,$academic_level, 'student']);
+            $query->execute([$email, $first_name, $last_name, $password, $gender, $phone,$date_of_birth,$place_of_birth,$address,$academic_level, 'teacher']);
             $user_id = $db->lastInsertId();
             
             // Insert into students table
-            $query = $db->prepare("INSERT INTO students (user_id, parent_name,notes,registered ) VALUES (?, ?, ?, ?)");
+            $query = $db->prepare("INSERT INTO teachers (user_id,specialization,employment_date,notes ) VALUES (?, ?, ?, ?)");
             $query->execute([
                 $user_id,
-                $parent_name,
-                $notes,
-                $regestred
+                'قرأن كريم',
+                $employment_date,
+                $notes
             ]);
             
-            header("Location: /quranic/admin/admin-users.php?user_type=student");
+            header("Location: /quranic/admin/admin-users.php?user_type=teacher");
             exit();
         }
     }

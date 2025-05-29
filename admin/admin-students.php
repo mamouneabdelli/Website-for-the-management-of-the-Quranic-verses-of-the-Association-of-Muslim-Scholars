@@ -1,5 +1,5 @@
 <?php
-
+$ac_student = "active";
 require_once __DIR__ .'/template/header.php';
 
 ?>
