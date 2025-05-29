@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2025 at 02:56 PM
+-- Generation Time: May 29, 2025 at 04:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,21 +82,14 @@ CREATE TABLE `curriculum` (
 CREATE TABLE `groups` (
   `id` int(11) UNSIGNED NOT NULL,
   `group_name` varchar(128) NOT NULL,
-  `group_type_id` int(11) UNSIGNED NOT NULL,
   `capacity` int(11) DEFAULT NULL,
   `academic_year` varchar(10) DEFAULT NULL,
   `semester` enum('first','second','summer') DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
+  `teacher_id` int(11) UNSIGNED NOT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `groups`
---
-
-INSERT INTO `groups` (`id`, `group_name`, `group_type_id`, `capacity`, `academic_year`, `semester`, `start_date`, `end_date`, `description`) VALUES
-(2, 'قرأن(رجال) الفوج 1', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -111,39 +104,6 @@ CREATE TABLE `group_subjects` (
   `curriculum_id` int(11) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `group_teachers`
---
-
-CREATE TABLE `group_teachers` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `group_id` int(11) UNSIGNED NOT NULL,
-  `teacher_id` int(11) UNSIGNED NOT NULL,
-  `assigned_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `group_types`
---
-
-CREATE TABLE `group_types` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `type_name` varchar(50) NOT NULL,
-  `description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `group_types`
---
-
-INSERT INTO `group_types` (`id`, `type_name`, `description`) VALUES
-(1, 'تحضيري', NULL),
-(2, 'تمهيدي', NULL);
 
 -- --------------------------------------------------------
 
@@ -175,6 +135,13 @@ CREATE TABLE `students` (
   `enrollment_date` date DEFAULT current_timestamp(),
   `registered` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `user_id`, `student_code`, `parent_name`, `notes`, `enrollment_date`, `registered`) VALUES
+(7, 8, '', 'عبد القادر عبدلي', '', '2025-05-27', 1);
 
 -- --------------------------------------------------------
 
@@ -226,12 +193,18 @@ INSERT INTO `subjects` (`id`, `name`, `level`, `credits`) VALUES
 CREATE TABLE `supervisors` (
   `id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL,
-  `admin_code` varchar(20) NOT NULL,
   `employment_date` date DEFAULT NULL,
   `department` varchar(100) DEFAULT NULL,
   `position` varchar(100) DEFAULT NULL,
   `responsibilities` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `supervisors`
+--
+
+INSERT INTO `supervisors` (`id`, `user_id`, `employment_date`, `department`, `position`, `responsibilities`) VALUES
+(1, 12, '2025-05-29', NULL, 'أمين المدرسة', NULL);
 
 -- --------------------------------------------------------
 
@@ -261,6 +234,13 @@ CREATE TABLE `teachers` (
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `teachers`
+--
+
+INSERT INTO `teachers` (`id`, `user_id`, `specialization`, `qualification`, `employment_date`, `notes`) VALUES
+(3, 10, 'قرأن كريم', NULL, '2025-05-29', '');
+
 -- --------------------------------------------------------
 
 --
@@ -283,6 +263,15 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `gender`, `phone`, `date_of_birth`, `place_of_birth`, `address`, `academic_level`, `user_type`, `created_at`, `updated_at`) VALUES
+(8, 'brahmialokman16@proton.me', 'عبد المومن', 'عبدلي', '$2y$10$49mPm7VLNh/wtPfV5bC8DOs14Yu2dwUJCv73CNZsLaM7ZQbGftSqO', 'male', '0664687657', '2025-05-27', '', 'وادي الزناتي', 'سنة الثانية جامعي', 'student', '2025-05-27 16:58:42', '2025-05-28 17:39:54'),
+(10, 'brahmia.lokmeneabdelmoname@univ-guelma.dz', 'محمد', 'سلامة', '$2y$10$mD3KkzQ8gvXlKFn8wKe3I.c0gsiKFqt2g3o2Hqq2mAXEbHs2BupPq', 'male', '0664687657', '2025-05-29', 'ghardaia', 'حي بوسعادة', 'جامعي', 'teacher', '2025-05-29 13:15:45', '2025-05-29 13:15:45'),
+(12, 'brahmialokman16@gmail.com', 'عادل', 'بن عميرة', '$2y$10$bfaCzfnXc/OxJ.3xFi111eDBDFk4fjmpqMv4FYdHNKJm5/3feXF8m', 'male', '0664687657', '2025-05-29', 'el-tarf', 'حي الاخوة سعدان', 'سنة ثانية جامعي', 'admin', '2025-05-29 13:36:23', '2025-05-29 13:36:23');
 
 --
 -- Indexes for dumped tables
@@ -319,7 +308,7 @@ ALTER TABLE `curriculum`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `group_type_id` (`group_type_id`);
+  ADD KEY `group_teacher` (`teacher_id`);
 
 --
 -- Indexes for table `group_subjects`
@@ -329,21 +318,6 @@ ALTER TABLE `group_subjects`
   ADD KEY `group_id` (`group_id`),
   ADD KEY `subject_id` (`subject_id`),
   ADD KEY `curriculum_id` (`curriculum_id`);
-
---
--- Indexes for table `group_teachers`
---
-ALTER TABLE `group_teachers`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `group_id` (`group_id`),
-  ADD KEY `teacher_id` (`teacher_id`);
-
---
--- Indexes for table `group_types`
---
-ALTER TABLE `group_types`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `type_name` (`type_name`);
 
 --
 -- Indexes for table `messages`
@@ -437,18 +411,6 @@ ALTER TABLE `group_subjects`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `group_teachers`
---
-ALTER TABLE `group_teachers`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `group_types`
---
-ALTER TABLE `group_types`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
@@ -458,7 +420,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `student_groups`
@@ -476,7 +438,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `supervisors`
 --
 ALTER TABLE `supervisors`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `super_admin`
@@ -488,13 +450,13 @@ ALTER TABLE `super_admin`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -527,7 +489,7 @@ ALTER TABLE `curriculum`
 -- Constraints for table `groups`
 --
 ALTER TABLE `groups`
-  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_type_id`) REFERENCES `group_types` (`id`);
+  ADD CONSTRAINT `group_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`);
 
 --
 -- Constraints for table `group_subjects`
@@ -536,13 +498,6 @@ ALTER TABLE `group_subjects`
   ADD CONSTRAINT `group_subjects_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   ADD CONSTRAINT `group_subjects_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`),
   ADD CONSTRAINT `group_subjects_ibfk_3` FOREIGN KEY (`curriculum_id`) REFERENCES `curriculum` (`id`);
-
---
--- Constraints for table `group_teachers`
---
-ALTER TABLE `group_teachers`
-  ADD CONSTRAINT `group_teachers_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
-  ADD CONSTRAINT `group_teachers_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`);
 
 --
 -- Constraints for table `messages`
