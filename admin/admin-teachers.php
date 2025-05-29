@@ -7,11 +7,6 @@ $query = $db->prepare("SELECT * FROM users WHERE user_type = ?");
 $query->execute([$user_type]);
 $teachers = $query->fetchAll(PDO::FETCH_ASSOC);
 
-foreach($teachers as $teacher) {
-    $query = $db->prepare("SELECT * FROM teachers WHERE user_id = ?");
-    $query->execute([$teacher['id']]);
-}
-
 
 ?>
 
@@ -60,8 +55,9 @@ foreach($teachers as $teacher) {
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach($teachers as $teacher) { ?>
                         <tr>
-                            <td>محمد علي أحمد</td>
+                            <td> <?= $teacher['first_name'] . " " . $teacher['last_name'] ?></td>
                             <td>القرآن الكريم</td>
                             <td>10 أبريل 2025</td>
                             <td>3</td>
@@ -74,7 +70,7 @@ foreach($teachers as $teacher) {
                                 </div>
                             </td>
                         </tr>
-                        
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
