@@ -1,4 +1,5 @@
 <?php
+
 $ac_student = "active";
 require_once __DIR__ . '/template/header.php';
 
@@ -40,11 +41,44 @@ $stmt = $db->prepare($query);
 $stmt->execute([$user_type]);
 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+//print_r($students);
+
 // Initialize errors array
 $errors = [];
 
-if (isset($_POST))
+if (isset($_POST['first_name']))
     require_once __DIR__ . '/includes/add-student.php';
+
+
+print_r($_POST);
+
+if(isset($_POST['group_id']) && isset($_POST['student_id']) && isset($_POST['register_student'])) {
+    $student_id = $_POST['student_id'];
+    $group_id = $_POST['group_id'];
+    $enrollment_date = $_POST['enrollment_date'] ?? date('Y-m-d');
+
+        // Check if student is already in this group
+        $checkQuery = $db->prepare("SELECT * FROM student_groups WHERE student_id = ? AND group_id = ?");
+        $checkQuery->execute([$student_id, $group_id]);
+        
+        if ($checkQuery->rowCount() > 0) {
+            // Student is already in this group, just update registration status
+            $query = $db->prepare("UPDATE students SET registered = 1, enrollment_date = ? WHERE id = ?");
+            $query->execute([$enrollment_date, $student_id]);
+        } else {
+            // Update student registration status
+            $query = $db->prepare("UPDATE students SET registered = 1, enrollment_date = ? WHERE id = ?");
+            $query->execute([$enrollment_date, $student_id]);
+
+            // Add student to group
+            $query = $db->prepare("INSERT INTO student_groups (student_id, group_id) VALUES (?, ?)");
+            $query->execute([$student_id, $group_id]);
+        }
+
+        // Redirect to refresh the page
+        header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+        exit();
+}
 ?>
 
 <link rel="stylesheet" href="CSS/admin-students.css">
@@ -131,7 +165,8 @@ if (isset($_POST))
                     $query = $db->prepare("SELECT * FROM students WHERE user_id = ?");
                     $query->execute([$student['id']]);
                     $data = $query->fetchAll(PDO::FETCH_ASSOC);
-
+                     
+                    //print_r($data);
                     $query = $db->prepare("SELECT group_id FROM student_groups WHERE id = ?");
                     $query->execute([$student['id']]);
                     $group_id = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -158,7 +193,7 @@ if (isset($_POST))
                                     <i class="fas fa-edit"></i> تعديل
                                 </a>
                                 <?php if ($data[0]['registered'] == 0): ?>
-                                <button class="action-button register" onclick="openRegisterModal(<?= $student['id'] ?>, '<?= $student['first_name'] . ' ' . $student['last_name'] ?>')">
+                                <button class="action-button register" onclick="openRegisterModal(<?= $data[0]['id'] ?>, '<?= $student['first_name'] . ' ' . $student['last_name'] ?>')">
                                     <i class="fas fa-user-plus"></i> تسجيل
                                 </button>
                                 <?php endif; ?>
@@ -185,7 +220,7 @@ if (isset($_POST))
             <div class="modal-title">إضافة طالب جديد</div>
             <button class="close-btn" id="closeAddStudentModal">&times;</button>
         </div>
-        <form class="user-form" id="userForm" method="post">
+        <form  class="user-form" id="userForm" method="post">
                 <div class="form-group">
                     <label class="form-label">الاسم </label>
                     <input name="first_name" type="text" class="form-control" placeholder="أدخل الاسم ">
@@ -323,7 +358,7 @@ if (isset($_POST))
             <div class="form-group">
                 <label class="form-label">الحلقة</label>
                 <select name="group_id" class="form-control" required>
-                    <option value="">اختر الحلقة</option>
+                    <option value="" hidden >اختر الحلقة</option>
                     <?php
                     $query = $db->prepare("SELECT * FROM groups");
                     $query->execute();
@@ -646,7 +681,7 @@ if (isset($_POST['delete'])) {
 }
 
 // Handle student registration
-if (isset($_POST['register_student'])) {
+/* if (isset($_POST['register_student'])) {
     $student_id = $_POST['student_id'];
     $group_id = $_POST['group_id'];
     $enrollment_date = $_POST['enrollment_date'];
@@ -674,5 +709,5 @@ if (isset($_GET['success'])) {
     echo '<div class="alert alert-success">تم تسجيل الطالب بنجاح</div>';
 } elseif (isset($_GET['error'])) {
     echo '<div class="alert alert-danger">حدث خطأ أثناء تسجيل الطالب</div>';
-}
+} */
 ?>

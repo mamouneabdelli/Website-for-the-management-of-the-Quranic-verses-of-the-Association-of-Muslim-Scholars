@@ -39,7 +39,6 @@ $errors = [
 
 $first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $parent_name = $notes = ''; 
 
-
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
     $first_name = $_POST['first_name']; $last_name = $_POST['last_name']; $email = $_POST['email'];
@@ -105,7 +104,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         if(empty($_POST['parent_name'])) $errors['parent_name'] = "اسم الوالد مطلوب";
     }
 
-    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password'] && !$errors['phone'] && !$errors['date'] && !$errors['wilaya'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['parent_name'] && !$errors['notes'] && !$errors['regestred']) {
+    //print_r($errors);
+    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password'] && !$errors['phone'] && !$errors['date'] && !$errors['wilaya'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['parent_name'] ) {
         $db = DBConnection::getConnection()->getDb();
         $query = $db->prepare("SELECT * FROM users WHERE email=?");
         $query->execute([$email]);

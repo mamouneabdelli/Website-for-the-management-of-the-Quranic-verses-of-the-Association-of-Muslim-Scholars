@@ -740,3 +740,31 @@ LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 </script>
 </body>
 </html>
+
+if(isset($_POST['group_id']) && isset($_POST['student_id']) && isset($_POST['register_student'])) {
+    $student_id = $_POST['student_id'];
+    $group_id = $_POST['group_id'];
+    $enrollment_date = $_POST['enrollment_date'] ?? date('Y-m-d');
+
+        // Check if student is already in this group
+        $checkQuery = $db->prepare("SELECT * FROM student_groups WHERE student_id = ? AND group_id = ?");
+        $checkQuery->execute([$student_id, $group_id]);
+        
+        if ($checkQuery->rowCount() > 0) {
+            // Student is already in this group, just update registration status
+            $query = $db->prepare("UPDATE students SET registered = 1, enrollment_date = ? WHERE user_id = ?");
+            $query->execute([$enrollment_date, $student_id]);
+        } else {
+            // Update student registration status
+            $query = $db->prepare("UPDATE students SET registered = 1, enrollment_date = ? WHERE user_id = ?");
+            $query->execute([$enrollment_date, $student_id]);
+
+            // Add student to group
+            $query = $db->prepare("INSERT INTO student_groups (student_id, group_id) VALUES (?, ?)");
+            $query->execute([$student_id, $group_id]);
+        }
+
+        // Redirect to refresh the page
+        header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+        exit();
+}

@@ -81,12 +81,12 @@ if (isset($_POST))
                     $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
                     $query = $db->prepare("SELECT * FROM groups WHERE teacher_id = ?");
-                    $query->execute([$teacher['id']]);
+                    $query->execute([$data[0]['id']]);
                     $groups = $query->fetchAll(PDO::FETCH_ASSOC);
 
                     $num = 0;
                     foreach ($groups as $group) {
-                        $query = $db->prepare("SELECT * FROM groups WHERE teacher_id = ?");
+                        $query = $db->prepare("SELECT * FROM student_groups WHERE group_id = ?");
                         $query->execute([$group['id']]);
                         $students = $query->fetchAll(PDO::FETCH_ASSOC);
                         $num += count($students);
