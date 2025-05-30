@@ -26,7 +26,15 @@ $errors = [
     'email' => '',
     'password' => '',
     'confirm_password' => '',
-    'user' => ''
+    'user' => '',
+    'date' => '',
+    'wilaya' => '',
+    'address' => '',
+    'gender' => '',
+    'academic_level' => '',
+    'employment_date' => '',
+    'parent_name' => '',
+    'phone' => ''
 ];
 
 $first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $regestred = $parent_name = $notes = ''; 
@@ -73,8 +81,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $errors['academic_level']="المستوى الدراسي غير صالح";
         if(!$parent_name)
             $errors['parent_name']="اسم الوالد غير صالح";
-        if(!$notes)
-            $errors['notes']="الملاحظات غير صالحة";
         if(strlen($password) >= 8)
         {
             if($password != $confirm_password)
@@ -100,7 +106,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         if(empty($_POST['regestred'])) $errors['regestred'] = "يجب تحديد حالة التسجيل";
     }
 
-    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password'] && !$errors['phone'] && !$errors['date_of_birth'] && !$errors['place_of_birth'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['parent_name'] && !$errors['notes'] && !$errors['regestred']) {
+    if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password'] && !$errors['phone'] && !$errors['date'] && !$errors['wilaya'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['parent_name'] && !$errors['notes'] && !$errors['regestred']) {
         $db = DBConnection::getConnection()->getDb();
         $query = $db->prepare("SELECT * FROM users WHERE email=?");
         $query->execute([$email]);

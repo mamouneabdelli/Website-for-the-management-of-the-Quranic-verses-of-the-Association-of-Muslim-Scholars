@@ -27,10 +27,6 @@ require_once __DIR__ .'/template/header.php';
                     <div class="label">طلاب جدد هذا الشهر</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number red">45</div>
-                    <div class="label">طلاب أكملوا المستوى</div>
-                </div>
-                <div class="stat-card">
                     <div class="number orange">95%</div>
                     <div class="label">نسبة الحضور</div>
                 </div>
@@ -47,23 +43,6 @@ require_once __DIR__ .'/template/header.php';
                             <option value="2">حلقة القرآن 2</option>
                             <option value="3">حلقة الحديث 1</option>
                             <option value="4">حلقة الفقه 1</option>
-                        </select>
-                    </div>
-                    <div class="filter-option">
-                        <label>المستوى:</label>
-                        <select class="filter-select">
-                            <option value="all">الكل</option>
-                            <option value="beginner">مبتدئ</option>
-                            <option value="intermediate">متوسط</option>
-                            <option value="advanced">متقدم</option>
-                        </select>
-                    </div>
-                    <div class="filter-option">
-                        <label>الحالة:</label>
-                        <select class="filter-select">
-                            <option value="all">الكل</option>
-                            <option value="active">نشط</option>
-                            <option value="inactive">غير نشط</option>
                         </select>
                     </div>
                     <div class="filter-option">

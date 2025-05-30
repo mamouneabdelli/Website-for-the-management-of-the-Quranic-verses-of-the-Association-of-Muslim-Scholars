@@ -126,7 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 $notes
             ]);
             
-            header("Location: /quranic/admin/admin-users.php?user_type=teacher");
+            header("Location: " . $_SERVER['PHP_SELF']);
             exit();
         }
     }
