@@ -294,16 +294,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <!-- حقول خاصة بالطلاب -->
             <?php if ($user['user_type'] == 'student'): ?>
-                <div class="form-group">
-                    <label class="form-label">مسجل:</label>
-                    <div>
-                        <input id="yes" value="1" name="regestred" type="radio" <?= ($additional_data['registered'] ?? 1) == 1 ? 'checked' : '' ?>>
-                        <label for="yes">نعم</label>
-                        <input id="no" value="0" name="regestred" type="radio" <?= ($additional_data['registered'] ?? 1) == 0 ? 'checked' : '' ?>>
-                        <label for="no">لا</label>
-                    </div>
-                    <span class="error"><?php echo isset($errors['regestred']) ? $errors['regestred'] : ''; ?></span>
-                </div>
 
                 <div class="form-group">
                     <label class="form-label">الاسم الكامل لولي الامر</label>

@@ -144,7 +144,7 @@ $messages = $query->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                 <?php foreach ($teachers as $teacher) :
                     $query = $db->prepare("
-    SELECT * FROM group_teachers WHERE teacher_id=?
+    SELECT * FROM groups WHERE teacher_id=?
 ");
                     $query->execute([$teacher['teacher_id']]);
                     $groups = $query->fetchAll(PDO::FETCH_ASSOC);

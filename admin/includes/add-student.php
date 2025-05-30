@@ -37,7 +37,7 @@ $errors = [
     'phone' => ''
 ];
 
-$first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $regestred = $parent_name = $notes = ''; 
+$first_name = $last_name = $email = $password = $confirm_password = $phone = $date_of_birth = $place_of_birth = $address = $gender = $academic_level = $parent_name = $notes = ''; 
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') 
@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $first_name = $_POST['first_name']; $last_name = $_POST['last_name']; $email = $_POST['email'];
         $password = $_POST['password']; $confirm_password = $_POST['confirm_password'];
         $date_of_birth = $_POST['date'];
-        $place_of_birth = $_POST['wilaya']; $regestred = $_POST['regestred'];
+        $place_of_birth = $_POST['wilaya']; 
         $phone= $_POST['phone']; $address = $_POST['address']; $gender = $_POST['gender']; $academic_level = $_POST['academic_level']; $parent_name = $_POST['parent_name']; $notes = $_POST['notes'];
     if(!empty($first_name) && !empty($last_name) && !empty($email) && !empty($password) && !empty($confirm_password) && !empty($phone) && !empty($date_of_birth) && !empty($place_of_birth) && !empty($address) && !empty($gender) && !empty($academic_level) )
     {
@@ -103,7 +103,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         if(empty($_POST['gender'])) $errors['gender'] = "الجنس مطلوب";
         if(empty($_POST['academic_level'])) $errors['academic_level'] = "المستوى الدراسي مطلوب";
         if(empty($_POST['parent_name'])) $errors['parent_name'] = "اسم الوالد مطلوب";
-        if(empty($_POST['regestred'])) $errors['regestred'] = "يجب تحديد حالة التسجيل";
     }
 
     if(!$errors['first_name'] && !$errors['last_name'] && !$errors['email'] && !$errors['password'] && !$errors['confirm_password'] && !$errors['phone'] && !$errors['date'] && !$errors['wilaya'] && !$errors['address'] && !$errors['gender'] && !$errors['academic_level'] && !$errors['parent_name'] && !$errors['notes'] && !$errors['regestred']) {
@@ -127,7 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 $user_id,
                 $parent_name,
                 $notes,
-                $regestred
+                0
             ]);
             
             header("Location: " . $_SERVER['PHP_SELF']);
