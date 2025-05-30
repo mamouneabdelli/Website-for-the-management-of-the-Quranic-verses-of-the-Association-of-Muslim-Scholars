@@ -130,7 +130,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 $regestred
             ]);
             
-            header("Location: /quranic/admin/admin-users.php?user_type=student");
+            header("Location: " . $_SERVER['PHP_SELF']);
             exit();
         }
     }
