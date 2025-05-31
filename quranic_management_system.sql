@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2025 at 12:29 PM
+-- Generation Time: May 31, 2025 at 07:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,6 +77,9 @@ CREATE TABLE `curriculum` (
 -- Dumping data for table `curriculum`
 --
 
+INSERT INTO `curriculum` (`id`, `day`, `start_time`, `end_time`, `class`, `teacher_id`, `subject_id`, `group_id`) VALUES
+(6, 'الثلاثاء', '16:00:00', '18:00:00', 'القاعة 1', 9, 1, 8),
+(7, 'الإثنين', '08:00:00', '10:00:00', 'القاعة1', 9, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -100,8 +103,9 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`id`, `group_name`, `capacity`, `academic_year`, `start_date`, `end_date`, `teacher_id`, `description`) VALUES
-(3, 'فوج القرأن 1', 30, '2025', '2025-05-31', NULL, 8, '....'),
-(4, 'فوج القرأن 2', 30, '2025', '2025-05-31', NULL, 8, '...');
+(8, 'فوج القرأن 1', 30, '2025', '2025-05-31', NULL, 9, ''),
+(9, 'الفوج القرأن 2', 30, '2025', '2025-05-31', NULL, 9, ''),
+(10, 'فوج القرأن 3', 30, '2025', '2025-05-31', NULL, 8, '');
 
 -- --------------------------------------------------------
 
@@ -153,7 +157,7 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `user_id`, `student_code`, `parent_name`, `notes`, `enrollment_date`, `registered`) VALUES
-(11, 20, '', 'بد الدين', '', '2025-05-30', 0);
+(11, 20, '', 'بد الدين', '', '2025-05-31', 1);
 
 -- --------------------------------------------------------
 
@@ -169,6 +173,13 @@ CREATE TABLE `student_groups` (
   `status` enum('active','withdrawn','completed') DEFAULT NULL,
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `student_groups`
+--
+
+INSERT INTO `student_groups` (`id`, `student_id`, `group_id`, `enrollment_date`, `status`, `notes`) VALUES
+(9, 11, 8, '2025-05-31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -251,7 +262,8 @@ CREATE TABLE `teachers` (
 --
 
 INSERT INTO `teachers` (`id`, `user_id`, `specialization`, `qualification`, `employment_date`, `notes`) VALUES
-(8, 18, 'قرأن كريم', NULL, '2025-05-30', '');
+(8, 18, 'قرأن كريم', NULL, '2025-05-30', ''),
+(9, 21, 'قرأن كريم', NULL, '2025-05-31', '');
 
 -- --------------------------------------------------------
 
@@ -283,7 +295,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `gender`, `phone`, `date_of_birth`, `place_of_birth`, `address`, `academic_level`, `user_type`, `created_at`, `updated_at`) VALUES
 (12, 'brahmialokman16@gmail.com', 'عادل', 'بن عميرة', '$2y$10$bfaCzfnXc/OxJ.3xFi111eDBDFk4fjmpqMv4FYdHNKJm5/3feXF8m', 'male', '0664687657', '2025-05-29', 'el-tarf', 'حي الاخوة سعدان', 'سنة ثانية جامعي', 'admin', '2025-05-29 13:36:23', '2025-05-29 13:36:23'),
 (18, 'kjlk@gmail.com', 'فاروق', 'كحل الراس', '$2y$10$Es8PY2tmnpyqXI74OThcJOHG9U2lUwbGUxR7tZmcXGZ0GiPAXiRpq', 'male', '0664687657', '2025-05-30', 'el-bayadh', 'حي 50 مسكن', 'جامعي', 'teacher', '2025-05-30 09:33:36', '2025-05-30 09:33:36'),
-(20, 'yahya@gmailc.om', 'يحي', 'بولحية', '$2y$10$MVd2Qgk.POP4qDt7fXvZF.gA8i4sxs13D1BBMFsMCbzTNkv2xlWaC', 'male', '0664687657', '2025-05-30', 'el-tarf', 'حي الاخوة سعدان', 'جامعي', 'student', '2025-05-30 16:37:45', '2025-05-30 16:37:45');
+(20, 'yahya@gmailc.om', 'يحي', 'بولحية', '$2y$10$MVd2Qgk.POP4qDt7fXvZF.gA8i4sxs13D1BBMFsMCbzTNkv2xlWaC', 'male', '0664687657', '2025-05-30', 'el-tarf', 'حي الاخوة سعدان', 'جامعي', 'student', '2025-05-30 16:37:45', '2025-05-30 16:37:45'),
+(21, 'brahmialokman16@proton.me', 'عبد القادر', 'بولحفة', '$2y$10$B17fsmeN9vpD4.e/FD1eYO7O.hg3tbKj64isxUkPeX/oqx7GfQD.6', 'male', '0664687657', '2025-05-31', 'el-bayadh', 'حي بولوح', 'جامعي', 'teacher', '2025-05-31 10:36:21', '2025-05-31 10:36:21');
 
 --
 -- Indexes for dumped tables
@@ -408,13 +421,13 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `curriculum`
 --
 ALTER TABLE `curriculum`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `group_subjects`
@@ -438,7 +451,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `student_groups`
 --
 ALTER TABLE `student_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -462,13 +475,13 @@ ALTER TABLE `super_admin`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
