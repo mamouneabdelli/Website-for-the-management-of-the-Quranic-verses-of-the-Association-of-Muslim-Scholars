@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 $ac_student = "active";
 require_once __DIR__ . '/template/header.php';
@@ -709,4 +710,6 @@ if (isset($_GET['success'])) {
 } elseif (isset($_GET['error'])) {
     echo '<div class="alert alert-danger">حدث خطأ أثناء تسجيل الطالب</div>';
 } */
+ob_end_flush();
+
 ?>
