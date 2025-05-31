@@ -50,7 +50,6 @@ if (isset($_POST['first_name']))
     require_once __DIR__ . '/includes/add-student.php';
 
 
-print_r($_POST);
 
 if(isset($_POST['group_id']) && isset($_POST['student_id']) && isset($_POST['register_student'])) {
     $student_id = $_POST['student_id'];

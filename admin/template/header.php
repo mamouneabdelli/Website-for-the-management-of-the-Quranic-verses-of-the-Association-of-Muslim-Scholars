@@ -59,8 +59,8 @@ require_once __DIR__ .'/../../config/app.php';
             <li class="<?= $ac_message ?? "" ?>">
                 <a href="admin-reports.php" >الرسائل والإحصائيات</a>
             </li>
-            <li>
-                <a href="admin-reports.php">ادارة البرامج</a>
+            <li class="<?= $ac_programs ?? "" ?>" >
+                <a href="admin-programs.php">ادارة جداول الحلقات الأسبوعية</a>
             </li>
             <li>
                 <a href="admin-settings.php">إعدادات النظام</a>

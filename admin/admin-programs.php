@@ -1,45 +1,15 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة جداول الحلقات - جمعية العلماء المسلمين</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="header">
-        <div class="welcome-msg">
-            أهلا بك يا <span>المدير أحمد</span>
-        </div>
-        <div class="header-icons">
-            <i class="fas fa-bell"></i>
-            <i class="fas fa-envelope"></i>
-            <i class="fas fa-cog"></i>
-        </div>
-    </div>
+<?php
+$ac_programs = "active";
+require_once __DIR__ .'/template/header.php';
 
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='90' viewBox='0 0 120 90'%3E%3Crect fill='%2300A841' width='120' height='90' rx='45'/%3E%3Ctext x='60' y='50' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3Eجمعية العلماء%3C/text%3E%3C/svg%3E" alt="جمعية العلماء المسلمين">
-                <p>جمعية العلماء المسلمين الجزائريين</p>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="index.php">لوحة التحكم</a></li>
-                <li><a href="admin-users.php">إدارة المستخدمين</a></li>
-                <li><a href="admin-teachers.php">إدارة الأساتذة</a></li>
-                <li><a href="admin-students.php">إدارة الطلاب</a></li>
-                <li><a href="admin-sessions.php">إدارة الحلقات</a></li>
-                <li><a href="admin-reports.php">الرسائل والإحصائيات</a></li>
-                <li class="active"><a href="admin-schedules.php">إدارة الجداول</a></li>
-                <li><a href="admin-settings.php">إعدادات النظام</a></li>
-            </ul>
-            <div class="register-btn">
-                <i class="fas fa-arrow-left"></i> تسجيل الخروج
-            </div>
-        </div>
+?>
 
-        <div class="content">
+
+<link rel="stylesheet" href="CSS/admin-programs.css">
+
+
+
+<div class="content">
             <div class="search-bar">
                 <div class="search-input">
                     <i class="fas fa-search"></i>
