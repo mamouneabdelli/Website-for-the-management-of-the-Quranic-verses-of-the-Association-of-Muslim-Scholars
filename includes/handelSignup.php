@@ -76,9 +76,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 $email,$password,$db,$first_name,$last_name,$_POST['gender']
             );
     
-            $student->signup();
-        
-                $_SESSION['login_in'] = false;
+            $student->signup();     
+                $_SESSION['login_in'] = true;
                 $_SESSION['user_id'] = $db->lastInsertId();
                 $_SESSION['user_name'] = $first_name;
                 header("Location: /quranic/index.php");

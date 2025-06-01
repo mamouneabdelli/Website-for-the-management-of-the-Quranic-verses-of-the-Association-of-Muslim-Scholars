@@ -2,9 +2,11 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-if (isset($_SESSION['logen_in']) && $_SESSION['logen_in'] == true)
+ 
+//print_r($_SESSION);
+if (isset($_SESSION['login_in']) && $_SESSION['login_in'] == true) {
     $showPopup = true;
+}
 
 ?>
 <!DOCTYPE html>

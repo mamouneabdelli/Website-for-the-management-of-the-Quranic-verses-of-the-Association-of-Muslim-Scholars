@@ -1,4 +1,5 @@
 <?php
+ob_start();
 $ac_session = "active";
 require_once __DIR__ .'/template/header.php';
 
@@ -570,3 +571,7 @@ function deleteGroup(id) {
 </script>
 </body>
 </html>
+
+<?php
+
+ob_end_flush();
