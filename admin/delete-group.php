@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 $ac_session = "active";
 require_once __DIR__ .'/template/header.php';
 
@@ -85,3 +87,5 @@ try {
 
 header("Location: admin-sessions.php");
 exit; 
+
+ob_end_flush();

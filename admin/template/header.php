@@ -151,7 +151,7 @@ body {
 <body>
 <div class="header">
     <div class="welcome-msg">
-        أهلا بك يا <span>المدير أحمد</span>
+        أهلا بك يا <span><?= $_SESSION['name'] ?></span>
     </div>
     <div class="header-icons">
         <i class="fas fa-bell"></i>
@@ -193,6 +193,6 @@ body {
             </li>
         </ul>
         <div class="register-btn">
-            <i class="fas fa-arrow-left"></i> تسجيل الخروج
+            <i class="fas fa-arrow-left"></i> <a href="logout.php">تسجيل الخروج</a>
         </div>
     </div>

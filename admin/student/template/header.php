@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-if(empty($_SESSION['login_in'])) {
-    header("Location: /quranic");
+// التحقق مما إذا كان المستخدم قد سجل الدخول وأنه طالب
+if (!isset($_SESSION['login_in']) || $_SESSION['login_in'] !== true || !isset($_SESSION['student_id']) || $_SESSION['user_type'] !== 'student') {
+    header("Location: /quranic/login.php");
+    exit();
 }
-
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);

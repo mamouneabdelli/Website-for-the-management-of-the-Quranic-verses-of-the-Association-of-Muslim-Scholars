@@ -31,6 +31,24 @@ if (isset($_POST))
 <link rel="stylesheet" href="CSS/admin-teachers.css">
 
 <div class="content">
+    <?php if (isset($_GET['has_groups']) && $_GET['has_groups'] == 1): ?>
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> لا يمكن حذف الأستاذ لأنه مسؤول عن مجموعة واحدة أو أكثر. يجب حذف المجموعات المرتبطة به أولاً من صفحة إدارة المجموعات.
+    </div>
+    <?php endif; ?>
+    
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> تم حذف الأستاذ بنجاح.
+    </div>
+    <?php endif; ?>
+    
+    <?php if (isset($_GET['error']) && $_GET['error'] == 1): ?>
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> حدث خطأ أثناء محاولة حذف الأستاذ. الرجاء المحاولة مرة أخرى.
+    </div>
+    <?php endif; ?>
+    
     <div class="search-bar">
         <div class="search-input">
             <i class="fas fa-search"></i>
@@ -443,6 +461,31 @@ if (isset($_POST))
         border-color: #dc3545;
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
+    
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .alert i {
+        margin-left: 10px;
+        font-size: 20px;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
 </style>
 </body>
 
@@ -451,22 +494,51 @@ if (isset($_POST))
 <?php
 
 if (isset($_POST['delete'])) {
-    ob_start(); // Start output buffering
-
+    ob_start(); // بدء تخزين المخرجات
+    
     $user_id = $_POST['delete'];
     $db = DBConnection::getConnection()->getDb();
-
+    
     try {
-        $query = $db->prepare("DELETE FROM teachers WHERE user_id=?");
+        // أولاً، نتحقق مما إذا كان المعلم لديه مجموعات قبل محاولة حذفه
+        // البحث عن معرف المعلم
+        $query = $db->prepare("SELECT id FROM teachers WHERE user_id = ?");
         $query->execute([$user_id]);
-
-        $query = $db->prepare("DELETE FROM users WHERE id=?");
-        $query->execute([$user_id]);
-
-        ob_end_clean(); // Clear any output
-        header("Location: /quranic/admin/admin-teachers.php");
-        echo "<script>window.location.href = '/quranic/admin/admin-teachers.php';</script>";
-        exit();
+        $teacher = $query->fetch(PDO::FETCH_ASSOC);
+        
+        if ($teacher) {
+            $teacher_id = $teacher['id'];
+            
+            // التحقق من وجود مجموعات يشرف عليها المعلم
+            $query = $db->prepare("SELECT COUNT(*) as group_count FROM groups WHERE teacher_id = ?");
+            $query->execute([$teacher_id]);
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if ($result['group_count'] > 0) {
+                // المعلم لديه مجموعات، إرسال رسالة خطأ
+                ob_end_clean();
+                header("Location: /quranic/admin/admin-teachers.php?has_groups=1");
+                echo "<script>window.location.href = '/quranic/admin/admin-teachers.php?has_groups=1';</script>";
+                exit();
+            }
+        }
+        
+        // إذا لم يكن للمعلم أي مجموعات، يمكننا المتابعة في حذفه
+        require_once __DIR__ . '/admin-users.php'; // استيراد الملف الذي يحتوي على الدالة
+        
+        $success = deleteUserFromAllTables($db, $user_id, 'teacher');
+        
+        ob_end_clean(); // مسح المخرجات المخزنة
+        
+        if ($success) {
+            header("Location: /quranic/admin/admin-teachers.php?success=1");
+            echo "<script>window.location.href = '/quranic/admin/admin-teachers.php?success=1';</script>";
+            exit();
+        } else {
+            header("Location: /quranic/admin/admin-teachers.php?error=1");
+            echo "<script>window.location.href = '/quranic/admin/admin-teachers.php?error=1';</script>";
+            exit();
+        }
     } catch (PDOException $e) {
         ob_end_clean();
         header("Location: /quranic/admin/admin-teachers.php?error=1");

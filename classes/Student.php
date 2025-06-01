@@ -51,8 +51,8 @@ class Student extends User
 
             $user_id = $this->db->lastInsertId();
 
-            $query = $this->db->prepare("INSERT INTO students (user_id,academic_phase) VALUES (?, ?)");
-            $query->execute([$user_id, $this->academic_phase]);
+            $query = $this->db->prepare("INSERT INTO students (user_id,registered) VALUES (?, ?)");
+            $query->execute([$user_id,0]);
             return true;
         } catch (PDOException $e) {
             die("خطأ في التسجيل: " . $e->getMessage());

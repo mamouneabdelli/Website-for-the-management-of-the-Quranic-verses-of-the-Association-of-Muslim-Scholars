@@ -357,75 +357,159 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <?php
 
-if (isset($_POST['user_id']) && $_POST['delete_type'] == "student") {
-    ob_start(); // Start output buffering
-
-    $user_id = $_POST['user_id'];
-    $db = DBConnection::getConnection()->getDb();
-
+/**
+ * دالة لحذف المستخدم من جميع الجداول المرتبطة
+ * @param PDO $db كائن قاعدة البيانات
+ * @param int $user_id معرف المستخدم
+ * @param string $user_type نوع المستخدم (student, teacher, admin)
+ * @return bool نجاح أو فشل العملية
+ */
+function deleteUserFromAllTables($db, $user_id, $user_type) {
     try {
-        $query = $db->prepare("DELETE FROM students WHERE user_id=?");
+        // بدء المعاملة لضمان التكامل
+        $db->beginTransaction();
+        
+        // حذف السجلات من جدول الرسائل
+        $query = $db->prepare("DELETE FROM messages WHERE sender_id = ?");
         $query->execute([$user_id]);
-
-        $query = $db->prepare("DELETE FROM users WHERE id=?");
+        
+        // معالجة حذف الطالب وبياناته المرتبطة
+        if ($user_type == "student") {
+            // البحث عن معرف الطالب
+            $query = $db->prepare("SELECT id FROM students WHERE user_id = ?");
+            $query->execute([$user_id]);
+            $student = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if ($student) {
+                $student_id = $student['id'];
+                
+                // حذف سجلات التقدم الأكاديمي
+                $query = $db->prepare("DELETE FROM academic_progress WHERE student_id = ?");
+                $query->execute([$student_id]);
+                
+                // حذف سجلات الحضور
+                $query = $db->prepare("DELETE FROM attendance WHERE student_id = ?");
+                $query->execute([$student_id]);
+                
+                // حذف من مجموعات الطلاب
+                $query = $db->prepare("DELETE FROM student_groups WHERE student_id = ?");
+                $query->execute([$student_id]);
+                
+                // حذف من جدول الطلاب
+                $query = $db->prepare("DELETE FROM students WHERE id = ?");
+                $query->execute([$student_id]);
+            }
+        }
+        
+        // معالجة حذف المعلم وبياناته المرتبطة
+        elseif ($user_type == "teacher") {
+            // البحث عن معرف المعلم
+            $query = $db->prepare("SELECT id FROM teachers WHERE user_id = ?");
+            $query->execute([$user_id]);
+            $teacher = $query->fetch(PDO::FETCH_ASSOC);
+            
+            if ($teacher) {
+                $teacher_id = $teacher['id'];
+                
+                // حذف سجلات المناهج الدراسية
+                $query = $db->prepare("DELETE FROM curriculum WHERE teacher_id = ?");
+                $query->execute([$teacher_id]);
+                
+                // تحديث المجموعات التي يشرف عليها المعلم (يمكن تعيين معلم آخر أو حذفها)
+                $query = $db->prepare("SELECT id FROM groups WHERE teacher_id = ?");
+                $query->execute([$teacher_id]);
+                $groups = $query->fetchAll(PDO::FETCH_ASSOC);
+                
+                foreach ($groups as $group) {
+                    $group_id = $group['id'];
+                    
+                    // حذف المناهج المرتبطة بالمجموعة
+                    $query = $db->prepare("DELETE FROM curriculum WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف سجلات مواد المجموعة
+                    $query = $db->prepare("DELETE FROM group_subjects WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف الرسائل المرتبطة بالمجموعة
+                    $query = $db->prepare("DELETE FROM messages WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف سجلات التقدم الأكاديمي
+                    $query = $db->prepare("DELETE FROM academic_progress WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف سجلات الحضور
+                    $query = $db->prepare("DELETE FROM attendance WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف سجلات مجموعات الطلاب
+                    $query = $db->prepare("DELETE FROM student_groups WHERE group_id = ?");
+                    $query->execute([$group_id]);
+                    
+                    // حذف المجموعة نفسها
+                    $query = $db->prepare("DELETE FROM groups WHERE id = ?");
+                    $query->execute([$group_id]);
+                }
+                
+                // حذف سجلات الحضور التي أنشأها المعلم
+                $query = $db->prepare("DELETE FROM attendance WHERE created_by = ?");
+                $query->execute([$teacher_id]);
+                
+                // حذف المعلم
+                $query = $db->prepare("DELETE FROM teachers WHERE id = ?");
+                $query->execute([$teacher_id]);
+            }
+        }
+        
+        // معالجة حذف المشرف
+        elseif ($user_type == "admin") {
+            // حذف من جدول المشرفين
+            $query = $db->prepare("DELETE FROM supervisors WHERE user_id = ?");
+            $query->execute([$user_id]);
+        }
+        
+        // حذف من جدول super_admin إذا كان موجودًا
+        $query = $db->prepare("DELETE FROM super_admin WHERE user_id = ?");
         $query->execute([$user_id]);
-
-        ob_end_clean(); // Clear any output
-        header("Location: /quranic/admin/admin-users.php?user_type=student");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=student';</script>";
-        exit();
+        
+        // أخيرًا، حذف المستخدم نفسه
+        $query = $db->prepare("DELETE FROM users WHERE id = ?");
+        $query->execute([$user_id]);
+        
+        // تأكيد المعاملة
+        $db->commit();
+        return true;
     } catch (PDOException $e) {
-        ob_end_clean();
-        header("Location: /quranic/admin/admin-users.php?user_type=student&error=1");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=student&error=1';</script>";
-        exit();
+        // التراجع عن المعاملة في حالة حدوث خطأ
+        $db->rollBack();
+        return false;
     }
 }
-if (isset($_POST['user_id']) && $_POST['delete_type'] == "teacher") {
-    ob_start(); // Start output buffering
 
+// معالجة حذف المستخدم
+if (isset($_POST['user_id']) && isset($_POST['delete_type'])) {
+    ob_start(); // بدء تخزين المخرجات
+    
     $user_id = $_POST['user_id'];
+    $user_type = $_POST['delete_type'];
     $db = DBConnection::getConnection()->getDb();
-
-    try {
-        $query = $db->prepare("DELETE FROM teachers WHERE user_id=?");
-        $query->execute([$user_id]);
-
-        $query = $db->prepare("DELETE FROM users WHERE id=?");
-        $query->execute([$user_id]);
-
-        ob_end_clean(); // Clear any output
-        header("Location: /quranic/admin/admin-users.php?user_type=teacher");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=teacher';</script>";
+    
+    // تحويل نوع المستخدم إلى القيمة المناسبة للدالة
+    $user_type_mapped = ($user_type == "admin") ? "admin" : 
+                       (($user_type == "teacher") ? "teacher" : "student");
+    
+    $success = deleteUserFromAllTables($db, $user_id, $user_type_mapped);
+    
+    ob_end_clean(); // مسح المخرجات المخزنة
+    
+    if ($success) {
+        header("Location: /quranic/admin/admin-users.php?user_type={$user_type}");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type={$user_type}';</script>";
         exit();
-    } catch (PDOException $e) {
-        ob_end_clean();
-        header("Location: /quranic/admin/admin-users.php?user_type=teacher&error=1");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=teacher&error=1';</script>";
-        exit();
-    }
-}
-if (isset($_POST['user_id']) && $_POST['delete_type'] == "admin") {
-    ob_start(); // Start output buffering
-
-    $user_id = $_POST['user_id'];
-    $db = DBConnection::getConnection()->getDb();
-
-    try {
-        $query = $db->prepare("DELETE FROM supervisors WHERE user_id=?");
-        $query->execute([$user_id]);
-
-        $query = $db->prepare("DELETE FROM users WHERE id=?");
-        $query->execute([$user_id]);
-
-        ob_end_clean(); // Clear any output
-        header("Location: /quranic/admin/admin-users.php?user_type=admin");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=admin';</script>";
-        exit();
-    } catch (PDOException $e) {
-        ob_end_clean();
-        header("Location: /quranic/admin/admin-users.php?user_type=admin&error=1");
-        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type=admin&error=1';</script>";
+    } else {
+        header("Location: /quranic/admin/admin-users.php?user_type={$user_type}&error=1");
+        echo "<script>window.location.href = '/quranic/admin/admin-users.php?user_type={$user_type}&error=1';</script>";
         exit();
     }
 }

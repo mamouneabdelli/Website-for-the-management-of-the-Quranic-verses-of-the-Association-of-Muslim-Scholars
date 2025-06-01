@@ -7,7 +7,13 @@ require_once __DIR__ . '/../../classes/Teacher.php';
 require_once __DIR__ . '/../../classes/Progress.php';
 require_once __DIR__ . '/../../classes/DBConnection.php';
 
-$teacherId = 2;
+if (isset($_SESSION['teacher_id'])) {
+    $teacherId = $_SESSION['teacher_id'];
+} else {
+    // إذا لم يتم تسجيل الدخول، يتم إعادة التوجيه إلى صفحة تسجيل الدخول
+    header("Location: /quranic/login.php");
+    exit();
+}
 $db = DBConnection::getConnection()->getDb();
 $groupNames = Teacher::getGroups(
     $teacherId,
@@ -189,10 +195,30 @@ foreach($groupNames as $groupName) {
 
         <div class="memorization-table-section">
             <?php
-            foreach($progresses as $progresseGroup) {
+            // استخدام مصفوفة لتخزين أسماء المجموعات التي تم معالجتها
+            $processedGroups = [];
+            foreach($progresses as $index => $progresseGroup) {
+                // تخطي المجموعات الفارغة
+                if (empty($progresseGroup)) {
+                    continue;
+                }
+                
+                // الحصول على اسم المجموعة
+                $groupName = '';
+                if (isset($progresseGroup[0]['group_name'])) {
+                    $groupName = $progresseGroup[0]['group_name'];
+                } elseif (isset($groupNames[$index]['group_name'])) {
+                    $groupName = $groupNames[$index]['group_name'];
+                }
+                
+                // تخطي المجموعات المكررة
+                if (in_array($groupName, $processedGroups)) {
+                    continue;
+                }
+                $processedGroups[] = $groupName;
              ?>
             <div class="section-header">
-                <div class="section-title"><?= $progresseGroup[0]['group_name'] ?? "" ?></div>
+                <div class="section-title"><?= $groupName ?></div>
                 <div>
                     <select class="filter-dropdown">
                         <option>آخر أسبوع</option>

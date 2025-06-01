@@ -6,8 +6,13 @@ require_once __DIR__ . '/../../classes/User.php';
 require_once __DIR__ . '/../../classes/Teacher.php';
 require_once __DIR__ . '/../../classes/Attendance.php';
 require_once __DIR__ . '/../../classes/DBConnection.php';
-
-$teacherId = 2;
+if (isset($_SESSION['teacher_id'])) {
+    $teacherId = $_SESSION['teacher_id'];
+} else {
+    // إذا لم يتم تسجيل الدخول، يتم إعادة التوجيه إلى صفحة تسجيل الدخول
+    header("Location: /quranic/login.php");
+    exit();
+}
 $db = DBConnection::getConnection()->getDb();
 $groupNames = Teacher::getGroups($teacherId, $db);
 

@@ -656,26 +656,32 @@ if(isset($_POST['group_id']) && isset($_POST['student_id']) && isset($_POST['reg
 <?php
 
 if (isset($_POST['delete'])) {
-    ob_start(); // Start output buffering
-
+    ob_start(); // بدء تخزين المخرجات
+    
     $user_id = $_POST['delete'];
     $db = DBConnection::getConnection()->getDb();
-
+    
     try {
-        $query = $db->prepare("DELETE FROM students WHERE user_id=?");
-        $query->execute([$user_id]);
-
-        $query = $db->prepare("DELETE FROM users WHERE id=?");
-        $query->execute([$user_id]);
-
-        ob_end_clean(); // Clear any output
-        header("Location: /quranic/admin/admin-students.php");
-        echo "<script>window.location.href = '/quranic/admin/admin-students.php';</script>";
-        exit();
+        // استدعاء الدالة لحذف الطالب من جميع الجداول المرتبطة
+        require_once __DIR__ . '/admin-users.php'; // استيراد الملف الذي يحتوي على الدالة
+        
+        $success = deleteUserFromAllTables($db, $user_id, 'student');
+        
+        ob_end_clean(); // مسح المخرجات المخزنة
+        
+        if ($success) {
+            header("Location: /quranic/admin/admin-students.php");
+            echo "<script>window.location.href = '/quranic/admin/admin-students.php';</script>";
+            exit();
+        } else {
+            header("Location: /quranic/admin/admin-students.php?error=1");
+            echo "<script>window.location.href = '/quranic/admin/admin-students.php?error=1';</script>";
+            exit();
+        }
     } catch (PDOException $e) {
         ob_end_clean();
-        header("Location: /quranic/admin/admin-users.php?user_type=student&error=1");
-        echo "<script>window.location.href = '/quranic/admin/admin-students.php&error=1';</script>";
+        header("Location: /quranic/admin/admin-students.php?error=1");
+        echo "<script>window.location.href = '/quranic/admin/admin-students.php?error=1';</script>";
         exit();
     }
 }

@@ -24,7 +24,7 @@ class Attendance
             SELECT 
                 users.first_name,
                 users.last_name, 
-                students.parent_phone, 
+                users.phone, 
                 students.id, 
                 attendance.status, 
                 attendance.date, 

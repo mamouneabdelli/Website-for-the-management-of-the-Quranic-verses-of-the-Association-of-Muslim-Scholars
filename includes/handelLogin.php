@@ -45,21 +45,71 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (!$errors['email'] && !$errors['password']) {
         $db = DBConnection::getConnection()->getDb();
-        $student = new Student(
-            $email,
-            $password,
-            $db
-        );
+        
+        // البحث عن المستخدم في قاعدة البيانات
         $query = $db->prepare("SELECT * FROM users WHERE email=?");
         $query->execute([$email]);
         $user = $query->fetch(PDO::FETCH_ASSOC);
-        $loginResult = $student->login($user);
-        if ($loginResult) {
+        
+        // التحقق من وجود المستخدم
+        if ($user && password_verify($password, $user['password'])) {
+            // تخزين معلومات المستخدم في الجلسة
             $_SESSION['login_in'] = true;  
-            $_SESSION['name'] = $loginResult['first_name'] ." ". $loginResult['last_name'];
-            $_SESSION['user_id'] =  $loginResult['id']; 
-            $_SESSION['student_id'] = $loginResult['student_id'];
-            header("Location: /quranic/admin/student");
+            $_SESSION['name'] = $user['first_name'] . " " . $user['last_name'];
+            $_SESSION['user_id'] = $user['id']; 
+            $_SESSION['user_type'] = $user['user_type'];
+            
+            // توجيه المستخدم حسب نوعه
+            switch ($user['user_type']) {
+                case 'student':
+                    // الحصول على معرف الطالب
+                    $query = $db->prepare("SELECT id FROM students WHERE user_id = ?");
+                    $query->execute([$user['id']]);
+                    $student = $query->fetch(PDO::FETCH_ASSOC);
+                    if ($student) {
+                        $_SESSION['student_id'] = $student['id'];
+                    }
+                    header("Location: /quranic/admin/student");
+                    break;
+                    
+                case 'teacher':
+                    // الحصول على معرف المعلم
+                    $query = $db->prepare("SELECT id FROM teachers WHERE user_id = ?");
+                    $query->execute([$user['id']]);
+                    $teacher = $query->fetch(PDO::FETCH_ASSOC);
+                    if ($teacher) {
+                        $_SESSION['teacher_id'] = $teacher['id'];
+                    }
+                    header("Location: /quranic/admin/teacher");
+                    break;
+                    
+                case 'admin':
+                    // الحصول على معرف المشرف
+                    $query = $db->prepare("SELECT id FROM supervisors WHERE user_id = ?");
+                    $query->execute([$user['id']]);
+                    $supervisor = $query->fetch(PDO::FETCH_ASSOC);
+                    if ($supervisor) {
+                        $_SESSION['supervisor_id'] = $supervisor['id'];
+                    }
+                    header("Location: /quranic/admin");
+                    break;
+                    
+                case 'super_admin':
+                    // الحصول على معرف المدير
+                    $query = $db->prepare("SELECT id FROM super_admin WHERE user_id = ?");
+                    $query->execute([$user['id']]);
+                    $super_admin = $query->fetch(PDO::FETCH_ASSOC);
+                    if ($super_admin) {
+                        $_SESSION['super_admin_id'] = $super_admin['id'];
+                    }
+                    header("Location: /quranic/admin");
+                    break;
+                
+                default:
+                    // في حالة عدم وجود نوع محدد، يتم توجيه المستخدم إلى الصفحة الرئيسية
+                    header("Location: /quranic");
+                    break;
+            }
             exit();
         } else {
             $errors['user'] = "كلمة السر او الايميل غير صالح";  

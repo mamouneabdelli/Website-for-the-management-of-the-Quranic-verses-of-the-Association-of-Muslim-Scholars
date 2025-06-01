@@ -81,19 +81,6 @@ require_once __DIR__ . "/includes/handelSignup.php";
                 <option value="female">أنثى</option>
               </select>
             </div>
-
-            <div>
-              <select class="main" id="education_level" name="academic_phase">
-                <option value="" selected>
-                  اختر الطور الذي تدرسه
-                </option>
-                <option value="primary">ابتدائي</option>
-                <option value="middle">متوسط</option>
-                <option value="secondary">ثانوي</option>
-                <option value="university">جامعي</option>
-              </select>
-            </div>
-
             <input class="second" type="submit" value="أرسل تسجيلك إلى الجمعية" />
           </div>
         </form>

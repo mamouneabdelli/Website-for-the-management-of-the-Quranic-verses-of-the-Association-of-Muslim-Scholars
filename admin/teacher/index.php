@@ -8,10 +8,12 @@ require_once __DIR__ . '/../../classes/DBConnection.php';
 $groupNames = [];
 
 if (isset($_SESSION['teacher_id'])) {
-    // Suggest using $_SESSION['teacher_id'] for production
+    $teacherId = $_SESSION['teacher_id'];
+} else {
+    // إذا لم يتم تسجيل الدخول، يتم إعادة التوجيه إلى صفحة تسجيل الدخول
+    header("Location: /quranic/login.php");
+    exit();
 }
-
-$teacherId = 2;
 $db = DBConnection::getConnection()->getDb();
 $groupNames = Teacher::getGroups($teacherId, $db);
 

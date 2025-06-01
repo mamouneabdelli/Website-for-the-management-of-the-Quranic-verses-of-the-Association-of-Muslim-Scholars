@@ -3,6 +3,11 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors",1);
 
+// التحقق مما إذا كان المستخدم قد سجل الدخول
+if (!isset($_SESSION['login_in']) || $_SESSION['login_in'] !== true || !isset($_SESSION['teacher_id']) || $_SESSION['user_type'] !== 'teacher') {
+    header("Location: /quranic/login.php");
+    exit();
+}
 
 ?>
 
@@ -20,7 +25,7 @@ ini_set("display_errors",1);
 <body>
     <div class="header">
         <div class="welcome-msg">
-            أهلا بك يا <span>الأستاذ محمد</span>
+            أهلا بك يا <span><?= $_SESSION['name'] ?></span>
         </div>
         <div class="header-icons">
             <i class="fas fa-bell"></i>
@@ -49,6 +54,6 @@ ini_set("display_errors",1);
                 </li>
             </ul>
             <div class="register-btn">
-                <i class="fas fa-arrow-left"></i> تسجيل الدخول
+                <i class="fas fa-arrow-left"></i> <a href="logout.php">تسجيل الخروج</a>
             </div>
         </div>

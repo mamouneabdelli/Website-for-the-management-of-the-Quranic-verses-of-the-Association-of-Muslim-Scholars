@@ -9,8 +9,7 @@ require_once __DIR__ . '/../../classes/Teacher.php';
 
 
 
-
-$studentId = $_SESSION['student_id']['id'];
+$studentId = $_SESSION['student_id'];
 $user_id = $_SESSION['user_id'];
 
 $db = DBConnection::getConnection()->getDb();
@@ -36,6 +35,8 @@ SELECT * FROM students WHERE id=?
     echo "Error : " . $e->getMessage();
 }
 
+
+//print_r($user);
 
 ?>
 <link rel="stylesheet" href="css/profile.css">
@@ -82,7 +83,7 @@ SELECT * FROM students WHERE id=?
                 <i class="fas fa-phone"></i>
                 <div>
                     <label>رقم الهاتف</label>
-                    <span><?= $student[0]['parent_phone'] ?></span>
+                    <span><?= $user[0]['phone'] ?></span>
                 </div>
             </div>
             <div class="detail-item">
@@ -96,7 +97,7 @@ SELECT * FROM students WHERE id=?
                 <i class="fas fa-map-marker-alt"></i>
                 <div>
                     <label>العنوان</label>
-                    <span><?= $student[0]['address'] ?></span>
+                    <span><?= $user[0]['address'] ?></span>
                 </div>
             </div>
         </div>
@@ -124,7 +125,7 @@ SELECT * FROM students WHERE id=?
             <i class="fas fa-medal"></i>
             <div>
                 <label>آخر تقييم</label>
-                <span><?= $progresses[0]['evaluation'] ?> (<?= $progresses[0]['date'] ?>)</span>
+                <span><?= $progresses[0]['evaluation'] ?? "" ?> (<?= $progresses[0]['date'] ?? "" ?>)</span>
             </div>
         </div>
     </div>

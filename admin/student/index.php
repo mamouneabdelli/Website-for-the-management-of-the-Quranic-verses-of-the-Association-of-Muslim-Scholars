@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../classes/Teacher.php';
 
 
 
-$studentId = $_SESSION['student_id']['id'];
+$studentId = $_SESSION['student_id'];
 
 $db = DBConnection::getConnection()->getDb();
 
@@ -93,7 +93,7 @@ ORDER BY curriculum.id ASC;
     <div class="schedule-section">
         <div class="section-title">
             البرنامج الأسبوعي
-            <span>حلقة القرآن رقم 1</span>
+            <span><?= $schedules[0]['group_name'] ?></span>
         </div>
         <div class="search-bar">
             <i class="fas fa-search"></i>

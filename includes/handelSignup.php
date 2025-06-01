@@ -73,12 +73,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             $password = password_hash($password,PASSWORD_DEFAULT);
             $db = DBConnection::getConnection()->getDb();
             $student = new Student(
-                $email,$password,$db,$first_name,$last_name,$_POST['gender'],$_POST['academic_phase']
+                $email,$password,$db,$first_name,$last_name,$_POST['gender']
             );
     
             $student->signup();
         
-                $_SESSION['logen_in'] = true;
+                $_SESSION['login_in'] = false;
                 $_SESSION['user_id'] = $db->lastInsertId();
                 $_SESSION['user_name'] = $first_name;
                 header("Location: /quranic/index.php");

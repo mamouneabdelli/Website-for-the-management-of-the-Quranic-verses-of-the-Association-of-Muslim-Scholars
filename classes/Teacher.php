@@ -57,7 +57,7 @@ class Teacher extends User implements Report {
     {
 
         $query = $db->prepare("
-        SELECT group_id FROM group_teachers WHERE teacher_id = ?
+        SELECT id FROM groups WHERE teacher_id = ?
     ");
         $query->execute([$teacherId]);
         $groupIds = $query->fetchAll(PDO::FETCH_COLUMN);
